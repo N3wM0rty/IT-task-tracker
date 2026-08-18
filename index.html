@@ -4,13 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IT Task Tracker & Management System</title>
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font support (Kanit) -->
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <!-- SheetJS CDN (สำหรับ Export Excel) -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <!-- Supabase JS Client CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body { font-family: 'Kanit', sans-serif; }
@@ -18,7 +14,6 @@
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen p-4 md:p-8">
 
-  <!-- ==================== PAGE: LOGIN ==================== -->
   <div id="loginPage" class="max-w-md mx-auto my-12 bg-slate-800/90 border border-slate-700/60 p-8 rounded-2xl shadow-2xl space-y-6">
     <div class="text-center space-y-2">
       <div class="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">
@@ -34,7 +29,10 @@
         <input type="email" id="loginEmail" required placeholder="admin@resort.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
       </div>
       <div>
-        <label class="block text-xs font-medium text-slate-300 mb-1">รหัสผ่าน (Password)</label>
+        <div class="flex justify-between items-center mb-1">
+          <label class="block text-xs font-medium text-slate-300">รหัสผ่าน (Password)</label>
+          <button type="button" onclick="showForgotPasswordPage()" class="text-[11px] text-indigo-400 hover:text-indigo-300 transition-colors">ลืมรหัสผ่าน?</button>
+        </div>
         <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
       </div>
       <button type="submit" id="btnLogin" class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold py-3 rounded-xl text-sm shadow-lg transition-all transform hover:-translate-y-0.5">
@@ -45,10 +43,62 @@
     <div id="loginError" class="hidden bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center"></div>
   </div>
 
-  <!-- ==================== PAGE: MAIN DASHBOARD ==================== -->
+
+  <div id="forgotPasswordPage" class="hidden max-w-md mx-auto my-12 bg-slate-800/90 border border-slate-700/60 p-8 rounded-2xl shadow-2xl space-y-6">
+    <div class="text-center space-y-2">
+      <div class="w-16 h-16 bg-gradient-to-tr from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">
+        🔑
+      </div>
+      <h1 class="text-2xl font-bold text-white">รีเซ็ตรหัสผ่าน</h1>
+      <p class="text-slate-400 text-xs">กรอกอีเมลของคุณเพื่อรับลิงก์สำหรับตั้งรหัสผ่านใหม่</p>
+    </div>
+
+    <form id="forgotPasswordForm" class="space-y-4">
+      <div>
+        <label class="block text-xs font-medium text-slate-300 mb-1">อีเมลที่ใช้ในระบบ</label>
+        <input type="email" id="forgotEmail" required placeholder="user@resort.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+      </div>
+      <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 rounded-xl text-sm shadow-lg transition-all transform hover:-translate-y-0.5">
+        ส่งลิงก์รีเซ็ตรหัสผ่าน
+      </button>
+      <button type="button" onclick="showLoginPage()" class="w-full bg-slate-700 hover:bg-slate-600 text-slate-300 font-medium py-2.5 rounded-xl text-xs transition-all">
+        ← ย้อนกลับไปหน้าเข้าสู่ระบบ
+      </button>
+    </form>
+
+    <div id="forgotMessage" class="hidden p-3 rounded-xl text-xs text-center"></div>
+  </div>
+
+
+  <div id="resetPasswordPage" class="hidden max-w-md mx-auto my-12 bg-slate-800/90 border border-slate-700/60 p-8 rounded-2xl shadow-2xl space-y-6">
+    <div class="text-center space-y-2">
+      <div class="w-16 h-16 bg-gradient-to-tr from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">
+        🔒
+      </div>
+      <h1 class="text-2xl font-bold text-white">ตั้งรหัสผ่านใหม่</h1>
+      <p class="text-slate-400 text-xs">กรุณากรอกรหัสผ่านใหม่ของคุณ</p>
+    </div>
+
+    <form id="resetPasswordForm" class="space-y-4">
+      <div>
+        <label class="block text-xs font-medium text-slate-300 mb-1">รหัสผ่านใหม่ (อย่างน้อย 6 ตัวอักษร)</label>
+        <input type="password" id="newPassword" required placeholder="••••••••" minlength="6" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-emerald-500 outline-none">
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-slate-300 mb-1">ยืนยันรหัสผ่านใหม่</label>
+        <input type="password" id="confirmNewPassword" required placeholder="••••••••" minlength="6" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-emerald-500 outline-none">
+      </div>
+      <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl text-sm shadow-lg transition-all transform hover:-translate-y-0.5">
+        บันทึกรหัสผ่านใหม่
+      </button>
+    </form>
+
+    <div id="resetMessage" class="hidden p-3 rounded-xl text-xs text-center"></div>
+  </div>
+
+
   <div id="mainDashboard" class="hidden max-w-7xl mx-auto space-y-6">
     
-    <!-- Header banner -->
     <header class="bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-500 p-6 rounded-2xl shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
         <h1 class="text-2xl md:text-3xl font-bold text-white flex items-center gap-2">
@@ -58,7 +108,6 @@
       </div>
       
       <div class="flex items-center gap-3">
-        <!-- User Badge -->
         <div class="bg-slate-900/40 backdrop-blur border border-white/10 p-2.5 rounded-xl flex items-center gap-3">
           <div class="text-right">
             <p id="userEmailDisplay" class="text-xs font-semibold text-white">user@resort.com</p>
@@ -69,7 +118,6 @@
           </button>
         </div>
 
-        <!-- Export Button (Supervisor Only) -->
         <button id="btnExport" onclick="exportToExcel()" class="hidden bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-4 py-3 rounded-xl text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
           Export Excel
@@ -77,7 +125,6 @@
       </div>
     </header>
 
-    <!-- Summary Stats Bar -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
       <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-xl shadow-sm flex items-center justify-between">
         <div>
@@ -111,7 +158,6 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       
-      <!-- Form บันทึกงาน -->
       <div class="bg-slate-800/90 border border-slate-700/60 p-6 rounded-2xl shadow-xl h-fit">
         <h2 class="text-lg font-bold mb-4 text-white flex items-center gap-2">
           <span class="text-indigo-400">📝</span> บันทึกงานใหม่
@@ -119,7 +165,7 @@
         <form id="taskForm" class="space-y-4">
           <div>
             <label class="block text-xs font-medium text-slate-300 mb-1">ชื่อ Task / งานที่ทำ</label>
-            <input type="text" id="title" required placeholder="เช่น รีเซ็ต Password / แก้ไขปัญหาระบบ" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+            <input type="text" id="title" required placeholder="เช่น รีเซ็ต Password / แก้ไขปัญหาระบบ" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
           </div>
 
           <div class="grid grid-cols-3 gap-2">
@@ -201,10 +247,8 @@
         </form>
       </div>
 
-      <!-- รายการ Task Log & Filter -->
       <div class="lg:col-span-2 space-y-4">
         
-        <!-- Filter Box -->
         <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-2xl shadow-xl flex flex-wrap items-end gap-3 text-sm">
           <div class="flex-1 min-w-[130px]">
             <label class="block text-xs font-medium text-slate-300 mb-1">ตั้งแต่วันที่</label>
@@ -251,8 +295,7 @@
                 </tr>
               </thead>
               <tbody id="taskTableBody" class="divide-y divide-slate-700/50">
-                <!-- ข้อมูลแสดงที่นี่ -->
-              </tbody>
+                </tbody>
             </table>
           </div>
         </div>
@@ -272,12 +315,42 @@
     let currentUserRole = 'staff';
     let currentTasks = [];
 
-    // Check Auth State on Load
+    // 1. Navigation Controller (สลับสลับหน้า)
+    function hideAllPages() {
+      document.getElementById('loginPage').classList.add('hidden');
+      document.getElementById('forgotPasswordPage').classList.add('hidden');
+      document.getElementById('resetPasswordPage').classList.add('hidden');
+      document.getElementById('mainDashboard').classList.add('hidden');
+    }
+
+    function showLoginPage() {
+      hideAllPages();
+      document.getElementById('loginPage').classList.remove('hidden');
+    }
+
+    function showForgotPasswordPage() {
+      hideAllPages();
+      document.getElementById('forgotPasswordPage').classList.remove('hidden');
+    }
+
+    function showResetPasswordPage() {
+      hideAllPages();
+      document.getElementById('resetPasswordPage').classList.remove('hidden');
+    }
+
+    // 2. Check Auth State on Load
     async function checkAuth() {
+      // ดักฟังเหตุการณ์การกู้คืนรหัสผ่านจากอีเมล
+      supabaseClient.auth.onAuthStateChange(async (event, session) => {
+        if (event === 'PASSWORD_RECOVERY') {
+          showResetPasswordPage();
+          return;
+        }
+      });
+
       const { data: { user } } = await supabaseClient.auth.getUser();
       if (user) {
         currentUser = user;
-        // Fetch Profile Role
         const { data: profile } = await supabaseClient
           .from('profiles')
           .select('role')
@@ -287,11 +360,11 @@
         currentUserRole = profile?.role || 'staff';
         showDashboard();
       } else {
-        showLogin();
+        showLoginPage();
       }
     }
 
-    // Handle Login
+    // 3. Handle Login
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('loginEmail').value;
@@ -310,23 +383,65 @@
       }
     });
 
-    // Handle Logout
+    // 4. Handle Forgot Password (ขอรับอีเมลรีเซ็ต)
+    document.getElementById('forgotPasswordForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('forgotEmail').value;
+      const msgBox = document.getElementById('forgotMessage');
+      msgBox.classList.add('hidden');
+
+      const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + window.location.pathname, // เด้งกลับมาที่หน้าเดิม
+      });
+
+      if (error) {
+        msgBox.innerText = 'เกิดข้อผิดพลาด: ' + error.message;
+        msgBox.className = "bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center";
+      } else {
+        msgBox.innerText = 'ส่งลิงก์รีเซ็ตรหัสผ่านไปที่อีเมลเรียบร้อยแล้ว! กรุณาตรวจสอบกล่องจดหมายของคุณ';
+        msgBox.className = "bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 p-3 rounded-xl text-xs text-center";
+      }
+      msgBox.classList.remove('hidden');
+    });
+
+    // 5. Handle Reset Password (ตั้งรหัสผ่านใหม่)
+    document.getElementById('resetPasswordForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+      const msgBox = document.getElementById('resetMessage');
+      msgBox.classList.add('hidden');
+
+      if (newPassword !== confirmNewPassword) {
+        msgBox.innerText = 'รหัสผ่านทั้งสองช่องไม่ตรงกัน';
+        msgBox.className = "bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center";
+        msgBox.classList.remove('hidden');
+        return;
+      }
+
+      const { error } = await supabaseClient.auth.updateUser({ password: newPassword });
+
+      if (error) {
+        msgBox.innerText = 'บันทึกไม่สำเร็จ: ' + error.message;
+        msgBox.className = "bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center";
+      } else {
+        alert('เปลี่ยนรหัสผ่านสำเร็จเรียบร้อย! กรุณาล็อกอินด้วยรหัสผ่านใหม่');
+        showLoginPage();
+      }
+      msgBox.classList.remove('hidden');
+    });
+
+    // 6. Handle Logout
     async function handleLogout() {
       await supabaseClient.auth.signOut();
       currentUser = null;
-      showLogin();
-    }
-
-    function showLogin() {
-      document.getElementById('loginPage').classList.remove('hidden');
-      document.getElementById('mainDashboard').classList.add('hidden');
+      showLoginPage();
     }
 
     function showDashboard() {
-      document.getElementById('loginPage').classList.add('hidden');
+      hideAllPages();
       document.getElementById('mainDashboard').classList.remove('hidden');
 
-      // Update Header Info
       document.getElementById('userEmailDisplay').innerText = currentUser.email;
       const roleBadge = document.getElementById('userRoleBadge');
       roleBadge.innerText = currentUserRole;
