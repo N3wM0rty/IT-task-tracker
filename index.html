@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IT Task Tracker & Report Generator</title>
+  <title>IT Task Tracker & Management System</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font support (Kanit / Inter) -->
+  <!-- Font support (Kanit) -->
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <!-- SheetJS CDN (สำหรับ Export Excel) -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -18,20 +18,63 @@
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen p-4 md:p-8">
 
-  <div class="max-w-7xl mx-auto space-y-6">
+  <!-- ==================== PAGE: LOGIN ==================== -->
+  <div id="loginPage" class="max-w-md mx-auto my-12 bg-slate-800/90 border border-slate-700/60 p-8 rounded-2xl shadow-2xl space-y-6">
+    <div class="text-center space-y-2">
+      <div class="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">
+        ⚡
+      </div>
+      <h1 class="text-2xl font-bold text-white">IT Task Management</h1>
+      <p class="text-slate-400 text-xs">เข้าสู่ระบบเพื่อจัดการงานและออกรายงาน (Multi-Role)</p>
+    </div>
+
+    <form id="loginForm" class="space-y-4">
+      <div>
+        <label class="block text-xs font-medium text-slate-300 mb-1">อีเมล (Email)</label>
+        <input type="email" id="loginEmail" required placeholder="admin@resort.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-slate-300 mb-1">รหัสผ่าน (Password)</label>
+        <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+      </div>
+      <button type="submit" id="btnLogin" class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold py-3 rounded-xl text-sm shadow-lg transition-all transform hover:-translate-y-0.5">
+        เข้าสู่ระบบ (Sign In)
+      </button>
+    </form>
+
+    <div id="loginError" class="hidden bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center"></div>
+  </div>
+
+  <!-- ==================== PAGE: MAIN DASHBOARD ==================== -->
+  <div id="mainDashboard" class="hidden max-w-7xl mx-auto space-y-6">
     
     <!-- Header banner -->
     <header class="bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-500 p-6 rounded-2xl shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
-        <h1 class="text-3xl font-bold text-white flex items-center gap-2">
-          <span>⚡</span> IT Task Tracker & Report
+        <h1 class="text-2xl md:text-3xl font-bold text-white flex items-center gap-2">
+          <span>⚡</span> IT Task Tracker & Management
         </h1>
-        <p class="text-indigo-100 text-sm mt-1">ระบบบันทึกงาน IT ประจำวัน และออกรายงานสรุปย่อ (Supabase Cloud Sync)</p>
+        <p class="text-indigo-100 text-xs md:text-sm mt-1">ระบบจัดการงาน IT ประจำวัน และการควบคุมสิทธิ์ตาม Role (Supabase Auth)</p>
       </div>
-      <button onclick="exportToExcel()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-5 py-3 rounded-xl text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-        Export Excel Report
-      </button>
+      
+      <div class="flex items-center gap-3">
+        <!-- User Badge -->
+        <div class="bg-slate-900/40 backdrop-blur border border-white/10 p-2.5 rounded-xl flex items-center gap-3">
+          <div class="text-right">
+            <p id="userEmailDisplay" class="text-xs font-semibold text-white">user@resort.com</p>
+            <span id="userRoleBadge" class="bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">Role</span>
+          </div>
+          <button onclick="handleLogout()" class="bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-500/30 px-3 py-1.5 rounded-lg text-xs font-medium transition-all">
+            ออก
+          </button>
+        </div>
+
+        <!-- Export Button (Supervisor Only) -->
+        <button id="btnExport" onclick="exportToExcel()" class="hidden bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-4 py-3 rounded-xl text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          Export Excel
+        </button>
+      </div>
     </header>
 
     <!-- Summary Stats Bar -->
@@ -79,7 +122,6 @@
             <input type="text" id="title" required placeholder="เช่น รีเซ็ต Password / แก้ไขปัญหาระบบ" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
           </div>
 
-          <!-- แยกช่อง ผู้แจ้ง / แผนก / ผู้รับงาน -->
           <div class="grid grid-cols-3 gap-2">
             <div>
               <label class="block text-[11px] font-medium text-slate-300 mb-1">ผู้แจ้งงาน</label>
@@ -209,7 +251,7 @@
                 </tr>
               </thead>
               <tbody id="taskTableBody" class="divide-y divide-slate-700/50">
-                <!-- ข้อมูลจาก Supabase แสดงที่นี่ -->
+                <!-- ข้อมูลแสดงที่นี่ -->
               </tbody>
             </table>
           </div>
@@ -225,18 +267,88 @@
     const SUPABASE_ANON_KEY = 'sb_publishable_2sxnepbtIji-OK0ddOnQFA_cCin-yLu';
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    let currentUser = null;
+    let currentUserRole = 'staff';
     let currentTasks = [];
 
-    // 1. ดึงข้อมูลจาก Supabase
+    // Check Auth State on Load
+    async function checkAuth() {
+      const { data: { user } } = await supabaseClient.auth.getUser();
+      if (user) {
+        currentUser = user;
+        // Fetch Profile Role
+        const { data: profile } = await supabaseClient
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single();
+        
+        currentUserRole = profile?.role || 'staff';
+        showDashboard();
+      } else {
+        showLogin();
+      }
+    }
+
+    // Handle Login
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      const errBox = document.getElementById('loginError');
+      errBox.classList.add('hidden');
+
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        errBox.innerText = 'เข้าสู่ระบบไม่สำเร็จ: ' + error.message;
+        errBox.classList.remove('hidden');
+      } else {
+        currentUser = data.user;
+        checkAuth();
+      }
+    });
+
+    // Handle Logout
+    async function handleLogout() {
+      await supabaseClient.auth.signOut();
+      currentUser = null;
+      showLogin();
+    }
+
+    function showLogin() {
+      document.getElementById('loginPage').classList.remove('hidden');
+      document.getElementById('mainDashboard').classList.add('hidden');
+    }
+
+    function showDashboard() {
+      document.getElementById('loginPage').classList.add('hidden');
+      document.getElementById('mainDashboard').classList.remove('hidden');
+
+      // Update Header Info
+      document.getElementById('userEmailDisplay').innerText = currentUser.email;
+      const roleBadge = document.getElementById('userRoleBadge');
+      roleBadge.innerText = currentUserRole;
+      
+      if (currentUserRole === 'admin' || currentUserRole === 'supervisor') {
+        roleBadge.className = "bg-rose-500/30 text-rose-200 border border-rose-400/30 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase";
+        document.getElementById('btnExport').classList.remove('hidden');
+      } else {
+        roleBadge.className = "bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase";
+        document.getElementById('btnExport').classList.add('hidden');
+      }
+
+      fetchTasks();
+    }
+
+    // Fetch Tasks
     async function fetchTasks() {
       const startDate = document.getElementById('startDate').value;
       const endDate = document.getElementById('endDate').value;
       const statusFilter = document.getElementById('filterStatus').value;
 
-      let query = supabaseClient
-        .from('tasks')
-        .select('*')
-        .order('id', { ascending: false });
+      let query = supabaseClient.from('tasks').select('*').order('id', { ascending: false });
 
       if (startDate) query = query.gte('date', startDate);
       if (endDate) query = query.lte('date', endDate);
@@ -245,8 +357,7 @@
       const { data, error } = await query;
 
       if (error) {
-        console.error('Error fetching tasks:', error);
-        document.getElementById('taskCount').innerText = `Error!`;
+        console.error(error);
         return;
       }
 
@@ -275,7 +386,7 @@
       document.getElementById('taskCount').innerText = `${currentTasks.length} รายการ`;
 
       if (currentTasks.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-500">ไม่พบข้อมูล Task ช่วงเวลานี้</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-500">ไม่พบข้อมูล Task</td></tr>`;
         return;
       }
 
@@ -288,6 +399,8 @@
         if (task.status === 'In Progress') statusBadge = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
         if (task.status === 'Pending') statusBadge = 'bg-orange-500/20 text-orange-300 border-orange-500/40';
         if (task.status === 'Cancelled') statusBadge = 'bg-rose-500/20 text-rose-300 border-rose-500/40';
+
+        const canDelete = (currentUserRole === 'admin' || currentUserRole === 'supervisor' || currentUser.id === task.user_id);
 
         tbody.innerHTML += `
           <tr class="hover:bg-slate-800/60 transition-colors">
@@ -311,23 +424,24 @@
               </select>
             </td>
             <td class="p-3 whitespace-nowrap">
-              <button onclick="deleteTask(${task.id})" class="text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 px-2.5 py-1 rounded-md text-xs font-medium transition-all">ลบ</button>
+              ${canDelete ? `<button onclick="deleteTask(${task.id})" class="text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 px-2.5 py-1 rounded-md text-xs font-medium transition-all">ลบ</button>` : `<span class="text-slate-600 text-xs">-</span>`}
             </td>
           </tr>
         `;
       });
     }
 
-    // 2. บันทึก Task ใหม่
+    // Submit Task
     document.getElementById('taskForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       
       const newTask = {
+        user_id: currentUser.id,
         date: new Date().toISOString().split('T')[0],
         title: document.getElementById('title').value,
         reporter: document.getElementById('reporter').value,
         department: document.getElementById('department').value,
-        assignee: document.getElementById('assignee').value,
+        assignee: document.getElementById('assignee').value || currentUser.email.split('@')[0],
         category: document.getElementById('category').value,
         priority: document.getElementById('priority').value,
         status: document.getElementById('status').value,
@@ -337,42 +451,29 @@
       const { error } = await supabaseClient.from('tasks').insert([newTask]);
 
       if (error) {
-        alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
-        console.error(error);
+        alert('เกิดข้อผิดพลาดในการบันทึก');
       } else {
         e.target.reset();
         fetchTasks();
       }
     });
 
-    // 3. อัปเดตสถานะงานด่วน
     async function updateStatus(id, newStatus) {
       const { error } = await supabaseClient.from('tasks').update({ status: newStatus }).eq('id', id);
-      if (error) {
-        alert('อัปเดตสถานะไม่สำเร็จ');
-      } else {
-        fetchTasks();
-      }
+      if (error) alert('อัปเดตไม่สำเร็จ');
+      else fetchTasks();
     }
 
-    // 4. ลบ Task
     async function deleteTask(id) {
-      if (confirm('คุณต้องการลบ Task นี้ใช่หรือไม่?')) {
+      if (confirm('ยืนยันลบ Task นี้?')) {
         const { error } = await supabaseClient.from('tasks').delete().eq('id', id);
-        if (error) {
-          alert('ไม่สามารถลบข้อมูลได้');
-        } else {
-          fetchTasks();
-        }
+        if (error) alert('ลบไม่สำเร็จ');
+        else fetchTasks();
       }
     }
 
-    // 5. Export ข้อมูลเป็น Excel
     function exportToExcel() {
-      if (currentTasks.length === 0) {
-        alert('ไม่มีข้อมูลสำหรับ Export');
-        return;
-      }
+      if (currentTasks.length === 0) return alert('ไม่มีข้อมูล');
 
       const dataToExport = currentTasks.map((t, i) => ({
         'No.': i + 1,
@@ -400,7 +501,7 @@
       XLSX.writeFile(workbook, `IT_Task_Report_${new Date().toISOString().split('T')[0]}.xlsx`);
     }
 
-    fetchTasks();
+    checkAuth();
   </script>
 </body>
 </html>
