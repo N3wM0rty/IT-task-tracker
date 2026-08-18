@@ -221,9 +221,9 @@
             <div>
               <label class="block text-xs font-medium text-slate-300 mb-1">สถานะงาน (Status)</label>
               <select id="status" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none font-medium">
-                <option value="Completed" selected class="text-emerald-400">Completed (เสร็จสิ้น)</option>
+                <option value="Pending" selected class="text-orange-400">Pending (รอดำเนินการ)</option>
                 <option value="In Progress" class="text-amber-400">In Progress (กำลังทำ)</option>
-                <option value="Pending" class="text-orange-400">Pending (รอดำเนินการ)</option>
+                <option value="Completed" class="text-emerald-400">Completed (เสร็จสิ้น)</option>
                 <option value="Cancelled" class="text-rose-400">Cancelled (ยกเลิก)</option>
               </select>
             </div>
@@ -262,9 +262,9 @@
             <label class="block text-xs font-medium text-slate-300 mb-1">สถานะ</label>
             <select id="filterStatus" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
               <option value="">ทั้งหมด</option>
-              <option value="Completed">Completed</option>
-              <option value="In Progress">In Progress</option>
               <option value="Pending">Pending</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
               <option value="Cancelled">Cancelled</option>
             </select>
           </div>
@@ -315,7 +315,7 @@
     let currentUserRole = 'staff';
     let currentTasks = [];
 
-    // 1. Navigation Controller (สลับสลับหน้า)
+    // 1. Navigation Controller (สลับหน้า)
     function hideAllPages() {
       document.getElementById('loginPage').classList.add('hidden');
       document.getElementById('forgotPasswordPage').classList.add('hidden');
@@ -340,7 +340,6 @@
 
     // 2. Check Auth State on Load
     async function checkAuth() {
-      // ดักฟังเหตุการณ์การกู้คืนรหัสผ่านจากอีเมล
       supabaseClient.auth.onAuthStateChange(async (event, session) => {
         if (event === 'PASSWORD_RECOVERY') {
           showResetPasswordPage();
@@ -383,7 +382,7 @@
       }
     });
 
-    // 4. Handle Forgot Password (ขอรับอีเมลรีเซ็ต)
+    // 4. Handle Forgot Password
     document.getElementById('forgotPasswordForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('forgotEmail').value;
@@ -391,20 +390,20 @@
       msgBox.classList.add('hidden');
 
       const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + window.location.pathname, // เด้งกลับมาที่หน้าเดิม
+        redirectTo: window.location.origin + window.location.pathname,
       });
 
       if (error) {
         msgBox.innerText = 'เกิดข้อผิดพลาด: ' + error.message;
         msgBox.className = "bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center";
       } else {
-        msgBox.innerText = 'ส่งลิงก์รีเซ็ตรหัสผ่านไปที่อีเมลเรียบร้อยแล้ว! กรุณาตรวจสอบกล่องจดหมายของคุณ';
+        msgBox.innerText = 'ส่งลิงก์รีเซ็ตรหัสผ่านไปที่อีเมลเรียบร้อยแล้ว!';
         msgBox.className = "bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 p-3 rounded-xl text-xs text-center";
       }
       msgBox.classList.remove('hidden');
     });
 
-    // 5. Handle Reset Password (ตั้งรหัสผ่านใหม่)
+    // 5. Handle Reset Password
     document.getElementById('resetPasswordForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const newPassword = document.getElementById('newPassword').value;
@@ -425,7 +424,7 @@
         msgBox.innerText = 'บันทึกไม่สำเร็จ: ' + error.message;
         msgBox.className = "bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center";
       } else {
-        alert('เปลี่ยนรหัสผ่านสำเร็จเรียบร้อย! กรุณาล็อกอินด้วยรหัสผ่านใหม่');
+        alert('เปลี่ยนรหัสผ่านสำเร็จเรียบร้อย!');
         showLoginPage();
       }
       msgBox.classList.remove('hidden');
@@ -510,9 +509,9 @@
         if (task.priority === 'High') priorityBadge = 'bg-amber-500/20 text-amber-300 border-amber-500/30';
         if (task.priority === 'Urgent') priorityBadge = 'bg-rose-500/20 text-rose-300 border-rose-500/30';
 
-        let statusBadge = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+        let statusBadge = 'bg-orange-500/20 text-orange-300 border-orange-500/40';
         if (task.status === 'In Progress') statusBadge = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
-        if (task.status === 'Pending') statusBadge = 'bg-orange-500/20 text-orange-300 border-orange-500/40';
+        if (task.status === 'Completed') statusBadge = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
         if (task.status === 'Cancelled') statusBadge = 'bg-rose-500/20 text-rose-300 border-rose-500/40';
 
         const canDelete = (currentUserRole === 'admin' || currentUserRole === 'supervisor' || currentUser.id === task.user_id);
@@ -532,9 +531,9 @@
             <td class="p-3 whitespace-nowrap"><span class="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-1 rounded-md text-xs font-semibold">${task.category}</span></td>
             <td class="p-3 whitespace-nowrap">
               <select onchange="updateStatus(${task.id}, this.value)" class="text-xs font-medium border rounded-lg px-2 py-1 ${statusBadge} bg-slate-900 outline-none cursor-pointer">
-                <option value="Completed" ${task.status === 'Completed' ? 'selected' : ''}>Completed</option>
-                <option value="In Progress" ${task.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
                 <option value="Pending" ${task.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                <option value="In Progress" ${task.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                <option value="Completed" ${task.status === 'Completed' ? 'selected' : ''}>Completed</option>
                 <option value="Cancelled" ${task.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
               </select>
             </td>
@@ -599,7 +598,7 @@
         'Assignee': t.assignee || '-',
         'Category': t.category,
         'Priority': t.priority,
-        'Status': t.status || 'Completed',
+        'Status': t.status || 'Pending',
         'Description / Outcome': t.description || '-'
       }));
 
