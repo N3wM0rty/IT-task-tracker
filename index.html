@@ -3,61 +3,102 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IT Task Tracker & Report Generator (Supabase)</title>
+  <title>IT Task Tracker & Report Generator</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font support (Kanit / Inter) -->
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <!-- SheetJS CDN (สำหรับ Export Excel) -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <!-- Supabase JS Client CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { font-family: 'Kanit', sans-serif; }
+  </style>
 </head>
-<body class="bg-slate-100 min-h-screen text-slate-800 p-4 md:p-8">
+<body class="bg-slate-900 text-slate-100 min-h-screen p-4 md:p-8">
 
   <div class="max-w-7xl mx-auto space-y-6">
     
-    <!-- Header -->
-    <header class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <!-- Header banner -->
+    <header class="bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-500 p-6 rounded-2xl shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
-        <h1 class="text-2xl font-bold text-slate-900">IT Task Tracker & Report</h1>
-        <p class="text-slate-500 text-sm">ระบบบันทึกงาน IT ประจำวัน และออกรายงานตามช่วงเวลา (Supabase Sync)</p>
+        <h1 class="text-3xl font-bold text-white flex items-center gap-2">
+          <span>⚡</span> IT Task Tracker & Report
+        </h1>
+        <p class="text-indigo-100 text-sm mt-1">ระบบบันทึกงาน IT ประจำวัน และออกรายงานสรุปย่อ (Supabase Cloud Sync)</p>
       </div>
-      <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2.5 rounded-lg text-sm flex items-center justify-center gap-2 shadow-sm transition-all">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-        Export Excel Report (ตามรายการที่แสดง)
+      <button onclick="exportToExcel()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-5 py-3 rounded-xl text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+        Export Excel Report
       </button>
     </header>
 
+    <!-- Summary Stats Bar -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-xl shadow-sm flex items-center justify-between">
+        <div>
+          <p class="text-slate-400 text-xs font-medium">งานทั้งหมด</p>
+          <p id="statTotal" class="text-2xl font-bold text-white mt-1">0</p>
+        </div>
+        <div class="w-10 h-10 bg-indigo-500/10 text-indigo-400 rounded-lg flex items-center justify-center font-bold text-lg">📁</div>
+      </div>
+      <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-xl shadow-sm flex items-center justify-between">
+        <div>
+          <p class="text-slate-400 text-xs font-medium">เสร็จสิ้น (Completed)</p>
+          <p id="statCompleted" class="text-2xl font-bold text-emerald-400 mt-1">0</p>
+        </div>
+        <div class="w-10 h-10 bg-emerald-500/10 text-emerald-400 rounded-lg flex items-center justify-center font-bold text-lg">✅</div>
+      </div>
+      <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-xl shadow-sm flex items-center justify-between">
+        <div>
+          <p class="text-slate-400 text-xs font-medium">กำลังทำ (In Progress)</p>
+          <p id="statInProgress" class="text-2xl font-bold text-amber-400 mt-1">0</p>
+        </div>
+        <div class="w-10 h-10 bg-amber-500/10 text-amber-400 rounded-lg flex items-center justify-center font-bold text-lg">⏳</div>
+      </div>
+      <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-xl shadow-sm flex items-center justify-between">
+        <div>
+          <p class="text-slate-400 text-xs font-medium">รอดำเนินการ (Pending)</p>
+          <p id="statPending" class="text-2xl font-bold text-orange-400 mt-1">0</p>
+        </div>
+        <div class="w-10 h-10 bg-orange-500/10 text-orange-400 rounded-lg flex items-center justify-center font-bold text-lg">📌</div>
+      </div>
+    </div>
+
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       
-      <!-- Form เพิ่ม Task -->
-      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 h-fit">
-        <h2 class="text-lg font-semibold mb-4 text-slate-900">บันทึกงานใหม่</h2>
+      <!-- Form บันทึกงาน -->
+      <div class="bg-slate-800/90 border border-slate-700/60 p-6 rounded-2xl shadow-xl h-fit">
+        <h2 class="text-lg font-bold mb-4 text-white flex items-center gap-2">
+          <span class="text-indigo-400">📝</span> บันทึกงานใหม่
+        </h2>
         <form id="taskForm" class="space-y-4">
           <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">ชื่อ Task / งานที่ทำ</label>
-            <input type="text" id="title" required placeholder="เช่น รีเซ็ต Password / แก้ไขปัญหาระบบ" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+            <label class="block text-xs font-medium text-slate-300 mb-1">ชื่อ Task / งานที่ทำ</label>
+            <input type="text" id="title" required placeholder="เช่น รีเซ็ต Password / แก้ไขปัญหาระบบ" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
           </div>
 
           <!-- แยกช่อง ผู้แจ้ง / แผนก / ผู้รับงาน -->
           <div class="grid grid-cols-3 gap-2">
             <div>
-              <label class="block text-xs font-medium text-slate-700 mb-1">ผู้แจ้งงาน</label>
-              <input type="text" id="reporter" placeholder="เช่น คุณสมชาย" class="w-full border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-blue-500 outline-none">
+              <label class="block text-[11px] font-medium text-slate-300 mb-1">ผู้แจ้งงาน</label>
+              <input type="text" id="reporter" placeholder="คุณสมชาย" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:ring-2 focus:ring-indigo-500 outline-none">
             </div>
             <div>
-              <label class="block text-xs font-medium text-slate-700 mb-1">แผนก (Dept)</label>
-              <input type="text" id="department" placeholder="เช่น FO, HK, FB" class="w-full border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-blue-500 outline-none">
+              <label class="block text-[11px] font-medium text-slate-300 mb-1">แผนก (Dept)</label>
+              <input type="text" id="department" placeholder="FO, HK" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:ring-2 focus:ring-indigo-500 outline-none">
             </div>
             <div>
-              <label class="block text-xs font-medium text-slate-700 mb-1">ผู้รับงาน</label>
-              <input type="text" id="assignee" placeholder="เช่น Supatcha" class="w-full border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-blue-500 outline-none">
+              <label class="block text-[11px] font-medium text-slate-300 mb-1">ผู้รับงาน</label>
+              <input type="text" id="assignee" placeholder="Supatcha" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:ring-2 focus:ring-indigo-500 outline-none">
             </div>
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">หมวดหมู่งาน (Category)</label>
-            <select id="category" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-              <optgroup label="System & Software">
+            <label class="block text-xs font-medium text-slate-300 mb-1">หมวดหมู่งาน (Category)</label>
+            <select id="category" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+              <optgroup label="System & Software" class="bg-slate-800">
                 <option value="POS">POS</option>
                 <option value="PC/ Laptop">PC/ Laptop</option>
                 <option value="Opera V.5">Opera V.5</option>
@@ -68,38 +109,53 @@
                 <option value="SUN/2">SUN/2</option>
                 <option value="Passport">Passport</option>
               </optgroup>
-              <optgroup label="Hardware & Access">
+              <optgroup label="Hardware & Access" class="bg-slate-800">
                 <option value="Door">Door</option>
                 <option value="Door/2">Door/2</option>
                 <option value="CCTV">CCTV</option>
                 <option value="Print">Print</option>
               </optgroup>
-              <optgroup label="Network & Communication">
+              <optgroup label="Network & Communication" class="bg-slate-800">
                 <option value="Wi-Fi">Wi-Fi</option>
                 <option value="Wi-Fi/2">Wi-Fi/2</option>
                 <option value="TV">TV</option>
                 <option value="Phone">Phone</option>
                 <option value="Phone/2">Phone/2</option>
               </optgroup>
-              <optgroup label="General & Others">
+              <optgroup label="General & Others" class="bg-slate-800">
                 <option value="General work">General work</option>
                 <option value="other">other</option>
               </optgroup>
             </select>
           </div>
-          <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">ระดับความสำคัญ</label>
-            <select id="priority" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-              <option value="Normal">Normal</option>
-              <option value="High">High</option>
-              <option value="Urgent">Urgent</option>
-            </select>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">สถานะงาน (Status)</label>
+              <select id="status" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none font-medium">
+                <option value="Completed" selected class="text-emerald-400">Completed (เสร็จสิ้น)</option>
+                <option value="In Progress" class="text-amber-400">In Progress (กำลังทำ)</option>
+                <option value="Pending" class="text-orange-400">Pending (รอดำเนินการ)</option>
+                <option value="Cancelled" class="text-rose-400">Cancelled (ยกเลิก)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">ความสำคัญ</label>
+              <select id="priority" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+                <option value="Normal">Normal</option>
+                <option value="High">High</option>
+                <option value="Urgent">Urgent</option>
+              </select>
+            </div>
           </div>
+
           <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">รายละเอียดเพิ่มเติม / ผลลัพธ์</label>
-            <textarea id="description" rows="3" placeholder="ระบุการแก้ไขหรือหมายเหตุ..." class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+            <label class="block text-xs font-medium text-slate-300 mb-1">รายละเอียดเพิ่มเติม / ผลลัพธ์</label>
+            <textarea id="description" rows="3" placeholder="ระบุการแก้ไขหรือหมายเหตุ..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none"></textarea>
           </div>
-          <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg text-sm shadow-sm transition-all">บันทึก Task</button>
+          <button type="submit" class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold py-3 rounded-xl text-sm shadow-lg transition-all transform hover:-translate-y-0.5">
+            + บันทึก Task เข้าระบบ
+          </button>
         </form>
       </div>
 
@@ -107,41 +163,53 @@
       <div class="lg:col-span-2 space-y-4">
         
         <!-- Filter Box -->
-        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-wrap items-end gap-3 text-sm">
-          <div class="flex-1 min-w-[140px]">
-            <label class="block text-xs font-medium text-slate-600 mb-1">ตั้งแต่วันที่</label>
-            <input type="date" id="startDate" class="w-full border border-slate-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-blue-500">
+        <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-2xl shadow-xl flex flex-wrap items-end gap-3 text-sm">
+          <div class="flex-1 min-w-[130px]">
+            <label class="block text-xs font-medium text-slate-300 mb-1">ตั้งแต่วันที่</label>
+            <input type="date" id="startDate" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
           </div>
-          <div class="flex-1 min-w-[140px]">
-            <label class="block text-xs font-medium text-slate-600 mb-1">ถึงวันที่</label>
-            <input type="date" id="endDate" class="w-full border border-slate-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-blue-500">
+          <div class="flex-1 min-w-[130px]">
+            <label class="block text-xs font-medium text-slate-300 mb-1">ถึงวันที่</label>
+            <input type="date" id="endDate" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div class="w-[130px]">
+            <label class="block text-xs font-medium text-slate-300 mb-1">สถานะ</label>
+            <select id="filterStatus" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="">ทั้งหมด</option>
+              <option value="Completed">Completed</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Pending">Pending</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
           </div>
           <div class="flex gap-2">
-            <button onclick="fetchTasks()" class="bg-slate-800 hover:bg-slate-900 text-white px-3 py-2 rounded-lg text-xs font-medium transition-all">กรองข้อมูล</button>
-            <button onclick="resetFilter()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-2 rounded-lg text-xs font-medium transition-all">ล้างการกรอง</button>
+            <button onclick="fetchTasks()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-xs font-semibold transition-all">กรองข้อมูล</button>
+            <button onclick="resetFilter()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 px-3 py-2 rounded-lg text-xs font-medium transition-all">ล้าง</button>
           </div>
         </div>
 
-        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-4">
+        <div class="bg-slate-800/90 border border-slate-700/60 p-6 rounded-2xl shadow-xl space-y-4">
           <div class="flex items-center justify-between">
-            <h2 class="text-lg font-semibold text-slate-900">รายการงานทั้งหมด</h2>
-            <span id="taskCount" class="bg-blue-50 text-blue-700 font-semibold text-xs px-2.5 py-1 rounded-full">กำลังโหลด...</span>
+            <h2 class="text-lg font-bold text-white flex items-center gap-2">
+              <span class="text-indigo-400">📊</span> รายการงานในระบบ
+            </h2>
+            <span id="taskCount" class="bg-indigo-500/20 text-indigo-300 font-semibold text-xs px-3 py-1 rounded-full border border-indigo-500/30">กำลังโหลด...</span>
           </div>
 
           <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm text-slate-600">
-              <thead class="bg-slate-50 text-slate-700 border-b border-slate-200">
+            <table class="w-full text-left text-sm text-slate-300">
+              <thead class="bg-slate-900/80 text-slate-300 border-b border-slate-700">
                 <tr>
                   <th class="p-3">วันที่</th>
                   <th class="p-3">งานที่ทำ</th>
-                  <th class="p-3">ผู้แจ้ง / แผนก / ผู้รับงาน</th>
+                  <th class="p-3">ผู้แจ้ง / แผนก / ผู้รับ</th>
                   <th class="p-3">Category</th>
-                  <th class="p-3">ความสำคัญ</th>
+                  <th class="p-3">สถานะ</th>
                   <th class="p-3">การจัดการ</th>
                 </tr>
               </thead>
-              <tbody id="taskTableBody" class="divide-y divide-slate-100">
-                <!-- ข้อมูลจาก Supabase จะแสดงที่นี่ -->
+              <tbody id="taskTableBody" class="divide-y divide-slate-700/50">
+                <!-- ข้อมูลจาก Supabase แสดงที่นี่ -->
               </tbody>
             </table>
           </div>
@@ -159,22 +227,20 @@
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     let currentTasks = [];
 
-    // 1. ดึงข้อมูลจาก Supabase พร้อมระบบกรองวันที่
+    // 1. ดึงข้อมูลจาก Supabase
     async function fetchTasks() {
       const startDate = document.getElementById('startDate').value;
       const endDate = document.getElementById('endDate').value;
+      const statusFilter = document.getElementById('filterStatus').value;
 
       let query = supabaseClient
         .from('tasks')
         .select('*')
         .order('id', { ascending: false });
 
-      if (startDate) {
-        query = query.gte('date', startDate);
-      }
-      if (endDate) {
-        query = query.lte('date', endDate);
-      }
+      if (startDate) query = query.gte('date', startDate);
+      if (endDate) query = query.lte('date', endDate);
+      if (statusFilter) query = query.eq('status', statusFilter);
 
       const { data, error } = await query;
 
@@ -185,12 +251,21 @@
       }
 
       currentTasks = data || [];
+      updateStats();
       renderTable();
+    }
+
+    function updateStats() {
+      document.getElementById('statTotal').innerText = currentTasks.length;
+      document.getElementById('statCompleted').innerText = currentTasks.filter(t => t.status === 'Completed').length;
+      document.getElementById('statInProgress').innerText = currentTasks.filter(t => t.status === 'In Progress').length;
+      document.getElementById('statPending').innerText = currentTasks.filter(t => t.status === 'Pending').length;
     }
 
     function resetFilter() {
       document.getElementById('startDate').value = '';
       document.getElementById('endDate').value = '';
+      document.getElementById('filterStatus').value = '';
       fetchTasks();
     }
 
@@ -200,28 +275,43 @@
       document.getElementById('taskCount').innerText = `${currentTasks.length} รายการ`;
 
       if (currentTasks.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">ไม่พบข้อมูล Task ช่วงเวลานี้</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-500">ไม่พบข้อมูล Task ช่วงเวลานี้</td></tr>`;
         return;
       }
 
       currentTasks.forEach((task) => {
-        const priorityBadge = task.priority === 'High' || task.priority === 'Urgent' 
-          ? 'bg-rose-50 text-rose-600 border-rose-200' 
-          : 'bg-slate-50 text-slate-600 border-slate-200';
+        let priorityBadge = 'bg-slate-700 text-slate-300 border-slate-600';
+        if (task.priority === 'High') priorityBadge = 'bg-amber-500/20 text-amber-300 border-amber-500/30';
+        if (task.priority === 'Urgent') priorityBadge = 'bg-rose-500/20 text-rose-300 border-rose-500/30';
+
+        let statusBadge = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+        if (task.status === 'In Progress') statusBadge = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+        if (task.status === 'Pending') statusBadge = 'bg-orange-500/20 text-orange-300 border-orange-500/40';
+        if (task.status === 'Cancelled') statusBadge = 'bg-rose-500/20 text-rose-300 border-rose-500/40';
 
         tbody.innerHTML += `
-          <tr class="hover:bg-slate-50">
-            <td class="p-3 whitespace-nowrap text-slate-500">${task.date}</td>
-            <td class="p-3 font-medium text-slate-900">${task.title}<br><span class="text-xs text-slate-400 font-normal">${task.description || '-'}</span></td>
-            <td class="p-3 whitespace-nowrap text-xs">
-              <span class="text-slate-700 font-medium">ผู้แจ้ง:</span> ${task.reporter || '-'}<br>
-              <span class="text-slate-700 font-medium">แผนก:</span> ${task.department || '-'}<br>
-              <span class="text-slate-700 font-medium">ผู้รับ:</span> ${task.assignee || '-'}
+          <tr class="hover:bg-slate-800/60 transition-colors">
+            <td class="p-3 whitespace-nowrap text-slate-400 text-xs font-mono">${task.date}</td>
+            <td class="p-3 font-medium text-white">
+              ${task.title} <span class="border ${priorityBadge} px-1.5 py-0.5 rounded text-[10px] ml-1 font-semibold">${task.priority}</span><br>
+              <span class="text-xs text-slate-400 font-normal">${task.description || '-'}</span>
             </td>
-            <td class="p-3 whitespace-nowrap"><span class="bg-blue-50 text-blue-600 px-2 py-1 rounded text-xs font-semibold">${task.category}</span></td>
-            <td class="p-3 whitespace-nowrap"><span class="border ${priorityBadge} px-2 py-0.5 rounded text-xs">${task.priority}</span></td>
+            <td class="p-3 whitespace-nowrap text-xs">
+              <span class="text-slate-400">แจ้ง:</span> <span class="text-indigo-300 font-medium">${task.reporter || '-'}</span><br>
+              <span class="text-slate-400">แผนก:</span> <span class="text-cyan-300 font-medium">${task.department || '-'}</span><br>
+              <span class="text-slate-400">ผู้รับ:</span> <span class="text-purple-300 font-medium">${task.assignee || '-'}</span>
+            </td>
+            <td class="p-3 whitespace-nowrap"><span class="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-1 rounded-md text-xs font-semibold">${task.category}</span></td>
             <td class="p-3 whitespace-nowrap">
-              <button onclick="deleteTask(${task.id})" class="text-rose-500 hover:text-rose-700 text-xs font-medium">ลบ</button>
+              <select onchange="updateStatus(${task.id}, this.value)" class="text-xs font-medium border rounded-lg px-2 py-1 ${statusBadge} bg-slate-900 outline-none cursor-pointer">
+                <option value="Completed" ${task.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                <option value="In Progress" ${task.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                <option value="Pending" ${task.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                <option value="Cancelled" ${task.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+              </select>
+            </td>
+            <td class="p-3 whitespace-nowrap">
+              <button onclick="deleteTask(${task.id})" class="text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 px-2.5 py-1 rounded-md text-xs font-medium transition-all">ลบ</button>
             </td>
           </tr>
         `;
@@ -240,14 +330,14 @@
         assignee: document.getElementById('assignee').value,
         category: document.getElementById('category').value,
         priority: document.getElementById('priority').value,
-        status: 'Completed',
+        status: document.getElementById('status').value,
         description: document.getElementById('description').value
       };
 
       const { error } = await supabaseClient.from('tasks').insert([newTask]);
 
       if (error) {
-        alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล (อย่าลืมรันคำสั่ง SQL เพิ่มคอลัมน์ department ใน Supabase ครับ)');
+        alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
         console.error(error);
       } else {
         e.target.reset();
@@ -255,7 +345,17 @@
       }
     });
 
-    // 3. ลบ Task
+    // 3. อัปเดตสถานะงานด่วน
+    async function updateStatus(id, newStatus) {
+      const { error } = await supabaseClient.from('tasks').update({ status: newStatus }).eq('id', id);
+      if (error) {
+        alert('อัปเดตสถานะไม่สำเร็จ');
+      } else {
+        fetchTasks();
+      }
+    }
+
+    // 4. ลบ Task
     async function deleteTask(id) {
       if (confirm('คุณต้องการลบ Task นี้ใช่หรือไม่?')) {
         const { error } = await supabaseClient.from('tasks').delete().eq('id', id);
@@ -267,7 +367,7 @@
       }
     }
 
-    // 4. Export ข้อมูลเป็น Excel (แยกคอลัมน์ Department ออกมาให้อัตโนมัติ)
+    // 5. Export ข้อมูลเป็น Excel
     function exportToExcel() {
       if (currentTasks.length === 0) {
         alert('ไม่มีข้อมูลสำหรับ Export');
@@ -283,7 +383,7 @@
         'Assignee': t.assignee || '-',
         'Category': t.category,
         'Priority': t.priority,
-        'Status': t.status,
+        'Status': t.status || 'Completed',
         'Description / Outcome': t.description || '-'
       }));
 
@@ -294,7 +394,7 @@
       worksheet['!cols'] = [
         { wch: 6 },  { wch: 12 }, { wch: 30 }, 
         { wch: 16 }, { wch: 14 }, { wch: 16 }, 
-        { wch: 16 }, { wch: 12 }, { wch: 12 }, { wch: 40 }
+        { wch: 16 }, { wch: 12 }, { wch: 14 }, { wch: 40 }
       ];
 
       XLSX.writeFile(workbook, `IT_Task_Report_${new Date().toISOString().split('T')[0]}.xlsx`);
