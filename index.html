@@ -38,14 +38,19 @@
             <input type="text" id="title" required placeholder="เช่น รีเซ็ต Password / แก้ไขปัญหาระบบ" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
           </div>
 
-          <div class="grid grid-cols-2 gap-3">
+          <!-- แยกช่อง ผู้แจ้ง / แผนก / ผู้รับงาน -->
+          <div class="grid grid-cols-3 gap-2">
             <div>
-              <label class="block text-sm font-medium text-slate-700 mb-1">ผู้แจ้งงาน / แผนก</label>
-              <input type="text" id="reporter" placeholder="เช่น FO, คุณสมชาย" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+              <label class="block text-xs font-medium text-slate-700 mb-1">ผู้แจ้งงาน</label>
+              <input type="text" id="reporter" placeholder="เช่น คุณสมชาย" class="w-full border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-blue-500 outline-none">
             </div>
             <div>
-              <label class="block text-sm font-medium text-slate-700 mb-1">ผู้รับงาน / ดำเนินการ</label>
-              <input type="text" id="assignee" placeholder="เช่น Supatcha" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+              <label class="block text-xs font-medium text-slate-700 mb-1">แผนก (Dept)</label>
+              <input type="text" id="department" placeholder="เช่น FO, HK, FB" class="w-full border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-700 mb-1">ผู้รับงาน</label>
+              <input type="text" id="assignee" placeholder="เช่น Supatcha" class="w-full border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-blue-500 outline-none">
             </div>
           </div>
 
@@ -129,7 +134,7 @@
                 <tr>
                   <th class="p-3">วันที่</th>
                   <th class="p-3">งานที่ทำ</th>
-                  <th class="p-3">ผู้แจ้ง / ผู้รับงาน</th>
+                  <th class="p-3">ผู้แจ้ง / แผนก / ผู้รับงาน</th>
                   <th class="p-3">Category</th>
                   <th class="p-3">ความสำคัญ</th>
                   <th class="p-3">การจัดการ</th>
@@ -209,8 +214,9 @@
             <td class="p-3 whitespace-nowrap text-slate-500">${task.date}</td>
             <td class="p-3 font-medium text-slate-900">${task.title}<br><span class="text-xs text-slate-400 font-normal">${task.description || '-'}</span></td>
             <td class="p-3 whitespace-nowrap text-xs">
-              <span class="text-slate-700 font-medium">แจ้ง:</span> ${task.reporter || '-'}<br>
-              <span class="text-slate-700 font-medium">รับ:</span> ${task.assignee || '-'}
+              <span class="text-slate-700 font-medium">ผู้แจ้ง:</span> ${task.reporter || '-'}<br>
+              <span class="text-slate-700 font-medium">แผนก:</span> ${task.department || '-'}<br>
+              <span class="text-slate-700 font-medium">ผู้รับ:</span> ${task.assignee || '-'}
             </td>
             <td class="p-3 whitespace-nowrap"><span class="bg-blue-50 text-blue-600 px-2 py-1 rounded text-xs font-semibold">${task.category}</span></td>
             <td class="p-3 whitespace-nowrap"><span class="border ${priorityBadge} px-2 py-0.5 rounded text-xs">${task.priority}</span></td>
@@ -230,6 +236,7 @@
         date: new Date().toISOString().split('T')[0],
         title: document.getElementById('title').value,
         reporter: document.getElementById('reporter').value,
+        department: document.getElementById('department').value,
         assignee: document.getElementById('assignee').value,
         category: document.getElementById('category').value,
         priority: document.getElementById('priority').value,
@@ -240,7 +247,7 @@
       const { error } = await supabaseClient.from('tasks').insert([newTask]);
 
       if (error) {
-        alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล (อย่าลืมรัน SQL คำสั่งเพิ่มคอลัมน์ reporter และ assignee บน Supabase ครับ)');
+        alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล (อย่าลืมรันคำสั่ง SQL เพิ่มคอลัมน์ department ใน Supabase ครับ)');
         console.error(error);
       } else {
         e.target.reset();
@@ -260,7 +267,7 @@
       }
     }
 
-    // 4. Export ข้อมูลเป็น Excel (ตามที่แสดงในหน้าจอปัจจุบัน)
+    // 4. Export ข้อมูลเป็น Excel (แยกคอลัมน์ Department ออกมาให้อัตโนมัติ)
     function exportToExcel() {
       if (currentTasks.length === 0) {
         alert('ไม่มีข้อมูลสำหรับ Export');
@@ -271,7 +278,8 @@
         'No.': i + 1,
         'Date': t.date,
         'Task Name': t.title,
-        'Reporter / Dept': t.reporter || '-',
+        'Reporter': t.reporter || '-',
+        'Department': t.department || '-',
         'Assignee': t.assignee || '-',
         'Category': t.category,
         'Priority': t.priority,
@@ -285,8 +293,8 @@
 
       worksheet['!cols'] = [
         { wch: 6 },  { wch: 12 }, { wch: 30 }, 
-        { wch: 18 }, { wch: 16 }, { wch: 16 }, 
-        { wch: 12 }, { wch: 12 }, { wch: 40 }
+        { wch: 16 }, { wch: 14 }, { wch: 16 }, 
+        { wch: 16 }, { wch: 12 }, { wch: 12 }, { wch: 40 }
       ];
 
       XLSX.writeFile(workbook, `IT_Task_Report_${new Date().toISOString().split('T')[0]}.xlsx`);
