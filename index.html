@@ -520,6 +520,9 @@
         return;
       }
 
+      // เช็กว่าเป็น Admin / Supervisor หรือไม่
+      const isSupervisor = (currentUserRole === 'admin' || currentUserRole === 'supervisor');
+
       currentTasks.forEach((task) => {
         let priorityBadge = 'bg-slate-700 text-slate-300 border-slate-600';
         if (task.priority === 'High') priorityBadge = 'bg-amber-500/20 text-amber-300 border-amber-500/30';
@@ -530,7 +533,21 @@
         if (task.status === 'Completed') statusBadge = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
         if (task.status === 'Cancelled') statusBadge = 'bg-rose-500/20 text-rose-300 border-rose-500/40';
 
-        const canDelete = (currentUserRole === 'admin' || currentUserRole === 'supervisor' || currentUser.id === task.user_id);
+        const canDelete = isSupervisor || currentUser.id === task.user_id;
+
+        // ถ้าเป็น Supervisor ถึงจะแสดง Dropdown ให้กดเปลี่ยนสถานะได้ / ถ้าเป็น Staff จะแสดงเฉพาะป้ายปุ่มกดไม่ได้
+        const statusHTML = isSupervisor ? `
+          <select onchange="updateStatus(${task.id}, this.value)" class="text-xs font-medium border rounded-lg px-2 py-1 ${statusBadge} bg-slate-900 outline-none cursor-pointer">
+            <option value="Pending" ${task.status === 'Pending' ? 'selected' : ''}>Pending</option>
+            <option value="In Progress" ${task.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+            <option value="Completed" ${task.status === 'Completed' ? 'selected' : ''}>Completed</option>
+            <option value="Cancelled" ${task.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+          </select>
+        ` : `
+          <span class="text-xs font-medium border rounded-lg px-2.5 py-1 ${statusBadge} inline-block">
+            ${task.status || 'Pending'}
+          </span>
+        `;
 
         tbody.innerHTML += `
           <tr class="hover:bg-slate-800/60 transition-colors">
@@ -545,14 +562,7 @@
               <span class="text-slate-400">ผู้รับ:</span> <span class="text-purple-300 font-medium">${task.assignee || '-'}</span>
             </td>
             <td class="p-3 whitespace-nowrap"><span class="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-1 rounded-md text-xs font-semibold">${task.category}</span></td>
-            <td class="p-3 whitespace-nowrap">
-              <select onchange="updateStatus(${task.id}, this.value)" class="text-xs font-medium border rounded-lg px-2 py-1 ${statusBadge} bg-slate-900 outline-none cursor-pointer">
-                <option value="Pending" ${task.status === 'Pending' ? 'selected' : ''}>Pending</option>
-                <option value="In Progress" ${task.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
-                <option value="Completed" ${task.status === 'Completed' ? 'selected' : ''}>Completed</option>
-                <option value="Cancelled" ${task.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
-              </select>
-            </td>
+            <td class="p-3 whitespace-nowrap">${statusHTML}</td>
             <td class="p-3 whitespace-nowrap">
               ${canDelete ? `<button onclick="deleteTask(${task.id})" class="text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 px-2.5 py-1 rounded-md text-xs font-medium transition-all">ลบ</button>` : `<span class="text-slate-600 text-xs">-</span>`}
             </td>
@@ -602,7 +612,7 @@
       }
     }
 
-    // 7. Export Excel (จัดเรียงคอลัมน์และซ่อนวันที่ซ้ำตามแบบตัวอย่างเป๊ะๆ)
+    // Export Excel
     function exportToExcel() {
       if (currentTasks.length === 0) {
         alert('ไม่มีข้อมูลสำหรับ Export');
