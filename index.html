@@ -45,17 +45,58 @@
       </button>
     </form>
 
+    <div class="text-center pt-2 border-t border-slate-700/50">
+      <p class="text-xs text-slate-400">ยังไม่มีบัญชีผู้ใช้งาน? 
+        <button type="button" onclick="showRegisterPage()" class="text-indigo-400 hover:text-indigo-300 font-medium underline">สมัครสมาชิก</button>
+      </p>
+    </div>
+
     <div id="loginError" class="hidden bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center"></div>
   </div>
 
 
-  <!-- ==================== PAGE 2: FORGOT PASSWORD ==================== -->
+  <!-- ==================== PAGE 2: REGISTER (สมัครสมาชิก) ==================== -->
+  <div id="registerPage" class="hidden max-w-md mx-auto my-12 bg-slate-800/90 border border-slate-700/60 p-8 rounded-2xl shadow-2xl space-y-6">
+    <div class="text-center space-y-2">
+      <div class="w-16 h-16 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">
+        👤
+      </div>
+      <h1 class="text-2xl font-bold text-white">สมัครสมาชิก</h1>
+      <p class="text-slate-400 text-xs">สร้างบัญชีผู้ใช้งานใหม่เข้าสู่ระบบ IT Task</p>
+    </div>
+
+    <form id="registerForm" class="space-y-4">
+      <div>
+        <label class="block text-xs font-medium text-slate-300 mb-1">อีเมล (Email)</label>
+        <input type="email" id="regEmail" required placeholder="user@resort.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-slate-300 mb-1">รหัสผ่าน (อย่างน้อย 6 ตัวอักษร)</label>
+        <input type="password" id="regPassword" required placeholder="••••••••" minlength="6" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-slate-300 mb-1">ยืนยันรหัสผ่าน</label>
+        <input type="password" id="regConfirmPassword" required placeholder="••••••••" minlength="6" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+      </div>
+      <button type="submit" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold py-3 rounded-xl text-sm shadow-lg transition-all transform hover:-translate-y-0.5">
+        สมัครสมาชิก (Sign Up)
+      </button>
+      <button type="button" onclick="showLoginPage()" class="w-full bg-slate-700 hover:bg-slate-600 text-slate-300 font-medium py-2.5 rounded-xl text-xs transition-all">
+        ← ย้อนกลับไปหน้าเข้าสู่ระบบ
+      </button>
+    </form>
+
+    <div id="registerMessage" class="hidden p-3 rounded-xl text-xs text-center"></div>
+  </div>
+
+
+  <!-- ==================== PAGE 3: FORGOT PASSWORD ==================== -->
   <div id="forgotPasswordPage" class="hidden max-w-md mx-auto my-12 bg-slate-800/90 border border-slate-700/60 p-8 rounded-2xl shadow-2xl space-y-6">
     <div class="text-center space-y-2">
       <div class="w-16 h-16 bg-gradient-to-tr from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">
         🔑
       </div>
-      <h1 class="text-2xl font-bold text-white">รีเซ็ตรหัสผ่าน</h1>
+      <h1 class="text-2xl font-bold text-white">ลืมรหัสผ่าน</h1>
       <p class="text-slate-400 text-xs">กรอกอีเมลของคุณเพื่อรับลิงก์สำหรับตั้งรหัสผ่านใหม่</p>
     </div>
 
@@ -76,7 +117,7 @@
   </div>
 
 
-  <!-- ==================== PAGE 3: RESET PASSWORD ==================== -->
+  <!-- ==================== PAGE 4: RESET PASSWORD ==================== -->
   <div id="resetPasswordPage" class="hidden max-w-md mx-auto my-12 bg-slate-800/90 border border-slate-700/60 p-8 rounded-2xl shadow-2xl space-y-6">
     <div class="text-center space-y-2">
       <div class="w-16 h-16 bg-gradient-to-tr from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">
@@ -104,7 +145,7 @@
   </div>
 
 
-  <!-- ==================== PAGE 4: MAIN DASHBOARD ==================== -->
+  <!-- ==================== PAGE 5: MAIN DASHBOARD ==================== -->
   <div id="mainDashboard" class="hidden max-w-7xl mx-auto space-y-6">
     
     <!-- Header banner -->
@@ -335,6 +376,7 @@
     // 1. Navigation Controller (สลับหน้า)
     function hideAllPages() {
       document.getElementById('loginPage').classList.add('hidden');
+      document.getElementById('registerPage').classList.add('hidden');
       document.getElementById('forgotPasswordPage').classList.add('hidden');
       document.getElementById('resetPasswordPage').classList.add('hidden');
       document.getElementById('mainDashboard').classList.add('hidden');
@@ -343,6 +385,11 @@
     function showLoginPage() {
       hideAllPages();
       document.getElementById('loginPage').classList.remove('hidden');
+    }
+
+    function showRegisterPage() {
+      hideAllPages();
+      document.getElementById('registerPage').classList.remove('hidden');
     }
 
     function showForgotPasswordPage() {
@@ -399,7 +446,41 @@
       }
     });
 
-    // 4. Handle Forgot Password
+    // 4. Handle Register (สมัครสมาชิก)
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('regEmail').value;
+      const password = document.getElementById('regPassword').value;
+      const confirmPassword = document.getElementById('regConfirmPassword').value;
+      const msgBox = document.getElementById('registerMessage');
+      msgBox.classList.add('hidden');
+
+      if (password !== confirmPassword) {
+        msgBox.innerText = 'รหัสผ่านทั้งสองช่องไม่ตรงกัน';
+        msgBox.className = "bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center";
+        msgBox.classList.remove('hidden');
+        return;
+      }
+
+      const { data, error } = await supabaseClient.auth.signUp({
+        email: email,
+        password: password,
+      });
+
+      if (error) {
+        msgBox.innerText = 'สมัครสมาชิกไม่สำเร็จ: ' + error.message;
+        msgBox.className = "bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center";
+      } else {
+        msgBox.innerText = 'สมัครสมาชิกสำเร็จเรียบร้อย! กำลังนำคุณกลับไปหน้าเข้าสู่ระบบ...';
+        msgBox.className = "bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 p-3 rounded-xl text-xs text-center";
+        setTimeout(() => {
+          showLoginPage();
+        }, 2000);
+      }
+      msgBox.classList.remove('hidden');
+    });
+
+    // 5. Handle Forgot Password (ขอรีเซ็ตรหัสผ่าน)
     document.getElementById('forgotPasswordForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('forgotEmail').value;
@@ -420,7 +501,7 @@
       msgBox.classList.remove('hidden');
     });
 
-    // 5. Handle Reset Password
+    // 6. Handle Reset Password (ตั้งรหัสผ่านใหม่)
     document.getElementById('resetPasswordForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const newPassword = document.getElementById('newPassword').value;
@@ -447,7 +528,7 @@
       msgBox.classList.remove('hidden');
     });
 
-    // 6. Handle Logout
+    // 7. Handle Logout
     async function handleLogout() {
       await supabaseClient.auth.signOut();
       currentUser = null;
