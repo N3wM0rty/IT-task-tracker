@@ -233,7 +233,8 @@
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block text-xs font-medium text-slate-300 mb-1">สถานะงาน (Status)</label>
-              <select id="status" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none font-medium">
+              <!-- จะถูกควบคุมด้วย JavaScript: Staff จะโดนล็อกให้ปรับไม่ได้ -->
+              <select id="status" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none font-medium disabled:opacity-50 disabled:cursor-not-allowed">
                 <option value="Pending" selected class="text-orange-400">Pending (รอดำเนินการ)</option>
                 <option value="In Progress" class="text-amber-400">In Progress (กำลังทำ)</option>
                 <option value="Completed" class="text-emerald-400">Completed (เสร็จสิ้น)</option>
@@ -461,12 +462,19 @@
       const roleBadge = document.getElementById('userRoleBadge');
       roleBadge.innerText = currentUserRole;
       
-      if (currentUserRole === 'admin' || currentUserRole === 'supervisor') {
+      const isSupervisor = (currentUserRole === 'admin' || currentUserRole === 'supervisor');
+
+      // ล็อก / ปลดล็อก ฟอร์มเลือกสถานะงานตอนบันทึกงานใหม่
+      const formStatusSelect = document.getElementById('status');
+      if (isSupervisor) {
         roleBadge.className = "bg-rose-500/30 text-rose-200 border border-rose-400/30 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase";
         document.getElementById('btnExport').classList.remove('hidden');
+        formStatusSelect.disabled = false;
       } else {
         roleBadge.className = "bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase";
         document.getElementById('btnExport').classList.add('hidden');
+        formStatusSelect.value = 'Pending';
+        formStatusSelect.disabled = true; // ล็อกไม่ให้ Staff ปรับเปลี่ยนสถานะตอนสร้างงาน
       }
 
       fetchTasks();
@@ -520,7 +528,6 @@
         return;
       }
 
-      // เช็กว่าเป็น Admin / Supervisor หรือไม่
       const isSupervisor = (currentUserRole === 'admin' || currentUserRole === 'supervisor');
 
       currentTasks.forEach((task) => {
@@ -535,7 +542,7 @@
 
         const canDelete = isSupervisor || currentUser.id === task.user_id;
 
-        // ถ้าเป็น Supervisor ถึงจะแสดง Dropdown ให้กดเปลี่ยนสถานะได้ / ถ้าเป็น Staff จะแสดงเฉพาะป้ายปุ่มกดไม่ได้
+        // บัญชี Supervisor ถึงจะมี Dropdown ให้แก้สถานะในตารางได้ / บัญชี Staff จะแสดงเฉพาะป้ายข้อความปกติ
         const statusHTML = isSupervisor ? `
           <select onchange="updateStatus(${task.id}, this.value)" class="text-xs font-medium border rounded-lg px-2 py-1 ${statusBadge} bg-slate-900 outline-none cursor-pointer">
             <option value="Pending" ${task.status === 'Pending' ? 'selected' : ''}>Pending</option>
@@ -584,7 +591,7 @@
         assignee: document.getElementById('assignee').value || currentUser.email.split('@')[0],
         category: document.getElementById('category').value,
         priority: document.getElementById('priority').value,
-        status: document.getElementById('status').value,
+        status: document.getElementById('status').value, // ถ้าล็อกไว้ จะส่งค่า 'Pending' เสมอ
         description: document.getElementById('description').value
       };
 
@@ -594,7 +601,7 @@
         alert('เกิดข้อผิดพลาดในการบันทึก');
       } else {
         e.target.reset();
-        fetchTasks();
+        checkAuth(); // รีเฟรชสถานะฟอร์มตาม Role
       }
     });
 
