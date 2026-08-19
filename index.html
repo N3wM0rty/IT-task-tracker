@@ -4,9 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IT Task Tracker & Management System</title>
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font support (Kanit) -->
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- SheetJS CDN (สำหรับ Export Excel) -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- Supabase JS Client CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body { font-family: 'Kanit', sans-serif; }
@@ -14,6 +18,7 @@
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen p-4 md:p-8">
 
+  <!-- ==================== PAGE 1: LOGIN ==================== -->
   <div id="loginPage" class="max-w-md mx-auto my-12 bg-slate-800/90 border border-slate-700/60 p-8 rounded-2xl shadow-2xl space-y-6">
     <div class="text-center space-y-2">
       <div class="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">
@@ -44,6 +49,7 @@
   </div>
 
 
+  <!-- ==================== PAGE 2: FORGOT PASSWORD ==================== -->
   <div id="forgotPasswordPage" class="hidden max-w-md mx-auto my-12 bg-slate-800/90 border border-slate-700/60 p-8 rounded-2xl shadow-2xl space-y-6">
     <div class="text-center space-y-2">
       <div class="w-16 h-16 bg-gradient-to-tr from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">
@@ -70,6 +76,7 @@
   </div>
 
 
+  <!-- ==================== PAGE 3: RESET PASSWORD ==================== -->
   <div id="resetPasswordPage" class="hidden max-w-md mx-auto my-12 bg-slate-800/90 border border-slate-700/60 p-8 rounded-2xl shadow-2xl space-y-6">
     <div class="text-center space-y-2">
       <div class="w-16 h-16 bg-gradient-to-tr from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">
@@ -97,8 +104,10 @@
   </div>
 
 
+  <!-- ==================== PAGE 4: MAIN DASHBOARD ==================== -->
   <div id="mainDashboard" class="hidden max-w-7xl mx-auto space-y-6">
     
+    <!-- Header banner -->
     <header class="bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-500 p-6 rounded-2xl shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
         <h1 class="text-2xl md:text-3xl font-bold text-white flex items-center gap-2">
@@ -108,6 +117,7 @@
       </div>
       
       <div class="flex items-center gap-3">
+        <!-- User Badge -->
         <div class="bg-slate-900/40 backdrop-blur border border-white/10 p-2.5 rounded-xl flex items-center gap-3">
           <div class="text-right">
             <p id="userEmailDisplay" class="text-xs font-semibold text-white">user@resort.com</p>
@@ -118,6 +128,7 @@
           </button>
         </div>
 
+        <!-- Export Button (Supervisor Only) -->
         <button id="btnExport" onclick="exportToExcel()" class="hidden bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-4 py-3 rounded-xl text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
           Export Excel
@@ -125,6 +136,7 @@
       </div>
     </header>
 
+    <!-- Summary Stats Bar -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
       <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-xl shadow-sm flex items-center justify-between">
         <div>
@@ -158,6 +170,7 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       
+      <!-- Form บันทึกงาน -->
       <div class="bg-slate-800/90 border border-slate-700/60 p-6 rounded-2xl shadow-xl h-fit">
         <h2 class="text-lg font-bold mb-4 text-white flex items-center gap-2">
           <span class="text-indigo-400">📝</span> บันทึกงานใหม่
@@ -247,8 +260,10 @@
         </form>
       </div>
 
+      <!-- รายการ Task Log & Filter -->
       <div class="lg:col-span-2 space-y-4">
         
+        <!-- Filter Box -->
         <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-2xl shadow-xl flex flex-wrap items-end gap-3 text-sm">
           <div class="flex-1 min-w-[130px]">
             <label class="block text-xs font-medium text-slate-300 mb-1">ตั้งแต่วันที่</label>
@@ -295,7 +310,8 @@
                 </tr>
               </thead>
               <tbody id="taskTableBody" class="divide-y divide-slate-700/50">
-                </tbody>
+                <!-- ข้อมูลแสดงที่นี่ -->
+              </tbody>
             </table>
           </div>
         </div>
@@ -586,33 +602,54 @@
       }
     }
 
+    // 7. Export Excel (จัดเรียงคอลัมน์และซ่อนวันที่ซ้ำตามแบบตัวอย่างเป๊ะๆ)
     function exportToExcel() {
-      if (currentTasks.length === 0) return alert('ไม่มีข้อมูล');
+      if (currentTasks.length === 0) {
+        alert('ไม่มีข้อมูลสำหรับ Export');
+        return;
+      }
 
-      const dataToExport = currentTasks.map((t, i) => ({
-        'No.': i + 1,
-        'Date': t.date,
-        'Task Name': t.title,
-        'Reporter': t.reporter || '-',
-        'Department': t.department || '-',
-        'Assignee': t.assignee || '-',
-        'Category': t.category,
-        'Priority': t.priority,
-        'Status': t.status || 'Pending',
-        'Description / Outcome': t.description || '-'
-      }));
+      let lastDate = '';
+
+      const dataToExport = currentTasks.map((t) => {
+        let displayDate = t.date || '';
+        if (displayDate === lastDate) {
+          displayDate = '';
+        } else {
+          lastDate = displayDate;
+        }
+
+        return {
+          'Date': displayDate,
+          'Category': t.category || '-',
+          'Task Name': t.title || '-',
+          'Priority': t.priority || 'Normal',
+          'Status': t.status || 'Pending',
+          'Description / Outcome': t.description || '-',
+          'Dept': t.department || '-',
+          'Reporter': t.reporter || '-',
+          'Fix By': t.assignee || '-'
+        };
+      });
 
       const worksheet = XLSX.utils.json_to_sheet(dataToExport);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "IT Task Log");
 
       worksheet['!cols'] = [
-        { wch: 6 },  { wch: 12 }, { wch: 30 }, 
-        { wch: 16 }, { wch: 14 }, { wch: 16 }, 
-        { wch: 16 }, { wch: 12 }, { wch: 14 }, { wch: 40 }
+        { wch: 13 }, // Date
+        { wch: 17 }, // Category
+        { wch: 40 }, // Task Name
+        { wch: 13 }, // Priority
+        { wch: 13 }, // Status
+        { wch: 70 }, // Description / Outcome
+        { wch: 12 }, // Dept
+        { wch: 20 }, // Reporter
+        { wch: 13 }  // Fix By
       ];
 
-      XLSX.writeFile(workbook, `IT_Task_Report_${new Date().toISOString().split('T')[0]}.xlsx`);
+      const today = new Date().toISOString().split('T')[0];
+      XLSX.writeFile(workbook, `IT_Task_Report_${today}.xlsx`);
     }
 
     checkAuth();
