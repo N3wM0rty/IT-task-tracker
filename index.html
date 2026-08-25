@@ -55,7 +55,7 @@
   </div>
 
 
-  <!-- ==================== PAGE 2: REGISTER (สมัครสมาชิก) ==================== -->
+  <!-- ==================== PAGE 2: REGISTER ==================== -->
   <div id="registerPage" class="hidden max-w-md mx-auto my-12 bg-slate-800/90 border border-slate-700/60 p-8 rounded-2xl shadow-2xl space-y-6">
     <div class="text-center space-y-2">
       <div class="w-16 h-16 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">
@@ -222,6 +222,12 @@
             <input type="text" id="title" required placeholder="เช่น รีเซ็ต Password / แก้ไขปัญหาระบบ" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
           </div>
 
+          <!-- ⭐️ เพิ่มช่องเลือกวันที่ทำรายการ ⭐️ -->
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">📅 วันที่ทำรายการ</label>
+            <input type="date" id="taskDate" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+          </div>
+
           <div class="grid grid-cols-3 gap-2">
             <div>
               <label class="block text-[11px] font-medium text-slate-300 mb-1">ผู้แจ้งงาน</label>
@@ -274,7 +280,6 @@
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block text-xs font-medium text-slate-300 mb-1">สถานะงาน (Status)</label>
-              <!-- จะถูกควบคุมด้วย JavaScript: Staff จะโดนล็อกให้ปรับไม่ได้ -->
               <select id="status" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none font-medium disabled:opacity-50 disabled:cursor-not-allowed">
                 <option value="Pending" selected class="text-orange-400">Pending (รอดำเนินการ)</option>
                 <option value="In Progress" class="text-amber-400">In Progress (กำลังทำ)</option>
@@ -373,7 +378,15 @@
     let currentUserRole = 'staff';
     let currentTasks = [];
 
-    // 1. Navigation Controller (สลับหน้า)
+    // Helper: กำหนดวันปัจจุบันให้ช่องวันที่
+    function setDefaultTaskDate() {
+      const taskDateInput = document.getElementById('taskDate');
+      if (taskDateInput) {
+        taskDateInput.value = new Date().toISOString().split('T')[0];
+      }
+    }
+
+    // 1. Navigation Controller
     function hideAllPages() {
       document.getElementById('loginPage').classList.add('hidden');
       document.getElementById('registerPage').classList.add('hidden');
@@ -446,7 +459,7 @@
       }
     });
 
-    // 4. Handle Register (สมัครสมาชิก)
+    // 4. Handle Register
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('regEmail').value;
@@ -480,7 +493,7 @@
       msgBox.classList.remove('hidden');
     });
 
-    // 5. Handle Forgot Password (ขอรีเซ็ตรหัสผ่าน)
+    // 5. Handle Forgot Password
     document.getElementById('forgotPasswordForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('forgotEmail').value;
@@ -501,7 +514,7 @@
       msgBox.classList.remove('hidden');
     });
 
-    // 6. Handle Reset Password (ตั้งรหัสผ่านใหม่)
+    // 6. Handle Reset Password
     document.getElementById('resetPasswordForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const newPassword = document.getElementById('newPassword').value;
@@ -555,9 +568,10 @@
         roleBadge.className = "bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase";
         document.getElementById('btnExport').classList.add('hidden');
         formStatusSelect.value = 'Pending';
-        formStatusSelect.disabled = true; // ล็อกไม่ให้ Staff ปรับเปลี่ยนสถานะตอนสร้างงาน
+        formStatusSelect.disabled = true;
       }
 
+      setDefaultTaskDate(); // ตั้งค่าวันปัจจุบันให้ช่องวันที่
       fetchTasks();
     }
 
@@ -623,7 +637,6 @@
 
         const canDelete = isSupervisor || currentUser.id === task.user_id;
 
-        // บัญชี Supervisor ถึงจะมี Dropdown ให้แก้สถานะในตารางได้ / บัญชี Staff จะแสดงเฉพาะป้ายข้อความปกติ
         const statusHTML = isSupervisor ? `
           <select onchange="updateStatus(${task.id}, this.value)" class="text-xs font-medium border rounded-lg px-2 py-1 ${statusBadge} bg-slate-900 outline-none cursor-pointer">
             <option value="Pending" ${task.status === 'Pending' ? 'selected' : ''}>Pending</option>
@@ -639,7 +652,7 @@
 
         tbody.innerHTML += `
           <tr class="hover:bg-slate-800/60 transition-colors">
-            <td class="p-3 whitespace-nowrap text-slate-400 text-xs font-mono">${task.date}</td>
+            <td class="p-3 whitespace-nowrap text-slate-400 text-xs font-mono">${task.date || '-'}</td>
             <td class="p-3 font-medium text-white">
               ${task.title} <span class="border ${priorityBadge} px-1.5 py-0.5 rounded text-[10px] ml-1 font-semibold">${task.priority}</span><br>
               <span class="text-xs text-slate-400 font-normal">${task.description || '-'}</span>
@@ -659,30 +672,32 @@
       });
     }
 
-    // Submit Task
+    // Submit Task (อัปเดตดึงวันที่จาก input #taskDate)
     document.getElementById('taskForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       
+      const selectedDate = document.getElementById('taskDate').value || new Date().toISOString().split('T')[0];
+
       const newTask = {
         user_id: currentUser.id,
-        date: new Date().toISOString().split('T')[0],
+        date: selectedDate, // 👈 บันทึกตามวันที่เลือกย้อนหลังหรือวันที่เลือกจริง
         title: document.getElementById('title').value,
         reporter: document.getElementById('reporter').value,
         department: document.getElementById('department').value,
         assignee: document.getElementById('assignee').value || currentUser.email.split('@')[0],
         category: document.getElementById('category').value,
         priority: document.getElementById('priority').value,
-        status: document.getElementById('status').value, // ถ้าล็อกไว้ จะส่งค่า 'Pending' เสมอ
+        status: document.getElementById('status').value,
         description: document.getElementById('description').value
       };
 
       const { error } = await supabaseClient.from('tasks').insert([newTask]);
 
       if (error) {
-        alert('เกิดข้อผิดพลาดในการบันทึก');
+        alert('เกิดข้อผิดพลาดในการบันทึก: ' + error.message);
       } else {
         e.target.reset();
-        checkAuth(); // รีเฟรชสถานะฟอร์มตาม Role
+        checkAuth(); // รีเฟรชฟอร์มและตั้งค่าวันที่กลับเป็นวันนี้
       }
     });
 
