@@ -211,7 +211,7 @@
       </div>
     </div>
 
-    <!-- ⭐️ [เพิ่มใหม่]: การ์ดแสดงกราฟสรุปงานตาม Category ⭐️ -->
+    <!-- การ์ดแสดงกราฟสรุปงานตาม Category -->
     <div class="bg-slate-800/90 border border-slate-700/60 p-5 rounded-2xl shadow-xl">
       <h3 class="text-sm font-bold text-slate-300 mb-3 flex items-center gap-2">
         <span>📈</span> สรุปจำนวนงานแยกตาม Category (Analytics Chart)
@@ -321,10 +321,8 @@
       <!-- รายการ Task Log & Filter -->
       <div class="lg:col-span-2 space-y-4">
         
-        <!-- Filter Box (อัปเดตเพิ่มช่อง Search Real-time และ Filter แผนก) -->
+        <!-- Filter Box -->
         <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-2xl shadow-xl flex flex-wrap items-end gap-3 text-sm">
-          
-          <!-- ⭐️ [เพิ่มใหม่]: ช่องค้นหา Real-time ⭐️ -->
           <div class="flex-1 min-w-[150px]">
             <label class="block text-xs font-medium text-slate-300 mb-1">🔍 ค้นหา (Search)</label>
             <input type="text" id="searchInput" oninput="applyFilters()" placeholder="พิมพ์งาน, ผู้แจ้ง, ผู้รับ..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
@@ -339,7 +337,6 @@
             <input type="date" id="endDate" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
           </div>
 
-          <!-- ⭐️ [เพิ่มใหม่]: ตัวกรองแผนก ⭐️ -->
           <div class="w-[110px]">
             <label class="block text-xs font-medium text-slate-300 mb-1">แผนก</label>
             <select id="filterDept" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
@@ -409,9 +406,9 @@
     
     let currentUser = null;
     let currentUserRole = 'staff';
-    let rawTasks = [];      // ข้อมูลดิบจาก DB
-    let currentTasks = [];  // ข้อมูลที่ผ่าน Filter แล้ว
-    let myChart = null;     // เก็บอินสแตนซ์ของ Chart.js
+    let rawTasks = [];
+    let currentTasks = [];
+    let myChart = null;
 
     function setDefaultTaskDate() {
       const taskDateInput = document.getElementById('taskDate');
@@ -493,7 +490,7 @@
       }
     });
 
-    // 4. Handle Register
+    // 4. Handle Register (เพิ่ม options.emailRedirectTo เพื่อแก้ปัญหา 404 บน GitHub Pages)
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('regEmail').value;
@@ -512,17 +509,20 @@
       const { data, error } = await supabaseClient.auth.signUp({
         email: email,
         password: password,
+        options: {
+          emailRedirectTo: window.location.href // 👈 ส่ง Redirect URL ปลายทางกลับมาที่หน้าเว็บที่ใช้งานอยู่
+        }
       });
 
       if (error) {
         msgBox.innerText = 'สมัครสมาชิกไม่สำเร็จ: ' + error.message;
         msgBox.className = "bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center";
       } else {
-        msgBox.innerText = 'สมัครสมาชิกสำเร็จเรียบร้อย! กำลังนำคุณกลับไปหน้าเข้าสู่ระบบ...';
+        msgBox.innerText = 'สมัครสมาชิกสำเร็จ! กรุณาเช็กอีเมลเพื่อกดยืนยันตัวตน (Confirm Email) ก่อนเข้าสู่ระบบ';
         msgBox.className = "bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 p-3 rounded-xl text-xs text-center";
         setTimeout(() => {
           showLoginPage();
-        }, 2000);
+        }, 4000);
       }
       msgBox.classList.remove('hidden');
     });
@@ -608,7 +608,7 @@
       fetchTasks();
     }
 
-    // Fetch Tasks ดึงข้อมูลหลักจาก DB
+    // Fetch Tasks
     async function fetchTasks() {
       let { data, error } = await supabaseClient.from('tasks').select('*').order('id', { ascending: false });
 
@@ -618,10 +618,10 @@
       }
 
       rawTasks = data || [];
-      applyFilters(); // นำข้อมูลมาผ่านตัวกรอง
+      applyFilters();
     }
 
-    // ⭐️ [เพิ่มใหม่]: ฟังก์ชันกรองข้อมูล Real-time (Search + Date + Dept + Status) ⭐️
+    // Filter Logic
     function applyFilters() {
       const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
       const startDate = document.getElementById('startDate').value;
@@ -630,7 +630,6 @@
       const statusFilter = document.getElementById('filterStatus').value;
 
       currentTasks = rawTasks.filter(t => {
-        // ค้นหาในชื่อเรื่อง, ผู้แจ้ง, ผู้รับงาน, หรือรายละเอียด
         const matchesSearch = !searchTerm || 
           (t.title && t.title.toLowerCase().includes(searchTerm)) ||
           (t.reporter && t.reporter.toLowerCase().includes(searchTerm)) ||
@@ -646,7 +645,7 @@
       });
 
       updateStats();
-      renderCategoryChart(); // วาดกราฟสรุปใหม่ตาม Filter
+      renderCategoryChart();
       renderTable();
     }
 
@@ -666,7 +665,7 @@
       applyFilters();
     }
 
-    // ⭐️ [เพิ่มใหม่]: ฟังก์ชันวาดกราฟสรุปงานตาม Category ด้วย Chart.js ⭐️
+    // Render Category Analytics Chart
     function renderCategoryChart() {
       const counts = {};
       currentTasks.forEach(t => {
@@ -680,7 +679,7 @@
       const ctx = document.getElementById('categoryChart').getContext('2d');
 
       if (myChart) {
-        myChart.destroy(); // ทำลายกราฟเก่าก่อนวาดใหม่
+        myChart.destroy();
       }
 
       myChart = new Chart(ctx, {
@@ -745,7 +744,6 @@
           </span>
         `;
 
-        // ⭐️ [เพิ่มใหม่]: ปุ่ม Quick Complete สำหรับจบงานไว ⭐️
         const quickActionHTML = (task.status !== 'Completed') ? `
           <button onclick="updateStatus(${task.id}, 'Completed')" title="จบงานด่วน" class="text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 px-2 py-1 rounded-md text-xs font-medium transition-all mr-1">
             ✓ จบงาน
