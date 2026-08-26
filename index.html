@@ -392,7 +392,6 @@
             <table class="w-full text-left text-sm text-slate-300">
               <thead class="bg-slate-900/80 text-slate-300 border-b border-slate-700">
                 <tr>
-                  <th class="p-3">วันที่</th>
                   <th class="p-3">งานที่ทำ</th>
                   <th class="p-3">ผู้แจ้ง / แผนก / ผู้รับ</th>
                   <th class="p-3">Category</th>
@@ -401,7 +400,7 @@
                 </tr>
               </thead>
               <tbody id="taskTableBody" class="divide-y divide-slate-700/50">
-                <!-- ข้อมูลแสดงที่นี่ -->
+                <!-- ข้อมูลแบบแยกวันต่อวันจะแสดงที่นี่ -->
               </tbody>
             </table>
           </div>
@@ -425,10 +424,8 @@
     let myChart = null;
 
     // ----------------------------------------------------
-    // 🔔 1. Notification Helper Functions
+    // 🔔 Notification Helper Functions
     // ----------------------------------------------------
-
-    // แสดง In-App Toast Notification มุมขวาบน
     function showToast(title, message, type = 'success') {
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
@@ -459,7 +456,6 @@
 
       container.appendChild(toast);
 
-      // ให้ Toast หายไปเองภายใน 3.5 วินาที
       setTimeout(() => {
         toast.style.opacity = '0';
         toast.style.transition = 'opacity 0.3s ease';
@@ -467,7 +463,6 @@
       }, 3500);
     }
 
-    // ขอสิทธิ์การแจ้งเตือนแบบ Browser Push Notification
     function requestNotificationPermission() {
       if (!("Notification" in window)) {
         showToast('ไม่รองรับการแจ้งเตือน', 'เบราว์เซอร์นี้ไม่รองรับ Push Notifications', 'warning');
@@ -484,7 +479,6 @@
       });
     }
 
-    // ส่งการแจ้งเตือน Browser Push Notification
     function sendBrowserNotification(title, body) {
       if ("Notification" in window && Notification.permission === "granted") {
         new Notification(title, {
@@ -495,7 +489,7 @@
     }
 
     // ----------------------------------------------------
-    // 2. Navigation & Setup
+    // Navigation & Auth Logic
     // ----------------------------------------------------
     function setDefaultTaskDate() {
       const taskDateInput = document.getElementById('taskDate');
@@ -532,7 +526,6 @@
       document.getElementById('resetPasswordPage').classList.remove('hidden');
     }
 
-    // Check Auth State on Load
     async function checkAuth() {
       supabaseClient.auth.onAuthStateChange(async (event, session) => {
         if (event === 'PASSWORD_RECOVERY') {
@@ -557,7 +550,6 @@
       }
     }
 
-    // Handle Login
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('loginEmail').value;
@@ -578,7 +570,6 @@
       }
     });
 
-    // Handle Register
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('regEmail').value;
@@ -618,7 +609,6 @@
       msgBox.classList.remove('hidden');
     });
 
-    // Handle Forgot Password
     document.getElementById('forgotPasswordForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('forgotEmail').value;
@@ -641,7 +631,6 @@
       msgBox.classList.remove('hidden');
     });
 
-    // Handle Reset Password
     document.getElementById('resetPasswordForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const newPassword = document.getElementById('newPassword').value;
@@ -670,7 +659,6 @@
       msgBox.classList.remove('hidden');
     });
 
-    // Handle Logout
     async function handleLogout() {
       await supabaseClient.auth.signOut();
       currentUser = null;
@@ -704,9 +692,11 @@
       fetchTasks();
     }
 
-    // Fetch Tasks
+    // ----------------------------------------------------
+    // Data Fetching & Filter Logic
+    // ----------------------------------------------------
     async function fetchTasks() {
-      let { data, error } = await supabaseClient.from('tasks').select('*').order('id', { ascending: false });
+      let { data, error } = await supabaseClient.from('tasks').select('*').order('date', { ascending: false }).order('id', { ascending: false });
 
       if (error) {
         console.error(error);
@@ -717,7 +707,6 @@
       applyFilters();
     }
 
-    // Filter Logic
     function applyFilters() {
       const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
       const startDate = document.getElementById('startDate').value;
@@ -761,7 +750,6 @@
       applyFilters();
     }
 
-    // Render Category Analytics Chart
     function renderCategoryChart() {
       const counts = {};
       currentTasks.forEach(t => {
@@ -803,52 +791,85 @@
       });
     }
 
+    // ⭐️ ฟังก์ชัน Render แสดงผลตารางแบบ "แบ่งแยกวันต่อวัน (Group By Date Header)" ⭐️
     function renderTable() {
       const tbody = document.getElementById('taskTableBody');
       tbody.innerHTML = '';
       document.getElementById('taskCount').innerText = `${currentTasks.length} รายการ`;
 
       if (currentTasks.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-500">ไม่พบข้อมูล Task</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-500">ไม่พบข้อมูล Task</td></tr>`;
         return;
       }
 
       const isSupervisor = (currentUserRole === 'admin' || currentUserRole === 'supervisor');
 
-      currentTasks.forEach((task) => {
-        let priorityBadge = 'bg-slate-700 text-slate-300 border-slate-600';
-        if (task.priority === 'High') priorityBadge = 'bg-amber-500/20 text-amber-300 border-amber-500/30';
-        if (task.priority === 'Urgent') priorityBadge = 'bg-rose-500/20 text-rose-300 border-rose-500/30';
+      // 1. จัดกลุ่มงานตามวันที่
+      const groupedTasks = {};
+      currentTasks.forEach(task => {
+        const taskDate = task.date || 'ไม่ระบุวันที่';
+        if (!groupedTasks[taskDate]) {
+          groupedTasks[taskDate] = [];
+        }
+        groupedTasks[taskDate].push(task);
+      });
 
-        let statusBadge = 'bg-orange-500/20 text-orange-300 border-orange-500/40';
-        if (task.status === 'In Progress') statusBadge = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
-        if (task.status === 'Completed') statusBadge = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
-        if (task.status === 'Cancelled') statusBadge = 'bg-rose-500/20 text-rose-300 border-rose-500/40';
+      // 2. วนลูปสร้างแถบวันที่ (Date Header) และรายการงานในวันนั้น
+      Object.keys(groupedTasks).forEach(dateStr => {
+        const tasksInDate = groupedTasks[dateStr];
 
-        const canDelete = isSupervisor || currentUser.id === task.user_id;
-
-        const statusHTML = isSupervisor ? `
-          <select onchange="updateStatus(${task.id}, this.value)" class="text-xs font-medium border rounded-lg px-2 py-1 ${statusBadge} bg-slate-900 outline-none cursor-pointer">
-            <option value="Pending" ${task.status === 'Pending' ? 'selected' : ''}>Pending</option>
-            <option value="In Progress" ${task.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
-            <option value="Completed" ${task.status === 'Completed' ? 'selected' : ''}>Completed</option>
-            <option value="Cancelled" ${task.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
-          </select>
-        ` : `
-          <span class="text-xs font-medium border rounded-lg px-2.5 py-1 ${statusBadge} inline-block">
-            ${task.status || 'Pending'}
-          </span>
+        // --- แถบหัวข้อคั่นวันที่ (Group Header Row) ---
+        const headerRow = document.createElement('tr');
+        headerRow.className = "bg-slate-900/90 border-y border-indigo-500/30 font-bold text-xs text-indigo-300";
+        headerRow.innerHTML = `
+          <td colspan="5" class="py-2.5 px-4 bg-indigo-950/40">
+            <div class="flex items-center justify-between">
+              <span class="flex items-center gap-2">
+                <span>📅</span> วันที่ ${dateStr}
+              </span>
+              <span class="bg-indigo-500/20 text-indigo-300 px-2.5 py-0.5 rounded-full border border-indigo-500/30 text-[11px] font-normal">
+                ${tasksInDate.length} รายการ
+              </span>
+            </div>
+          </td>
         `;
+        tbody.appendChild(headerRow);
 
-        const quickActionHTML = (task.status !== 'Completed') ? `
-          <button onclick="updateStatus(${task.id}, 'Completed')" title="จบงานด่วน" class="text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 px-2 py-1 rounded-md text-xs font-medium transition-all mr-1">
-            ✓ จบงาน
-          </button>
-        ` : '';
+        // --- รายการงานในวันนั้น ---
+        tasksInDate.forEach(task => {
+          let priorityBadge = 'bg-slate-700 text-slate-300 border-slate-600';
+          if (task.priority === 'High') priorityBadge = 'bg-amber-500/20 text-amber-300 border-amber-500/30';
+          if (task.priority === 'Urgent') priorityBadge = 'bg-rose-500/20 text-rose-300 border-rose-500/30';
 
-        tbody.innerHTML += `
-          <tr class="hover:bg-slate-800/60 transition-colors">
-            <td class="p-3 whitespace-nowrap text-slate-400 text-xs font-mono">${task.date || '-'}</td>
+          let statusBadge = 'bg-orange-500/20 text-orange-300 border-orange-500/40';
+          if (task.status === 'In Progress') statusBadge = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+          if (task.status === 'Completed') statusBadge = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+          if (task.status === 'Cancelled') statusBadge = 'bg-rose-500/20 text-rose-300 border-rose-500/40';
+
+          const canDelete = isSupervisor || currentUser.id === task.user_id;
+
+          const statusHTML = isSupervisor ? `
+            <select onchange="updateStatus(${task.id}, this.value)" class="text-xs font-medium border rounded-lg px-2 py-1 ${statusBadge} bg-slate-900 outline-none cursor-pointer">
+              <option value="Pending" ${task.status === 'Pending' ? 'selected' : ''}>Pending</option>
+              <option value="In Progress" ${task.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+              <option value="Completed" ${task.status === 'Completed' ? 'selected' : ''}>Completed</option>
+              <option value="Cancelled" ${task.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+            </select>
+          ` : `
+            <span class="text-xs font-medium border rounded-lg px-2.5 py-1 ${statusBadge} inline-block">
+              ${task.status || 'Pending'}
+            </span>
+          `;
+
+          const quickActionHTML = (task.status !== 'Completed') ? `
+            <button onclick="updateStatus(${task.id}, 'Completed')" title="จบงานด่วน" class="text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 px-2 py-1 rounded-md text-xs font-medium transition-all mr-1">
+              ✓ จบงาน
+            </button>
+          ` : '';
+
+          const tr = document.createElement('tr');
+          tr.className = "hover:bg-slate-800/60 transition-colors";
+          tr.innerHTML = `
             <td class="p-3 font-medium text-white">
               ${task.title} <span class="border ${priorityBadge} px-1.5 py-0.5 rounded text-[10px] ml-1 font-semibold">${task.priority}</span><br>
               <span class="text-xs text-slate-400 font-normal">${task.description || '-'}</span>
@@ -864,14 +885,11 @@
               ${quickActionHTML}
               ${canDelete ? `<button onclick="deleteTask(${task.id})" class="text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 px-2.5 py-1 rounded-md text-xs font-medium transition-all">ลบ</button>` : `<span class="text-slate-600 text-xs">-</span>`}
             </td>
-          </tr>
-        `;
+          `;
+          tbody.appendChild(tr);
+        });
       });
     }
-
-    // ----------------------------------------------------
-    // 3. Database Operations with Notifications
-    // ----------------------------------------------------
 
     // Submit Task
     document.getElementById('taskForm').addEventListener('submit', async (e) => {
