@@ -10,6 +10,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <!-- SheetJS CDN (สำหรับ Export Excel) -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- Chart.js CDN (สำหรับสร้างกราฟสรุปงาน) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Supabase JS Client CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -209,6 +211,16 @@
       </div>
     </div>
 
+    <!-- ⭐️ [เพิ่มใหม่]: การ์ดแสดงกราฟสรุปงานตาม Category ⭐️ -->
+    <div class="bg-slate-800/90 border border-slate-700/60 p-5 rounded-2xl shadow-xl">
+      <h3 class="text-sm font-bold text-slate-300 mb-3 flex items-center gap-2">
+        <span>📈</span> สรุปจำนวนงานแยกตาม Category (Analytics Chart)
+      </h3>
+      <div class="h-48">
+        <canvas id="categoryChart"></canvas>
+      </div>
+    </div>
+
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       
       <!-- Form บันทึกงาน -->
@@ -222,7 +234,6 @@
             <input type="text" id="title" required placeholder="เช่น รีเซ็ต Password / แก้ไขปัญหาระบบ" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
           </div>
 
-          <!-- ⭐️ เพิ่มช่องเลือกวันที่ทำรายการ ⭐️ -->
           <div>
             <label class="block text-xs font-medium text-slate-300 mb-1">📅 วันที่ทำรายการ</label>
             <input type="date" id="taskDate" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
@@ -310,19 +321,41 @@
       <!-- รายการ Task Log & Filter -->
       <div class="lg:col-span-2 space-y-4">
         
-        <!-- Filter Box -->
+        <!-- Filter Box (อัปเดตเพิ่มช่อง Search Real-time และ Filter แผนก) -->
         <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-2xl shadow-xl flex flex-wrap items-end gap-3 text-sm">
-          <div class="flex-1 min-w-[130px]">
+          
+          <!-- ⭐️ [เพิ่มใหม่]: ช่องค้นหา Real-time ⭐️ -->
+          <div class="flex-1 min-w-[150px]">
+            <label class="block text-xs font-medium text-slate-300 mb-1">🔍 ค้นหา (Search)</label>
+            <input type="text" id="searchInput" oninput="applyFilters()" placeholder="พิมพ์งาน, ผู้แจ้ง, ผู้รับ..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+
+          <div class="w-[120px]">
             <label class="block text-xs font-medium text-slate-300 mb-1">ตั้งแต่วันที่</label>
-            <input type="date" id="startDate" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
+            <input type="date" id="startDate" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
           </div>
-          <div class="flex-1 min-w-[130px]">
+          <div class="w-[120px]">
             <label class="block text-xs font-medium text-slate-300 mb-1">ถึงวันที่</label>
-            <input type="date" id="endDate" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
+            <input type="date" id="endDate" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
           </div>
-          <div class="w-[130px]">
+
+          <!-- ⭐️ [เพิ่มใหม่]: ตัวกรองแผนก ⭐️ -->
+          <div class="w-[110px]">
+            <label class="block text-xs font-medium text-slate-300 mb-1">แผนก</label>
+            <select id="filterDept" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="">ทั้งหมด</option>
+              <option value="FO">FO</option>
+              <option value="HK">HK</option>
+              <option value="FB">F&B</option>
+              <option value="ACC">ACC</option>
+              <option value="HR">HR</option>
+              <option value="IT">IT</option>
+            </select>
+          </div>
+
+          <div class="w-[110px]">
             <label class="block text-xs font-medium text-slate-300 mb-1">สถานะ</label>
-            <select id="filterStatus" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
+            <select id="filterStatus" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
               <option value="">ทั้งหมด</option>
               <option value="Pending">Pending</option>
               <option value="In Progress">In Progress</option>
@@ -330,8 +363,8 @@
               <option value="Cancelled">Cancelled</option>
             </select>
           </div>
-          <div class="flex gap-2">
-            <button onclick="fetchTasks()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-xs font-semibold transition-all">กรองข้อมูล</button>
+          
+          <div>
             <button onclick="resetFilter()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 px-3 py-2 rounded-lg text-xs font-medium transition-all">ล้าง</button>
           </div>
         </div>
@@ -376,9 +409,10 @@
     
     let currentUser = null;
     let currentUserRole = 'staff';
-    let currentTasks = [];
+    let rawTasks = [];      // ข้อมูลดิบจาก DB
+    let currentTasks = [];  // ข้อมูลที่ผ่าน Filter แล้ว
+    let myChart = null;     // เก็บอินสแตนซ์ของ Chart.js
 
-    // Helper: กำหนดวันปัจจุบันให้ช่องวันที่
     function setDefaultTaskDate() {
       const taskDateInput = document.getElementById('taskDate');
       if (taskDateInput) {
@@ -558,7 +592,6 @@
       
       const isSupervisor = (currentUserRole === 'admin' || currentUserRole === 'supervisor');
 
-      // ล็อก / ปลดล็อก ฟอร์มเลือกสถานะงานตอนบันทึกงานใหม่
       const formStatusSelect = document.getElementById('status');
       if (isSupervisor) {
         roleBadge.className = "bg-rose-500/30 text-rose-200 border border-rose-400/30 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase";
@@ -571,31 +604,49 @@
         formStatusSelect.disabled = true;
       }
 
-      setDefaultTaskDate(); // ตั้งค่าวันปัจจุบันให้ช่องวันที่
+      setDefaultTaskDate();
       fetchTasks();
     }
 
-    // Fetch Tasks
+    // Fetch Tasks ดึงข้อมูลหลักจาก DB
     async function fetchTasks() {
-      const startDate = document.getElementById('startDate').value;
-      const endDate = document.getElementById('endDate').value;
-      const statusFilter = document.getElementById('filterStatus').value;
-
-      let query = supabaseClient.from('tasks').select('*').order('id', { ascending: false });
-
-      if (startDate) query = query.gte('date', startDate);
-      if (endDate) query = query.lte('date', endDate);
-      if (statusFilter) query = query.eq('status', statusFilter);
-
-      const { data, error } = await query;
+      let { data, error } = await supabaseClient.from('tasks').select('*').order('id', { ascending: false });
 
       if (error) {
         console.error(error);
         return;
       }
 
-      currentTasks = data || [];
+      rawTasks = data || [];
+      applyFilters(); // นำข้อมูลมาผ่านตัวกรอง
+    }
+
+    // ⭐️ [เพิ่มใหม่]: ฟังก์ชันกรองข้อมูล Real-time (Search + Date + Dept + Status) ⭐️
+    function applyFilters() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
+      const deptFilter = document.getElementById('filterDept').value.toLowerCase();
+      const statusFilter = document.getElementById('filterStatus').value;
+
+      currentTasks = rawTasks.filter(t => {
+        // ค้นหาในชื่อเรื่อง, ผู้แจ้ง, ผู้รับงาน, หรือรายละเอียด
+        const matchesSearch = !searchTerm || 
+          (t.title && t.title.toLowerCase().includes(searchTerm)) ||
+          (t.reporter && t.reporter.toLowerCase().includes(searchTerm)) ||
+          (t.assignee && t.assignee.toLowerCase().includes(searchTerm)) ||
+          (t.description && t.description.toLowerCase().includes(searchTerm));
+
+        const matchesStartDate = !startDate || (t.date >= startDate);
+        const matchesEndDate = !endDate || (t.date <= endDate);
+        const matchesDept = !deptFilter || (t.department && t.department.toLowerCase().includes(deptFilter));
+        const matchesStatus = !statusFilter || (t.status === statusFilter);
+
+        return matchesSearch && matchesStartDate && matchesEndDate && matchesDept && matchesStatus;
+      });
+
       updateStats();
+      renderCategoryChart(); // วาดกราฟสรุปใหม่ตาม Filter
       renderTable();
     }
 
@@ -607,10 +658,54 @@
     }
 
     function resetFilter() {
+      document.getElementById('searchInput').value = '';
       document.getElementById('startDate').value = '';
       document.getElementById('endDate').value = '';
+      document.getElementById('filterDept').value = '';
       document.getElementById('filterStatus').value = '';
-      fetchTasks();
+      applyFilters();
+    }
+
+    // ⭐️ [เพิ่มใหม่]: ฟังก์ชันวาดกราฟสรุปงานตาม Category ด้วย Chart.js ⭐️
+    function renderCategoryChart() {
+      const counts = {};
+      currentTasks.forEach(t => {
+        const cat = t.category || 'other';
+        counts[cat] = (counts[cat] || 0) + 1;
+      });
+
+      const labels = Object.keys(counts);
+      const dataValues = Object.values(counts);
+
+      const ctx = document.getElementById('categoryChart').getContext('2d');
+
+      if (myChart) {
+        myChart.destroy(); // ทำลายกราฟเก่าก่อนวาดใหม่
+      }
+
+      myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'จำนวน Task',
+            data: dataValues,
+            backgroundColor: '#6366f1',
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            x: { ticks: { color: '#94a3b8', font: { family: 'Kanit' } }, grid: { display: false } },
+            y: { ticks: { color: '#94a3b8', font: { family: 'Kanit' }, stepSize: 1 }, grid: { color: '#334155' } }
+          }
+        }
+      });
     }
 
     function renderTable() {
@@ -650,6 +745,13 @@
           </span>
         `;
 
+        // ⭐️ [เพิ่มใหม่]: ปุ่ม Quick Complete สำหรับจบงานไว ⭐️
+        const quickActionHTML = (task.status !== 'Completed') ? `
+          <button onclick="updateStatus(${task.id}, 'Completed')" title="จบงานด่วน" class="text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 px-2 py-1 rounded-md text-xs font-medium transition-all mr-1">
+            ✓ จบงาน
+          </button>
+        ` : '';
+
         tbody.innerHTML += `
           <tr class="hover:bg-slate-800/60 transition-colors">
             <td class="p-3 whitespace-nowrap text-slate-400 text-xs font-mono">${task.date || '-'}</td>
@@ -665,6 +767,7 @@
             <td class="p-3 whitespace-nowrap"><span class="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-1 rounded-md text-xs font-semibold">${task.category}</span></td>
             <td class="p-3 whitespace-nowrap">${statusHTML}</td>
             <td class="p-3 whitespace-nowrap">
+              ${quickActionHTML}
               ${canDelete ? `<button onclick="deleteTask(${task.id})" class="text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 px-2.5 py-1 rounded-md text-xs font-medium transition-all">ลบ</button>` : `<span class="text-slate-600 text-xs">-</span>`}
             </td>
           </tr>
@@ -672,7 +775,7 @@
       });
     }
 
-    // Submit Task (อัปเดตดึงวันที่จาก input #taskDate)
+    // Submit Task
     document.getElementById('taskForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       
@@ -680,7 +783,7 @@
 
       const newTask = {
         user_id: currentUser.id,
-        date: selectedDate, // 👈 บันทึกตามวันที่เลือกย้อนหลังหรือวันที่เลือกจริง
+        date: selectedDate,
         title: document.getElementById('title').value,
         reporter: document.getElementById('reporter').value,
         department: document.getElementById('department').value,
@@ -697,7 +800,7 @@
         alert('เกิดข้อผิดพลาดในการบันทึก: ' + error.message);
       } else {
         e.target.reset();
-        checkAuth(); // รีเฟรชฟอร์มและตั้งค่าวันที่กลับเป็นวันนี้
+        checkAuth();
       }
     });
 
