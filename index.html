@@ -16,9 +16,18 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body { font-family: 'Kanit', sans-serif; }
+    /* Keyframe Animation สำหรับ In-App Toast Notification */
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    .toast-slide-in { animation: slideInRight 0.3s ease-out forwards; }
   </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen p-4 md:p-8">
+<body class="bg-slate-900 text-slate-100 min-h-screen p-4 md:p-8 relative">
+
+  <!-- 🔔 Toast Container (สำหรับแสดง In-App Notification มุมขวาบน) -->
+  <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
 
   <!-- ==================== PAGE 1: LOGIN ==================== -->
   <div id="loginPage" class="max-w-md mx-auto my-12 bg-slate-800/90 border border-slate-700/60 p-8 rounded-2xl shadow-2xl space-y-6">
@@ -160,6 +169,11 @@
       </div>
       
       <div class="flex items-center gap-3">
+        <!-- 🔔 ปุ่มเปิดการแจ้งเตือน Browser Notification -->
+        <button id="btnEnableNotification" onclick="requestNotificationPermission()" class="bg-slate-900/40 hover:bg-slate-900/60 backdrop-blur border border-white/20 text-xs font-semibold px-3 py-2 rounded-xl text-white flex items-center gap-1.5 transition-all" title="เปิดใช้งานการแจ้งเตือนบนเบราว์เซอร์">
+          <span>🔔</span> เปิดแจ้งเตือน
+        </button>
+
         <!-- User Badge -->
         <div class="bg-slate-900/40 backdrop-blur border border-white/10 p-2.5 rounded-xl flex items-center gap-3">
           <div class="text-right">
@@ -410,6 +424,79 @@
     let currentTasks = [];
     let myChart = null;
 
+    // ----------------------------------------------------
+    // 🔔 1. Notification Helper Functions
+    // ----------------------------------------------------
+
+    // แสดง In-App Toast Notification มุมขวาบน
+    function showToast(title, message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      
+      let bgStyle = 'bg-emerald-500/90 border-emerald-400 text-white';
+      let icon = '✅';
+      
+      if (type === 'error') {
+        bgStyle = 'bg-rose-500/90 border-rose-400 text-white';
+        icon = '❌';
+      } else if (type === 'info') {
+        bgStyle = 'bg-indigo-500/90 border-indigo-400 text-white';
+        icon = 'ℹ️';
+      } else if (type === 'warning') {
+        bgStyle = 'bg-amber-500/90 border-amber-400 text-white';
+        icon = '⚠️';
+      }
+
+      toast.className = `pointer-events-auto p-4 rounded-xl border shadow-xl backdrop-blur flex items-start gap-3 toast-slide-in ${bgStyle}`;
+      toast.innerHTML = `
+        <span class="text-xl flex-shrink-0">${icon}</span>
+        <div class="flex-1">
+          <h4 class="text-xs font-bold">${title}</h4>
+          <p class="text-xs opacity-90 mt-0.5">${message}</p>
+        </div>
+        <button onclick="this.parentElement.remove()" class="text-xs font-bold opacity-70 hover:opacity-100">✕</button>
+      `;
+
+      container.appendChild(toast);
+
+      // ให้ Toast หายไปเองภายใน 3.5 วินาที
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    // ขอสิทธิ์การแจ้งเตือนแบบ Browser Push Notification
+    function requestNotificationPermission() {
+      if (!("Notification" in window)) {
+        showToast('ไม่รองรับการแจ้งเตือน', 'เบราว์เซอร์นี้ไม่รองรับ Push Notifications', 'warning');
+        return;
+      }
+
+      Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+          showToast('เปิดการแจ้งเตือนสำเร็จ!', 'ระบบจะยิงการแจ้งเตือนผ่าน OS/เบราว์เซอร์เมื่อมีอัปเดต', 'success');
+          sendBrowserNotification('⚡ IT Task Tracker', 'ระบบแจ้งเตือนเปิดใช้งานเรียบร้อยแล้ว');
+        } else {
+          showToast('ปิดการแจ้งเตือน', 'คุณปฏิเสธการขอสิทธิ์แจ้งเตือน', 'error');
+        }
+      });
+    }
+
+    // ส่งการแจ้งเตือน Browser Push Notification
+    function sendBrowserNotification(title, body) {
+      if ("Notification" in window && Notification.permission === "granted") {
+        new Notification(title, {
+          body: body,
+          icon: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
+        });
+      }
+    }
+
+    // ----------------------------------------------------
+    // 2. Navigation & Setup
+    // ----------------------------------------------------
     function setDefaultTaskDate() {
       const taskDateInput = document.getElementById('taskDate');
       if (taskDateInput) {
@@ -417,7 +504,6 @@
       }
     }
 
-    // 1. Navigation Controller
     function hideAllPages() {
       document.getElementById('loginPage').classList.add('hidden');
       document.getElementById('registerPage').classList.add('hidden');
@@ -446,7 +532,7 @@
       document.getElementById('resetPasswordPage').classList.remove('hidden');
     }
 
-    // 2. Check Auth State on Load
+    // Check Auth State on Load
     async function checkAuth() {
       supabaseClient.auth.onAuthStateChange(async (event, session) => {
         if (event === 'PASSWORD_RECOVERY') {
@@ -471,7 +557,7 @@
       }
     }
 
-    // 3. Handle Login
+    // Handle Login
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('loginEmail').value;
@@ -484,13 +570,15 @@
       if (error) {
         errBox.innerText = 'เข้าสู่ระบบไม่สำเร็จ: ' + error.message;
         errBox.classList.remove('hidden');
+        showToast('เข้าสู่ระบบไม่สำเร็จ', error.message, 'error');
       } else {
         currentUser = data.user;
+        showToast('เข้าสู่ระบบสำเร็จ', `ยินดีต้อนรับ ${email}`, 'success');
         checkAuth();
       }
     });
 
-    // 4. Handle Register (เพิ่ม options.emailRedirectTo เพื่อแก้ปัญหา 404 บน GitHub Pages)
+    // Handle Register
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('regEmail').value;
@@ -503,6 +591,7 @@
         msgBox.innerText = 'รหัสผ่านทั้งสองช่องไม่ตรงกัน';
         msgBox.className = "bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center";
         msgBox.classList.remove('hidden');
+        showToast('ข้อผิดพลาด', 'รหัสผ่านทั้งสองช่องไม่ตรงกัน', 'error');
         return;
       }
 
@@ -510,16 +599,18 @@
         email: email,
         password: password,
         options: {
-          emailRedirectTo: window.location.href // 👈 ส่ง Redirect URL ปลายทางกลับมาที่หน้าเว็บที่ใช้งานอยู่
+          emailRedirectTo: window.location.href
         }
       });
 
       if (error) {
         msgBox.innerText = 'สมัครสมาชิกไม่สำเร็จ: ' + error.message;
         msgBox.className = "bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center";
+        showToast('สมัครสมาชิกไม่สำเร็จ', error.message, 'error');
       } else {
         msgBox.innerText = 'สมัครสมาชิกสำเร็จ! กรุณาเช็กอีเมลเพื่อกดยืนยันตัวตน (Confirm Email) ก่อนเข้าสู่ระบบ';
         msgBox.className = "bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 p-3 rounded-xl text-xs text-center";
+        showToast('สมัครสมาชิกสำเร็จ', 'กรุณาเช็กอีเมลเพื่อยืนยันตัวตน', 'success');
         setTimeout(() => {
           showLoginPage();
         }, 4000);
@@ -527,7 +618,7 @@
       msgBox.classList.remove('hidden');
     });
 
-    // 5. Handle Forgot Password
+    // Handle Forgot Password
     document.getElementById('forgotPasswordForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('forgotEmail').value;
@@ -541,14 +632,16 @@
       if (error) {
         msgBox.innerText = 'เกิดข้อผิดพลาด: ' + error.message;
         msgBox.className = "bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center";
+        showToast('เกิดข้อผิดพลาด', error.message, 'error');
       } else {
         msgBox.innerText = 'ส่งลิงก์รีเซ็ตรหัสผ่านไปที่อีเมลเรียบร้อยแล้ว!';
         msgBox.className = "bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 p-3 rounded-xl text-xs text-center";
+        showToast('ส่งอีเมลแล้ว', 'โปรดเช็กอินบ็อกซ์ของคุณเพื่อตั้งรหัสผ่านใหม่', 'success');
       }
       msgBox.classList.remove('hidden');
     });
 
-    // 6. Handle Reset Password
+    // Handle Reset Password
     document.getElementById('resetPasswordForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const newPassword = document.getElementById('newPassword').value;
@@ -560,6 +653,7 @@
         msgBox.innerText = 'รหัสผ่านทั้งสองช่องไม่ตรงกัน';
         msgBox.className = "bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center";
         msgBox.classList.remove('hidden');
+        showToast('ข้อผิดพลาด', 'รหัสผ่านทั้งสองช่องไม่ตรงกัน', 'error');
         return;
       }
 
@@ -568,17 +662,19 @@
       if (error) {
         msgBox.innerText = 'บันทึกไม่สำเร็จ: ' + error.message;
         msgBox.className = "bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center";
+        showToast('บันทึกไม่สำเร็จ', error.message, 'error');
       } else {
-        alert('เปลี่ยนรหัสผ่านสำเร็จเรียบร้อย!');
+        showToast('สำเร็จ', 'เปลี่ยนรหัสผ่านสำเร็จเรียบร้อย!', 'success');
         showLoginPage();
       }
       msgBox.classList.remove('hidden');
     });
 
-    // 7. Handle Logout
+    // Handle Logout
     async function handleLogout() {
       await supabaseClient.auth.signOut();
       currentUser = null;
+      showToast('ออกจากระบบ', 'คุณได้ออกจากระบบเรียบร้อยแล้ว', 'info');
       showLoginPage();
     }
 
@@ -773,16 +869,21 @@
       });
     }
 
+    // ----------------------------------------------------
+    // 3. Database Operations with Notifications
+    // ----------------------------------------------------
+
     // Submit Task
     document.getElementById('taskForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       
       const selectedDate = document.getElementById('taskDate').value || new Date().toISOString().split('T')[0];
+      const title = document.getElementById('title').value;
 
       const newTask = {
         user_id: currentUser.id,
         date: selectedDate,
-        title: document.getElementById('title').value,
+        title: title,
         reporter: document.getElementById('reporter').value,
         department: document.getElementById('department').value,
         assignee: document.getElementById('assignee').value || currentUser.email.split('@')[0],
@@ -795,8 +896,10 @@
       const { error } = await supabaseClient.from('tasks').insert([newTask]);
 
       if (error) {
-        alert('เกิดข้อผิดพลาดในการบันทึก: ' + error.message);
+        showToast('เกิดข้อผิดพลาด', error.message, 'error');
       } else {
+        showToast('บันทึก Task สำเร็จ!', `เพิ่มงาน "${title}" เข้าสู่ระบบเรียบร้อย`, 'success');
+        sendBrowserNotification('📝 บันทึก Task ใหม่สำเร็จ', `งาน: ${title}`);
         e.target.reset();
         checkAuth();
       }
@@ -804,22 +907,31 @@
 
     async function updateStatus(id, newStatus) {
       const { error } = await supabaseClient.from('tasks').update({ status: newStatus }).eq('id', id);
-      if (error) alert('อัปเดตไม่สำเร็จ');
-      else fetchTasks();
+      if (error) {
+        showToast('อัปเดตไม่สำเร็จ', error.message, 'error');
+      } else {
+        showToast('อัปเดตสถานะสำเร็จ', `เปลี่ยนสถานะเป็น ${newStatus} เรียบร้อยแล้ว`, 'info');
+        sendBrowserNotification('🔄 อัปเดตสถานะ Task', `Task ID #${id} ปรับสถานะเป็น ${newStatus}`);
+        fetchTasks();
+      }
     }
 
     async function deleteTask(id) {
       if (confirm('ยืนยันลบ Task นี้?')) {
         const { error } = await supabaseClient.from('tasks').delete().eq('id', id);
-        if (error) alert('ลบไม่สำเร็จ');
-        else fetchTasks();
+        if (error) {
+          showToast('ลบไม่สำเร็จ', error.message, 'error');
+        } else {
+          showToast('ลบรายการสำเร็จ', `ลบ Task ID #${id} เรียบร้อยแล้ว`, 'error');
+          fetchTasks();
+        }
       }
     }
 
     // Export Excel
     function exportToExcel() {
       if (currentTasks.length === 0) {
-        alert('ไม่มีข้อมูลสำหรับ Export');
+        showToast('ไม่มีข้อมูล', 'ไม่มีรายการ Task สำหรับ Export', 'warning');
         return;
       }
 
@@ -864,6 +976,7 @@
 
       const today = new Date().toISOString().split('T')[0];
       XLSX.writeFile(workbook, `IT_Task_Report_${today}.xlsx`);
+      showToast('Export สำเร็จ!', 'ดาวน์โหลดไฟล์ Excel เรียบร้อยแล้ว', 'success');
     }
 
     checkAuth();
