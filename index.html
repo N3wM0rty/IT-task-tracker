@@ -33,7 +33,7 @@
     <div class="text-center space-y-2">
       <div class="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">⚡</div>
       <h1 class="text-2xl font-bold text-white">IT Task Management</h1>
-      <p class="text-slate-400 text-xs">เข้าสู่ระบบเพื่อจัดการงานและตารางกะ (Multi-Role)</p>
+      <p class="text-slate-400 text-xs">เข้าสู่ระบบเพื่อจัดการงานและตารางกะ</p>
     </div>
 
     <form id="loginForm" class="space-y-4">
@@ -48,17 +48,10 @@
         </div>
         <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
       </div>
-      <button type="submit" id="btnLogin" class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold py-3 rounded-xl text-sm shadow-lg transition-all transform hover:-translate-y-0.5">
+      <button type="submit" class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold py-3 rounded-xl text-sm shadow-lg transition-all transform hover:-translate-y-0.5">
         เข้าสู่ระบบ (Sign In)
       </button>
     </form>
-
-    <div class="text-center pt-2 border-t border-slate-700/50">
-      <p class="text-xs text-slate-400">ยังไม่มีบัญชีผู้ใช้งาน? 
-        <button type="button" onclick="showRegisterPage()" class="text-indigo-400 hover:text-indigo-300 font-medium underline">สมัครสมาชิก</button>
-      </p>
-    </div>
-
     <div id="loginError" class="hidden bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center"></div>
   </div>
 
@@ -67,28 +60,18 @@
     <div class="text-center space-y-2">
       <div class="w-16 h-16 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">👤</div>
       <h1 class="text-2xl font-bold text-white">สมัครสมาชิก</h1>
-      <p class="text-slate-400 text-xs">สร้างบัญชีผู้ใช้งานใหม่เข้าสู่ระบบ IT Task</p>
     </div>
-
     <form id="registerForm" class="space-y-4">
       <div>
         <label class="block text-xs font-medium text-slate-300 mb-1">อีเมล (Email)</label>
-        <input type="email" id="regEmail" required placeholder="user@resort.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+        <input type="email" id="regEmail" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white">
       </div>
       <div>
-        <label class="block text-xs font-medium text-slate-300 mb-1">รหัสผ่าน (อย่างน้อย 6 ตัวอักษร)</label>
-        <input type="password" id="regPassword" required placeholder="••••••••" minlength="6" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+        <label class="block text-xs font-medium text-slate-300 mb-1">รหัสผ่าน</label>
+        <input type="password" id="regPassword" required minlength="6" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white">
       </div>
-      <div>
-        <label class="block text-xs font-medium text-slate-300 mb-1">ยืนยันรหัสผ่าน</label>
-        <input type="password" id="regConfirmPassword" required placeholder="••••••••" minlength="6" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
-      </div>
-      <button type="submit" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold py-3 rounded-xl text-sm shadow-lg transition-all transform hover:-translate-y-0.5">
-        สมัครสมาชิก (Sign Up)
-      </button>
-      <button type="button" onclick="showLoginPage()" class="w-full bg-slate-700 hover:bg-slate-600 text-slate-300 font-medium py-2.5 rounded-xl text-xs transition-all">
-        ← ย้อนกลับไปหน้าเข้าสู่ระบบ
-      </button>
+      <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-3 rounded-xl text-sm">สมัครสมาชิก</button>
+      <button type="button" onclick="showLoginPage()" class="w-full bg-slate-700 text-slate-300 py-2.5 rounded-xl text-xs">← ย้อนกลับ</button>
     </form>
     <div id="registerMessage" class="hidden p-3 rounded-xl text-xs text-center"></div>
   </div>
@@ -96,392 +79,256 @@
   <!-- ==================== PAGE 3: FORGOT PASSWORD ==================== -->
   <div id="forgotPasswordPage" class="hidden max-w-md mx-auto my-12 bg-slate-800/90 border border-slate-700/60 p-8 rounded-2xl shadow-2xl space-y-6">
     <div class="text-center space-y-2">
-      <div class="w-16 h-16 bg-gradient-to-tr from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">🔑</div>
-      <h1 class="text-2xl font-bold text-white">ลืมรหัสผ่าน</h1>
-      <p class="text-slate-400 text-xs">กรอกอีเมลของคุณเพื่อรับลิงก์สำหรับตั้งรหัสผ่านใหม่</p>
+      <h1 class="text-xl font-bold text-white">ลืมรหัสผ่าน</h1>
     </div>
-
     <form id="forgotPasswordForm" class="space-y-4">
-      <div>
-        <label class="block text-xs font-medium text-slate-300 mb-1">อีเมลที่ใช้ในระบบ</label>
-        <input type="email" id="forgotEmail" required placeholder="user@resort.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
-      </div>
-      <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 rounded-xl text-sm shadow-lg transition-all transform hover:-translate-y-0.5">
-        ส่งลิงก์รีเซ็ตรหัสผ่าน
-      </button>
-      <button type="button" onclick="showLoginPage()" class="w-full bg-slate-700 hover:bg-slate-600 text-slate-300 font-medium py-2.5 rounded-xl text-xs transition-all">
-        ← ย้อนกลับไปหน้าเข้าสู่ระบบ
-      </button>
+      <input type="email" id="forgotEmail" required placeholder="user@resort.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white">
+      <button type="submit" class="w-full bg-amber-600 text-white py-3 rounded-xl text-sm">ส่งลิงก์รีเซ็ต</button>
+      <button type="button" onclick="showLoginPage()" class="w-full bg-slate-700 text-slate-300 py-2.5 rounded-xl text-xs">← ย้อนกลับ</button>
     </form>
     <div id="forgotMessage" class="hidden p-3 rounded-xl text-xs text-center"></div>
   </div>
 
-  <!-- ==================== PAGE 4: RESET PASSWORD ==================== -->
-  <div id="resetPasswordPage" class="hidden max-w-md mx-auto my-12 bg-slate-800/90 border border-slate-700/60 p-8 rounded-2xl shadow-2xl space-y-6">
-    <div class="text-center space-y-2">
-      <div class="w-16 h-16 bg-gradient-to-tr from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">🔒</div>
-      <h1 class="text-2xl font-bold text-white">ตั้งรหัสผ่านใหม่</h1>
-      <p class="text-slate-400 text-xs">กรุณากรอกรหัสผ่านใหม่ของคุณ</p>
-    </div>
-
-    <form id="resetPasswordForm" class="space-y-4">
-      <div>
-        <label class="block text-xs font-medium text-slate-300 mb-1">รหัสผ่านใหม่ (อย่างน้อย 6 ตัวอักษร)</label>
-        <input type="password" id="newPassword" required placeholder="••••••••" minlength="6" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-emerald-500 outline-none">
-      </div>
-      <div>
-        <label class="block text-xs font-medium text-slate-300 mb-1">ยืนยันรหัสผ่านใหม่</label>
-        <input type="password" id="confirmNewPassword" required placeholder="••••••••" minlength="6" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-emerald-500 outline-none">
-      </div>
-      <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl text-sm shadow-lg transition-all transform hover:-translate-y-0.5">
-        บันทึกรหัสผ่านใหม่
-      </button>
-    </form>
-    <div id="resetMessage" class="hidden p-3 rounded-xl text-xs text-center"></div>
-  </div>
-
-  <!-- ==================== PAGE 5: MAIN DASHBOARD ==================== -->
+  <!-- ==================== PAGE 4: MAIN DASHBOARD ==================== -->
   <div id="mainDashboard" class="hidden max-w-7xl mx-auto space-y-6">
     
     <!-- Header banner -->
     <header class="bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-500 p-6 rounded-2xl shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
         <h1 class="text-2xl md:text-3xl font-bold text-white flex items-center gap-2">
-          <span>⚡</span> IT Task Tracker & Management
+          <span>⚡</span> IT Task Tracker & Shift Management
         </h1>
-        <p class="text-indigo-100 text-xs md:text-sm mt-1">ระบบจัดการงาน IT ประจำวัน และการควบคุมสิทธิ์ตาม Role (Supabase Auth)</p>
+        <p class="text-indigo-100 text-xs md:text-sm mt-1">ระบบจัดการงาน IT ประจำวัน และตารางกะ On Duty</p>
       </div>
       
-      <div class="flex items-center gap-3">
-        <button id="btnEnableNotification" onclick="requestNotificationPermission()" class="bg-slate-900/40 hover:bg-slate-900/60 backdrop-blur border border-white/20 text-xs font-semibold px-3 py-2 rounded-xl text-white flex items-center gap-1.5 transition-all">
-          <span>🔔</span> เปิดแจ้งเตือน
+      <div class="flex flex-wrap items-center gap-3">
+        <!-- ⭐️ ปุ่มสลับหน้าเว็บ (Dashboard <-> Shift Management) -->
+        <button onclick="switchTab('tasks')" id="tabBtnTasks" class="bg-white/20 hover:bg-white/35 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow">
+          📋 หน้าจัดการ Task งาน
+        </button>
+        <button onclick="switchTab('shifts')" id="tabBtnShifts" class="bg-slate-900/40 hover:bg-slate-900/60 text-indigo-100 font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow">
+          📅 หน้าจัดการตารางกะ
         </button>
 
         <div class="bg-slate-900/40 backdrop-blur border border-white/10 p-2.5 rounded-xl flex items-center gap-3">
           <div class="text-right">
             <p id="userEmailDisplay" class="text-xs font-semibold text-white">user@resort.com</p>
-            <span id="userRoleBadge" class="bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">Role</span>
+            <span id="userRoleBadge" class="bg-indigo-500/30 text-indigo-200 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">Role</span>
           </div>
-          <button onclick="handleLogout()" class="bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-500/30 px-3 py-1.5 rounded-lg text-xs font-medium transition-all">
-            ออก
-          </button>
+          <button onclick="handleLogout()" class="bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 px-3 py-1.5 rounded-lg text-xs font-medium">ออก</button>
         </div>
-
-        <button id="btnExport" onclick="exportToExcel()" class="hidden bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-4 py-3 rounded-xl text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-          Export Excel
-        </button>
       </div>
     </header>
 
-    <!-- ⭐️ [เพิ่มใหม่]: การ์ดตารางกะ IT On Duty & ปุ่มแก้ไขตารางกะ ⭐️ -->
-    <div class="bg-slate-800/90 border border-slate-700/60 p-5 rounded-2xl shadow-xl space-y-4">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-700/60 pb-3">
-        <h3 class="text-base font-bold text-white flex items-center gap-2">
-          <span>📅</span> ตารางปฏิบัติงาน & IT On Duty ประจำวัน
-        </h3>
-        <div class="flex items-center gap-2">
-          <button onclick="sendLineShiftAlertFromUI()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs px-3 py-2 rounded-xl flex items-center gap-1.5 transition-all shadow-md">
-            <span>📲</span> ยิง LINE แจ้งกะ
-          </button>
-          <button onclick="toggleShiftEditModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs px-3 py-2 rounded-xl flex items-center gap-1.5 transition-all shadow-md">
-            <span>✏️</span> แก้ไขตารางกะ
-          </button>
-        </div>
-      </div>
-
-      <!-- โซนแสดงตารางกะปัจจุบัน -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="bg-slate-900/60 border border-slate-700/50 p-3.5 rounded-xl">
-          <p class="text-xs text-slate-400 font-medium">☀️ กะเช้า (Morning Shift)</p>
-          <p id="dispShiftMorning" class="text-sm font-bold text-cyan-400 mt-1">คุณสมชาย (08:00 - 17:00)</p>
-        </div>
-        <div class="bg-slate-900/60 border border-slate-700/50 p-3.5 rounded-xl">
-          <p class="text-xs text-slate-400 font-medium">🌙 กะบ่าย/บ่ายดึก (Evening Shift)</p>
-          <p id="dispShiftEvening" class="text-sm font-bold text-purple-400 mt-1">Supatcha (13:00 - 22:00)</p>
-        </div>
-        <div class="bg-slate-900/60 border border-slate-700/50 p-3.5 rounded-xl">
-          <p class="text-xs text-slate-400 font-medium">☎️ Standby On-Call / ลา</p>
-          <p id="dispShiftOnCall" class="text-sm font-bold text-emerald-400 mt-1">Supatcha (ลา: คุณอนันต์)</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Summary Stats Bar -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-xl shadow-sm flex items-center justify-between">
-        <div>
-          <p class="text-slate-400 text-xs font-medium">งานทั้งหมด</p>
-          <p id="statTotal" class="text-2xl font-bold text-white mt-1">0</p>
-        </div>
-        <div class="w-10 h-10 bg-indigo-500/10 text-indigo-400 rounded-lg flex items-center justify-center font-bold text-lg">📁</div>
-      </div>
-      <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-xl shadow-sm flex items-center justify-between">
-        <div>
-          <p class="text-slate-400 text-xs font-medium">เสร็จสิ้น (Completed)</p>
-          <p id="statCompleted" class="text-2xl font-bold text-emerald-400 mt-1">0</p>
-        </div>
-        <div class="w-10 h-10 bg-emerald-500/10 text-emerald-400 rounded-lg flex items-center justify-center font-bold text-lg">✅</div>
-      </div>
-      <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-xl shadow-sm flex items-center justify-between">
-        <div>
-          <p class="text-slate-400 text-xs font-medium">กำลังทำ (In Progress)</p>
-          <p id="statInProgress" class="text-2xl font-bold text-amber-400 mt-1">0</p>
-        </div>
-        <div class="w-10 h-10 bg-amber-500/10 text-amber-400 rounded-lg flex items-center justify-center font-bold text-lg">⏳</div>
-      </div>
-      <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-xl shadow-sm flex items-center justify-between">
-        <div>
-          <p class="text-slate-400 text-xs font-medium">รอดำเนินการ (Pending)</p>
-          <p id="statPending" class="text-2xl font-bold text-orange-400 mt-1">0</p>
-        </div>
-        <div class="w-10 h-10 bg-orange-500/10 text-orange-400 rounded-lg flex items-center justify-center font-bold text-lg">📌</div>
-      </div>
-    </div>
-
-    <!-- Analytics Chart -->
-    <div class="bg-slate-800/90 border border-slate-700/60 p-5 rounded-2xl shadow-xl">
-      <h3 class="text-sm font-bold text-slate-300 mb-3 flex items-center gap-2">
-        <span>📈</span> สรุปจำนวนงานแยกตาม Category (Analytics Chart)
-      </h3>
-      <div class="h-48">
-        <canvas id="categoryChart"></canvas>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- ==================== TAB 1: TASK TRACKER VIEW ==================== -->
+    <div id="viewTasks" class="space-y-6">
       
-      <!-- Form บันทึกงาน -->
-      <div class="bg-slate-800/90 border border-slate-700/60 p-6 rounded-2xl shadow-xl h-fit">
-        <h2 class="text-lg font-bold mb-4 text-white flex items-center gap-2">
-          <span class="text-indigo-400">📝</span> บันทึกงานใหม่
-        </h2>
-        <form id="taskForm" class="space-y-4">
-          <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1">ชื่อ Task / งานที่ทำ</label>
-            <input type="text" id="title" required placeholder="เช่น รีเซ็ต Password / แก้ไขปัญหาระบบ" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+      <!-- การ์ดสรุปกะวันนี้แบบย่อ -->
+      <div class="bg-slate-800/90 border border-slate-700/60 p-5 rounded-2xl shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h3 class="text-sm font-bold text-white flex items-center gap-2">
+            <span>📅</span> ตารางปฏิบัติงาน & IT On Duty ประจำวันนี้ (<span id="todayDateStr"></span>)
+          </h3>
+          <div class="flex flex-wrap gap-4 mt-2 text-xs text-slate-300">
+            <div>☀️ กะเช้า: <span id="summaryMorning" class="text-cyan-400 font-bold">-</span></div>
+            <div>🌙 กะบ่าย: <span id="summaryEvening" class="text-purple-400 font-bold">-</span></div>
+            <div>☎️ On-Call: <span id="summaryOnCall" class="text-emerald-400 font-bold">-</span></div>
+            <div>🔴 ลา: <span id="summaryLeave" class="text-rose-400 font-bold">-</span></div>
           </div>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="sendLineShiftAlertFromUI()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs px-3.5 py-2.5 rounded-xl flex items-center gap-1.5 shadow">
+            <span>📲</span> ยิง LINE แจ้งกะวันนี้
+          </button>
+          <button onclick="switchTab('shifts')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs px-3.5 py-2.5 rounded-xl flex items-center gap-1.5 shadow">
+            <span>✏️</span> ไปหน้าจัดการกะ
+          </button>
+        </div>
+      </div>
 
-          <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1">📅 วันที่ทำรายการ</label>
-            <input type="date" id="taskDate" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
-          </div>
+      <!-- Stats & Chart -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-xl flex items-center justify-between">
+          <div><p class="text-slate-400 text-xs">งานทั้งหมด</p><p id="statTotal" class="text-2xl font-bold text-white mt-1">0</p></div>
+          <div class="w-10 h-10 bg-indigo-500/10 text-indigo-400 rounded-lg flex items-center justify-center font-bold">📁</div>
+        </div>
+        <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-xl flex items-center justify-between">
+          <div><p class="text-slate-400 text-xs">เสร็จสิ้น (Completed)</p><p id="statCompleted" class="text-2xl font-bold text-emerald-400 mt-1">0</p></div>
+          <div class="w-10 h-10 bg-emerald-500/10 text-emerald-400 rounded-lg flex items-center justify-center font-bold">✅</div>
+        </div>
+        <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-xl flex items-center justify-between">
+          <div><p class="text-slate-400 text-xs">กำลังทำ (In Progress)</p><p id="statInProgress" class="text-2xl font-bold text-amber-400 mt-1">0</p></div>
+          <div class="w-10 h-10 bg-amber-500/10 text-amber-400 rounded-lg flex items-center justify-center font-bold">⏳</div>
+        </div>
+        <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-xl flex items-center justify-between">
+          <div><p class="text-slate-400 text-xs">รอดำเนินการ (Pending)</p><p id="statPending" class="text-2xl font-bold text-orange-400 mt-1">0</p></div>
+          <div class="w-10 h-10 bg-orange-500/10 text-orange-400 rounded-lg flex items-center justify-center font-bold">📌</div>
+        </div>
+      </div>
 
-          <div class="grid grid-cols-3 gap-2">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Form บันทึกงาน -->
+        <div class="bg-slate-800/90 border border-slate-700/60 p-6 rounded-2xl shadow-xl h-fit">
+          <h2 class="text-lg font-bold mb-4 text-white flex items-center gap-2">
+            <span class="text-indigo-400">📝</span> บันทึกงานใหม่
+          </h2>
+          <form id="taskForm" class="space-y-4">
             <div>
-              <label class="block text-[11px] font-medium text-slate-300 mb-1">ผู้แจ้งงาน</label>
-              <input type="text" id="reporter" placeholder="คุณสมชาย" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+              <label class="block text-xs font-medium text-slate-300 mb-1">ชื่อ Task / งานที่ทำ</label>
+              <input type="text" id="title" required placeholder="เช่น รีเซ็ต Password" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white outline-none focus:ring-2 focus:ring-indigo-500">
             </div>
             <div>
-              <label class="block text-[11px] font-medium text-slate-300 mb-1">แผนก (Dept)</label>
-              <input type="text" id="department" placeholder="FO, HK" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+              <label class="block text-xs font-medium text-slate-300 mb-1">📅 วันที่ทำรายการ</label>
+              <input type="date" id="taskDate" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white outline-none">
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <div>
+                <label class="block text-[11px] font-medium text-slate-300 mb-1">ผู้แจ้ง</label>
+                <input type="text" id="reporter" placeholder="คุณสมชาย" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white">
+              </div>
+              <div>
+                <label class="block text-[11px] font-medium text-slate-300 mb-1">แผนก</label>
+                <input type="text" id="department" placeholder="FO, HK" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white">
+              </div>
+              <div>
+                <label class="block text-[11px] font-medium text-slate-300 mb-1">ผู้รับงาน</label>
+                <input type="text" id="assignee" placeholder="New" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white">
+              </div>
             </div>
             <div>
-              <label class="block text-[11px] font-medium text-slate-300 mb-1">ผู้รับงาน</label>
-              <input type="text" id="assignee" placeholder="Supatcha" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:ring-2 focus:ring-indigo-500 outline-none">
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1">หมวดหมู่งาน (Category)</label>
-            <select id="category" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
-              <optgroup label="System & Software" class="bg-slate-800">
+              <label class="block text-xs font-medium text-slate-300 mb-1">หมวดหมู่</label>
+              <select id="category" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white outline-none">
                 <option value="POS">POS</option>
                 <option value="PC/ Laptop">PC/ Laptop</option>
                 <option value="Opera V.5">Opera V.5</option>
                 <option value="Opera Cloud">Opera Cloud</option>
-                <option value="MC">MC</option>
-                <option value="MC/2">MC/2</option>
-                <option value="SUN">SUN</option>
-                <option value="SUN/2">SUN/2</option>
-                <option value="Passport">Passport</option>
-              </optgroup>
-              <optgroup label="Hardware & Access" class="bg-slate-800">
-                <option value="Door">Door</option>
-                <option value="Door/2">Door/2</option>
+                <option value="Wi-Fi">Wi-Fi</option>
                 <option value="CCTV">CCTV</option>
                 <option value="Print">Print</option>
-              </optgroup>
-              <optgroup label="Network & Communication" class="bg-slate-800">
-                <option value="Wi-Fi">Wi-Fi</option>
-                <option value="Wi-Fi/2">Wi-Fi/2</option>
-                <option value="TV">TV</option>
-                <option value="Phone">Phone</option>
-                <option value="Phone/2">Phone/2</option>
-              </optgroup>
-              <optgroup label="General & Others" class="bg-slate-800">
                 <option value="General work">General work</option>
                 <option value="other">other</option>
-              </optgroup>
-            </select>
-          </div>
-
-          <div class="grid grid-cols-2 gap-3">
-            <div>
-              <label class="block text-xs font-medium text-slate-300 mb-1">สถานะงาน (Status)</label>
-              <select id="status" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none font-medium disabled:opacity-50 disabled:cursor-not-allowed">
-                <option value="Pending" selected class="text-orange-400">Pending (รอดำเนินการ)</option>
-                <option value="In Progress" class="text-amber-400">In Progress (กำลังทำ)</option>
-                <option value="Completed" class="text-emerald-400">Completed (เสร็จสิ้น)</option>
-                <option value="Cancelled" class="text-rose-400">Cancelled (ยกเลิก)</option>
               </select>
             </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1">สถานะ</label>
+                <select id="status" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white outline-none">
+                  <option value="Pending" selected>Pending</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1">ความสำคัญ</label>
+                <select id="priority" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white outline-none">
+                  <option value="Normal">Normal</option>
+                  <option value="High">High</option>
+                  <option value="Urgent">Urgent</option>
+                </select>
+              </div>
+            </div>
             <div>
-              <label class="block text-xs font-medium text-slate-300 mb-1">ความสำคัญ</label>
-              <select id="priority" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
-                <option value="Normal">Normal</option>
-                <option value="High">High</option>
-                <option value="Urgent">Urgent</option>
+              <label class="block text-xs font-medium text-slate-300 mb-1">รายละเอียด</label>
+              <textarea id="description" rows="2" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-sm text-white"></textarea>
+            </div>
+            <button type="submit" class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 text-white font-semibold py-3 rounded-xl text-sm shadow">
+              + บันทึก Task เข้าระบบ
+            </button>
+          </form>
+        </div>
+
+        <!-- รายการ Task Log & Table -->
+        <div class="lg:col-span-2 space-y-4">
+          <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-2xl shadow-xl flex flex-wrap items-end gap-3 text-sm">
+            <div class="w-[130px]">
+              <label class="block text-xs font-medium text-indigo-300 mb-1">📅 มุมมองวันที่</label>
+              <select id="dateRangeMode" onchange="toggleDateInputs(); applyFilters();" class="w-full bg-indigo-950/80 border border-indigo-500/50 text-indigo-200 rounded-lg p-2 text-xs outline-none">
+                <option value="today" selected>เฉพาะวันนี้</option>
+                <option value="all">ทุกวันทั้งหมด</option>
+                <option value="custom">ระบุช่วงวันที่</option>
               </select>
             </div>
+            <div class="flex-1 min-w-[140px]">
+              <label class="block text-xs font-medium text-slate-300 mb-1">🔍 ค้นหา</label>
+              <input type="text" id="searchInput" oninput="applyFilters()" placeholder="พิมพ์ค้นหา..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white">
+            </div>
+            <div id="customDateGroup" class="hidden flex gap-2">
+              <input type="date" id="startDate" onchange="applyFilters()" class="w-[115px] bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white">
+              <input type="date" id="endDate" onchange="applyFilters()" class="w-[115px] bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white">
+            </div>
+            <div><button onclick="resetFilter()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 px-3 py-2 rounded-lg text-xs">ล้าง</button></div>
           </div>
 
+          <div class="bg-slate-800/90 border border-slate-700/60 p-6 rounded-2xl shadow-xl space-y-4">
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg font-bold text-white">📊 รายการงานในระบบ</h2>
+              <span id="taskCount" class="bg-indigo-500/20 text-indigo-300 text-xs px-3 py-1 rounded-full border border-indigo-500/30">0 รายการ</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm text-slate-300">
+                <thead class="bg-slate-900/80 border-b border-slate-700 text-xs">
+                  <tr><th class="p-3">งานที่ทำ</th><th class="p-3">ผู้แจ้ง / แผนก / ผู้รับ</th><th class="p-3">Category</th><th class="p-3">สถานะ</th><th class="p-3">การจัดการ</th></tr>
+                </thead>
+                <tbody id="taskTableBody" class="divide-y divide-slate-700/50"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 2: SHIFT MANAGEMENT VIEW (หน้าแยกจัดการกะล่วงหน้า) ==================== -->
+    <div id="viewShifts" class="hidden space-y-6">
+      <div class="bg-slate-800/90 border border-slate-700/60 p-6 rounded-2xl shadow-xl space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-700 pb-4">
           <div>
-            <label class="block text-xs font-medium text-slate-300 mb-1">รายละเอียดเพิ่มเติม / ผลลัพธ์</label>
-            <textarea id="description" rows="3" placeholder="ระบุการแก้ไขหรือหมายเหตุ..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none"></textarea>
+            <h2 class="text-xl font-bold text-white flex items-center gap-2">
+              <span>📅</span> ระบบจัดการและบันทึกตารางกะล่วงหน้า (Shift Management)
+            </h2>
+            <p class="text-slate-400 text-xs mt-1">เลือกวันที่ต้องการเพื่อดูหรือบันทึก/แก้ไขตารางกะล่วงหน้าของทีม IT</p>
           </div>
-          <button type="submit" class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold py-3 rounded-xl text-sm shadow-lg transition-all transform hover:-translate-y-0.5">
-            + บันทึก Task เข้าระบบ
-          </button>
+          <div class="flex items-center gap-2">
+            <input type="date" id="manageShiftDate" onchange="loadShiftForDate()" class="bg-slate-900 border border-indigo-500/50 text-indigo-200 text-xs font-semibold rounded-xl p-2.5 outline-none">
+            <button onclick="loadShiftForDate()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs px-4 py-2.5 rounded-xl shadow">เรียกดู</button>
+          </div>
+        </div>
+
+        <!-- ฟอร์มแก้ไขกะของวันที่เลือก -->
+        <form id="shiftManageForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-slate-900/60 border border-slate-700/60 p-4 rounded-xl space-y-3">
+            <h4 class="text-xs font-bold text-indigo-300 uppercase tracking-wider">☀️ กะเช้า (Morning Shift)</h4>
+            <input type="text" id="mMorning" required placeholder="เช่น New (08:00 - 17:00)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+
+          <div class="bg-slate-900/60 border border-slate-700/60 p-4 rounded-xl space-y-3">
+            <h4 class="text-xs font-bold text-purple-300 uppercase tracking-wider">🌙 กะบ่าย (Evening Shift)</h4>
+            <input type="text" id="mEvening" placeholder="เช่น P'Puen ITM (10:00 - 19:00)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+
+          <div class="bg-slate-900/60 border border-slate-700/60 p-4 rounded-xl space-y-3">
+            <h4 class="text-xs font-bold text-emerald-300 uppercase tracking-wider">☎️ Standby On-Call</h4>
+            <input type="text" id="mOnCall" required placeholder="เช่น New หรือ P'Puen ITM" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+
+          <div class="bg-slate-900/60 border border-slate-700/60 p-4 rounded-xl space-y-3">
+            <h4 class="text-xs font-bold text-rose-300 uppercase tracking-wider">🔴 สถานะลา / หยุด (Leave & Day Off)</h4>
+            <input type="text" id="mLeave" placeholder="เช่น ไม่มี หรือ P'Puen ITM (Day Off)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+
+          <div class="md:col-span-2 flex items-center justify-end gap-3 pt-2">
+            <button type="submit" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 text-white font-semibold px-6 py-3 rounded-xl text-xs shadow-lg transition-all">
+              💾 บันทึกตารางกะของวันนี้
+            </button>
+          </div>
         </form>
       </div>
-
-      <!-- รายการ Task Log & Filter -->
-      <div class="lg:col-span-2 space-y-4">
-        
-        <!-- Filter Box -->
-        <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-2xl shadow-xl flex flex-wrap items-end gap-3 text-sm">
-          
-          <div class="w-[130px]">
-            <label class="block text-xs font-medium text-indigo-300 mb-1">📅 มุมมองวันที่</label>
-            <select id="dateRangeMode" onchange="toggleDateInputs(); applyFilters();" class="w-full bg-indigo-950/80 border border-indigo-500/50 text-indigo-200 font-medium rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-indigo-500">
-              <option value="today" selected>เฉพาะวันนี้</option>
-              <option value="all">ทุกวันทั้งหมด</option>
-              <option value="custom">ระบุช่วงวันที่</option>
-            </select>
-          </div>
-
-          <div class="flex-1 min-w-[140px]">
-            <label class="block text-xs font-medium text-slate-300 mb-1">🔍 ค้นหา (Search)</label>
-            <input type="text" id="searchInput" oninput="applyFilters()" placeholder="พิมพ์งาน, ผู้แจ้ง..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
-          </div>
-
-          <div id="customDateGroup" class="hidden flex gap-2">
-            <div class="w-[115px]">
-              <label class="block text-xs font-medium text-slate-300 mb-1">ตั้งแต่วันที่</label>
-              <input type="date" id="startDate" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none">
-            </div>
-            <div class="w-[115px]">
-              <label class="block text-xs font-medium text-slate-300 mb-1">ถึงวันที่</label>
-              <input type="date" id="endDate" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none">
-            </div>
-          </div>
-
-          <div class="w-[100px]">
-            <label class="block text-xs font-medium text-slate-300 mb-1">แผนก</label>
-            <select id="filterDept" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none">
-              <option value="">ทั้งหมด</option>
-              <option value="FO">FO</option>
-              <option value="HK">HK</option>
-              <option value="FB">F&B</option>
-              <option value="ACC">ACC</option>
-              <option value="HR">HR</option>
-              <option value="IT">IT</option>
-            </select>
-          </div>
-
-          <div class="w-[100px]">
-            <label class="block text-xs font-medium text-slate-300 mb-1">สถานะ</label>
-            <select id="filterStatus" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none">
-              <option value="">ทั้งหมด</option>
-              <option value="Pending">Pending</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Completed">Completed</option>
-              <option value="Cancelled">Cancelled</option>
-            </select>
-          </div>
-          
-          <div>
-            <button onclick="resetFilter()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 px-3 py-2 rounded-lg text-xs font-medium transition-all">ล้าง</button>
-          </div>
-        </div>
-
-        <div class="bg-slate-800/90 border border-slate-700/60 p-6 rounded-2xl shadow-xl space-y-4">
-          <div class="flex items-center justify-between">
-            <h2 class="text-lg font-bold text-white flex items-center gap-2">
-              <span class="text-indigo-400">📊</span> รายการงานในระบบ
-            </h2>
-            <span id="taskCount" class="bg-indigo-500/20 text-indigo-300 font-semibold text-xs px-3 py-1 rounded-full border border-indigo-500/30">กำลังโหลด...</span>
-          </div>
-
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm text-slate-300">
-              <thead class="bg-slate-900/80 text-slate-300 border-b border-slate-700">
-                <tr>
-                  <th class="p-3">งานที่ทำ</th>
-                  <th class="p-3">ผู้แจ้ง / แผนก / ผู้รับ</th>
-                  <th class="p-3">Category</th>
-                  <th class="p-3">สถานะ</th>
-                  <th class="p-3">การจัดการ</th>
-                </tr>
-              </thead>
-              <tbody id="taskTableBody" class="divide-y divide-slate-700/50">
-                <!-- ข้อมูลแสดงที่นี่ -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-      </div>
-
     </div>
-  </div>
 
-  <!-- ⭐️ [เพิ่มใหม่]: Modal ป๊อบอัพสำหรับแก้ตารางกะ ⭐️ -->
-  <div id="shiftModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-slate-800 border border-slate-700/80 rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl">
-      <div class="flex justify-between items-center border-b border-slate-700/60 pb-3">
-        <h3 class="text-base font-bold text-white flex items-center gap-2">
-          <span>✏️</span> แก้ไขตารางกะ & IT On Duty
-        </h3>
-        <button onclick="toggleShiftEditModal()" class="text-slate-400 hover:text-white font-bold text-sm">✕</button>
-      </div>
-
-      <form id="shiftForm" class="space-y-4">
-        <div>
-          <label class="block text-xs font-medium text-slate-300 mb-1">☀️ กะเช้า (Morning Shift)</label>
-          <input type="text" id="inputShiftMorning" required placeholder="เช่น คุณสมชาย (08:00 - 17:00)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-slate-300 mb-1">🌙 กะบ่าย/บ่ายดึก (Evening Shift)</label>
-          <input type="text" id="inputShiftEvening" required placeholder="เช่น Supatcha (13:00 - 22:00)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-slate-300 mb-1">☎️ Standby On-Call</label>
-          <input type="text" id="inputShiftOnCall" required placeholder="เช่น Supatcha" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-slate-300 mb-1">🔴 พนักงานแจ้งลา / หมายเหตุ</label>
-          <input type="text" id="inputShiftLeave" placeholder="เช่น คุณอนันต์ (ลาป่วย) หรือ - " class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
-        </div>
-
-        <div class="flex items-center gap-2 pt-2">
-          <button type="submit" class="flex-1 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold py-2.5 rounded-xl text-xs transition-all shadow-md">
-            💾 บันทึกตารางกะ
-          </button>
-          <button type="button" onclick="toggleShiftEditModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 font-medium px-4 py-2.5 rounded-xl text-xs transition-all">
-            ยกเลิก
-          </button>
-        </div>
-      </form>
-    </div>
   </div>
 
   <script>
     const SUPABASE_URL = 'https://mpvyalurrgrymbvbmwcj.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_2sxnepbtIji-OK0ddOnQFA_cCin-yLu';
-    
-    // 🟢 LINE Bot Access Token
     const LINE_ACCESS_TOKEN = '7LeHUPrb++DZ5vjtbXTR0GsPhY+ZIIpxjWs20hLwEmTaG7Hoy/kvGhVrbIIoOyOqgxksB8NQB90YcXvdZa2ZbQ6UJ1HGjQN0Y5W397jiC0ovlolV2iyLKWFkDEzWPMre/Qe3ZkqAG0vbmrsO0rCgFgdB04t89/1O/w1cDnyilFU=';
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -490,54 +337,116 @@
     let currentUserRole = 'staff';
     let rawTasks = [];
     let currentTasks = [];
-    let myChart = null;
-
-    // ข้อมูลตารางกะในระบบ (บันทึกลง LocalStorage อัตโนมัติ)
-    let currentShiftData = JSON.parse(localStorage.getItem('it_shift_data')) || {
-      morning: 'คุณสมชาย (08:00 - 17:00)',
-      evening: 'Supatcha (13:00 - 22:00)',
-      onCall: 'Supatcha',
-      leave: 'ไม่มีผู้แจ้งลา'
-    };
+    let todayShiftCache = { morning: '-', evening: '-', onCall: '-', leave: 'ไม่มี' };
 
     // ----------------------------------------------------
-    // 📅 Shift Management Functions
+    // Tab Navigation Logic
     // ----------------------------------------------------
-    function renderShiftData() {
-      document.getElementById('dispShiftMorning').innerText = currentShiftData.morning;
-      document.getElementById('dispShiftEvening').innerText = currentShiftData.evening;
-      document.getElementById('dispShiftOnCall').innerText = `${currentShiftData.onCall} ${currentShiftData.leave !== 'ไม่มีผู้แจ้งลา' ? `(ลา: ${currentShiftData.leave})` : ''}`;
-      
-      document.getElementById('inputShiftMorning').value = currentShiftData.morning;
-      document.getElementById('inputShiftEvening').value = currentShiftData.evening;
-      document.getElementById('inputShiftOnCall').value = currentShiftData.onCall;
-      document.getElementById('inputShiftLeave').value = currentShiftData.leave;
+    function switchTab(tabName) {
+      const btnTasks = document.getElementById('tabBtnTasks');
+      const btnShifts = document.getElementById('tabBtnShifts');
+      const viewTasks = document.getElementById('viewTasks');
+      const viewShifts = document.getElementById('viewShifts');
+
+      if (tabName === 'tasks') {
+        viewTasks.classList.remove('hidden');
+        viewShifts.classList.add('hidden');
+        btnTasks.className = "bg-white/20 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow";
+        btnShifts.className = "bg-slate-900/40 text-indigo-100 font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow";
+      } else {
+        viewTasks.classList.add('hidden');
+        viewShifts.classList.remove('hidden');
+        btnShifts.className = "bg-white/20 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow";
+        btnTasks.className = "bg-slate-900/40 text-indigo-100 font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow";
+        
+        // เซ็ตวันที่ในหน้ากะเป็นวันนี้ถ้ายังไม่ได้เลือก
+        if (!document.getElementById('manageShiftDate').value) {
+          document.getElementById('manageShiftDate').value = new Date().toISOString().split('T')[0];
+        }
+        loadShiftForDate();
+      }
     }
 
-    function toggleShiftEditModal() {
-      const modal = document.getElementById('shiftModal');
-      modal.classList.toggle('hidden');
+    // ----------------------------------------------------
+    // Shift Database Operations
+    // ----------------------------------------------------
+    async function fetchTodayShiftSummary() {
+      const todayStr = new Date().toISOString().split('T')[0];
+      document.getElementById('todayDateStr').innerText = todayStr;
+
+      const { data, error } = await supabaseClient
+        .from('shifts')
+        .select('*')
+        .eq('shift_date', todayStr)
+        .single();
+
+      if (data) {
+        todayShiftCache = {
+          morning: data.morning_staff || '-',
+          evening: data.evening_staff || '-',
+          onCall: data.on_call_staff || '-',
+          leave: data.leave_info || 'ไม่มี'
+        };
+      }
+
+      document.getElementById('summaryMorning').innerText = todayShiftCache.morning;
+      document.getElementById('summaryEvening').innerText = todayShiftCache.evening;
+      document.getElementById('summaryOnCall').innerText = todayShiftCache.onCall;
+      document.getElementById('summaryLeave').innerText = todayShiftCache.leave;
     }
 
-    document.getElementById('shiftForm').addEventListener('submit', (e) => {
+    async function loadShiftForDate() {
+      const selectedDate = document.getElementById('manageShiftDate').value;
+      if (!selectedDate) return;
+
+      const { data, error } = await supabaseClient
+        .from('shifts')
+        .select('*')
+        .eq('shift_date', selectedDate)
+        .single();
+
+      if (data) {
+        document.getElementById('mMorning').value = data.morning_staff || '';
+        document.getElementById('mEvening').value = data.evening_staff || '';
+        document.getElementById('mOnCall').value = data.on_call_staff || '';
+        document.getElementById('mLeave').value = data.leave_info || '';
+      } else {
+        document.getElementById('mMorning').value = '';
+        document.getElementById('mEvening').value = '';
+        document.getElementById('mOnCall').value = '';
+        document.getElementById('mLeave').value = '';
+      }
+    }
+
+    document.getElementById('shiftManageForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      currentShiftData = {
-        morning: document.getElementById('inputShiftMorning').value,
-        evening: document.getElementById('inputShiftEvening').value,
-        onCall: document.getElementById('inputShiftOnCall').value,
-        leave: document.getElementById('inputShiftLeave').value || 'ไม่มีผู้แจ้งลา'
+      const selectedDate = document.getElementById('manageShiftDate').value;
+      
+      const shiftPayload = {
+        shift_date: selectedDate,
+        morning_staff: document.getElementById('mMorning').value,
+        evening_staff: document.getElementById('mEvening').value,
+        on_call_staff: document.getElementById('mOnCall').value,
+        leave_info: document.getElementById('mLeave').value || 'ไม่มีผู้แจ้งลา'
       };
 
-      localStorage.setItem('it_shift_data', JSON.stringify(currentShiftData));
-      renderShiftData();
-      toggleShiftEditModal();
-      showToast('อัปเดตตารางกะสำเร็จ!', 'บันทึกตารางกะใหม่เรียบร้อยแล้ว', 'success');
+      const { error } = await supabaseClient
+        .from('shifts')
+        .upsert(shiftPayload, { onConflict: 'shift_date' });
+
+      if (error) {
+        showToast('เกิดข้อผิดพลาด', error.message, 'error');
+      } else {
+        showToast('บันทึกกะสำเร็จ!', `อัปเดตตารางกะวันที่ ${selectedDate} เรียบร้อย`, 'success');
+        fetchTodayShiftSummary();
+      }
     });
 
-    // 📲 ฟังก์ชันยิง LINE สรุปกะประจำวันเข้ากลุ่ม LINE
+    // ----------------------------------------------------
+    // LINE Alert for Shifts
+    // ----------------------------------------------------
     async function sendLineShiftAlertFromUI() {
       if (!LINE_ACCESS_TOKEN) return;
-
       const todayStr = new Date().toISOString().split('T')[0];
 
       const flexPayload = {
@@ -565,30 +474,9 @@
                 margin: "sm",
                 spacing: "xs",
                 contents: [
-                  {
-                    type: "box",
-                    layout: "baseline",
-                    contents: [
-                      { type: "text", text: "• กะเช้า:", size: "xs", color: "#64748b", flex: 3 },
-                      { type: "text", text: currentShiftData.morning, size: "xs", color: "#0f172a", flex: 5, weight: "bold" }
-                    ]
-                  },
-                  {
-                    type: "box",
-                    layout: "baseline",
-                    contents: [
-                      { type: "text", text: "• กะบ่าย:", size: "xs", color: "#64748b", flex: 3 },
-                      { type: "text", text: currentShiftData.evening, size: "xs", color: "#0f172a", flex: 5, weight: "bold" }
-                    ]
-                  },
-                  {
-                    type: "box",
-                    layout: "baseline",
-                    contents: [
-                      { type: "text", text: "• Standby:", size: "xs", color: "#64748b", flex: 3 },
-                      { type: "text", text: currentShiftData.onCall, size: "xs", color: "#0284c7", flex: 5, weight: "bold" }
-                    ]
-                  }
+                  { type: "box", layout: "baseline", contents: [{ type: "text", text: "• กะเช้า:", size: "xs", color: "#64748b", flex: 3 }, { type: "text", text: todayShiftCache.morning, size: "xs", color: "#0f172a", flex: 5, weight: "bold" }] },
+                  { type: "box", layout: "baseline", contents: [{ type: "text", text: "• กะบ่าย:", size: "xs", color: "#64748b", flex: 3 }, { type: "text", text: todayShiftCache.evening, size: "xs", color: "#0f172a", flex: 5, weight: "bold" }] },
+                  { type: "box", layout: "baseline", contents: [{ type: "text", text: "• Standby:", size: "xs", color: "#64748b", flex: 3 }, { type: "text", text: todayShiftCache.onCall, size: "xs", color: "#0284c7", flex: 5, weight: "bold" }] }
                 ]
               },
               { type: "separator", margin: "md" },
@@ -599,14 +487,7 @@
                 margin: "sm",
                 spacing: "xs",
                 contents: [
-                  {
-                    type: "box",
-                    layout: "baseline",
-                    contents: [
-                      { type: "text", text: "• สถานะลา:", size: "xs", color: "#ef4444", flex: 3, weight: "bold" },
-                      { type: "text", text: currentShiftData.leave, size: "xs", color: "#475569", flex: 5 }
-                    ]
-                  }
+                  { type: "box", layout: "baseline", contents: [{ type: "text", text: "• สถานะลา:", size: "xs", color: "#ef4444", flex: 3, weight: "bold" }, { type: "text", text: todayShiftCache.leave, size: "xs", color: "#475569", flex: 5 }] }
                 ]
               }
             ]
@@ -617,228 +498,53 @@
       try {
         await fetch('https://api.line.me/v2/bot/message/broadcast', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${LINE_ACCESS_TOKEN}`
-          },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${LINE_ACCESS_TOKEN}` },
           body: JSON.stringify({ messages: [flexPayload] })
         });
         showToast('ยิง LINE ตารางกะสำเร็จ!', 'ส่งตารางกะเข้ากลุ่มเรียบร้อยแล้ว', 'success');
       } catch (err) {
-        console.error('LINE Broadcast Error:', err);
-        showToast('เกิดข้อผิดพลาด', 'ยิง LINE ไม่สำเร็จ โปรดเช็กการตั้งค่า', 'error');
+        showToast('เกิดข้อผิดพลาด', 'ยิง LINE ไม่สำเร็จ', 'error');
       }
     }
 
     // ----------------------------------------------------
-    // 📲 LINE Bot Push Notification Helper (สำหรับ Task)
-    // ----------------------------------------------------
-    async function sendLineTaskAlert(taskData) {
-      if (!LINE_ACCESS_TOKEN) return;
-
-      const flexPayload = {
-        type: "flex",
-        altText: `🚨 งาน IT ใหม่: ${taskData.title}`,
-        contents: {
-          type: "bubble",
-          styles: { header: { backgroundColor: "#6366f1" } },
-          header: {
-            type: "box",
-            layout: "vertical",
-            contents: [
-              { type: "text", text: "⚡ มีการบันทึก Task ใหม่เข้าระบบ", weight: "bold", color: "#ffffff", size: "sm" }
-            ]
-          },
-          body: {
-            type: "box",
-            layout: "vertical",
-            contents: [
-              { type: "text", text: taskData.title, weight: "bold", size: "md", color: "#0f172a" },
-              { type: "text", text: `หมวดหมู่: ${taskData.category} | ความสำคัญ: ${taskData.priority}`, size: "xs", color: "#64748b", margin: "xs" },
-              { type: "separator", margin: "md" },
-              {
-                type: "box",
-                layout: "vertical",
-                margin: "md",
-                spacing: "sm",
-                contents: [
-                  {
-                    type: "box",
-                    layout: "baseline",
-                    contents: [
-                      { type: "text", text: "👤 ผู้แจ้งงาน:", size: "xs", color: "#94a3b8", flex: 3 },
-                      { type: "text", text: `${taskData.reporter || '-'} (แผนก: ${taskData.department || '-'})`, size: "xs", color: "#334155", flex: 5 }
-                    ]
-                  },
-                  {
-                    type: "box",
-                    layout: "baseline",
-                    contents: [
-                      { type: "text", text: "🛠️ ผู้รับงาน:", size: "xs", color: "#94a3b8", flex: 3 },
-                      { type: "text", text: taskData.assignee || '-', size: "xs", color: "#2563eb", flex: 5, weight: "bold" }
-                    ]
-                  },
-                  {
-                    type: "box",
-                    layout: "baseline",
-                    contents: [
-                      { type: "text", text: "💬 รายละเอียด:", size: "xs", color: "#94a3b8", flex: 3 },
-                      { type: "text", text: taskData.description || "-", size: "xs", color: "#334155", flex: 5 }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        }
-      };
-
-      try {
-        await fetch('https://api.line.me/v2/bot/message/broadcast', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${LINE_ACCESS_TOKEN}`
-          },
-          body: JSON.stringify({ messages: [flexPayload] })
-        });
-      } catch (err) {
-        console.error('LINE Broadcast Error:', err);
-      }
-    }
-
-    // ----------------------------------------------------
-    // 🔔 Toast & Browser Notification Functions
+    // Toast & Navigation Helpers
     // ----------------------------------------------------
     function showToast(title, message, type = 'success') {
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
-      
-      let bgStyle = 'bg-emerald-500/90 border-emerald-400 text-white';
-      let icon = '✅';
-      
-      if (type === 'error') {
-        bgStyle = 'bg-rose-500/90 border-rose-400 text-white';
-        icon = '❌';
-      } else if (type === 'info') {
-        bgStyle = 'bg-indigo-500/90 border-indigo-400 text-white';
-        icon = 'ℹ️';
-      } else if (type === 'warning') {
-        bgStyle = 'bg-amber-500/90 border-amber-400 text-white';
-        icon = '⚠️';
-      }
-
-      toast.className = `pointer-events-auto p-4 rounded-xl border shadow-xl backdrop-blur flex items-start gap-3 toast-slide-in ${bgStyle}`;
-      toast.innerHTML = `
-        <span class="text-xl flex-shrink-0">${icon}</span>
-        <div class="flex-1">
-          <h4 class="text-xs font-bold">${title}</h4>
-          <p class="text-xs opacity-90 mt-0.5">${message}</p>
-        </div>
-        <button onclick="this.parentElement.remove()" class="text-xs font-bold opacity-70 hover:opacity-100">✕</button>
-      `;
-
+      toast.className = `pointer-events-auto p-4 rounded-xl border shadow-xl backdrop-blur flex items-start gap-3 toast-slide-in ${type === 'error' ? 'bg-rose-500/90 border-rose-400 text-white' : 'bg-emerald-500/90 border-emerald-400 text-white'}`;
+      toast.innerHTML = `<span class="text-xl">✅</span><div class="flex-1"><h4 class="text-xs font-bold">${title}</h4><p class="text-xs opacity-90">${message}</p></div>`;
       container.appendChild(toast);
-
-      setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transition = 'opacity 0.3s ease';
-        setTimeout(() => toast.remove(), 300);
-      }, 3500);
-    }
-
-    function requestNotificationPermission() {
-      if (!("Notification" in window)) {
-        showToast('ไม่รองรับการแจ้งเตือน', 'เบราว์เซอร์นี้ไม่รองรับ Push Notifications', 'warning');
-        return;
-      }
-
-      Notification.requestPermission().then(permission => {
-        if (permission === "granted") {
-          showToast('เปิดการแจ้งเตือนสำเร็จ!', 'ระบบจะยิงการแจ้งเตือนผ่าน OS/เบราว์เซอร์เมื่อมีอัปเดต', 'success');
-          sendBrowserNotification('⚡ IT Task Tracker', 'ระบบแจ้งเตือนเปิดใช้งานเรียบร้อยแล้ว');
-        } else {
-          showToast('ปิดการแจ้งเตือน', 'คุณปฏิเสธการขอสิทธิ์แจ้งเตือน', 'error');
-        }
-      });
-    }
-
-    function sendBrowserNotification(title, body) {
-      if ("Notification" in window && Notification.permission === "granted") {
-        new Notification(title, {
-          body: body,
-          icon: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
-        });
-      }
-    }
-
-    // ----------------------------------------------------
-    // Navigation & Auth Logic
-    // ----------------------------------------------------
-    function setDefaultTaskDate() {
-      const taskDateInput = document.getElementById('taskDate');
-      if (taskDateInput) {
-        taskDateInput.value = new Date().toISOString().split('T')[0];
-      }
-    }
-
-    function toggleDateInputs() {
-      const mode = document.getElementById('dateRangeMode').value;
-      const group = document.getElementById('customDateGroup');
-      if (mode === 'custom') {
-        group.classList.remove('hidden');
-      } else {
-        group.classList.add('hidden');
-      }
+      setTimeout(() => toast.remove(), 3500);
     }
 
     function hideAllPages() {
       document.getElementById('loginPage').classList.add('hidden');
       document.getElementById('registerPage').classList.add('hidden');
       document.getElementById('forgotPasswordPage').classList.add('hidden');
-      document.getElementById('resetPasswordPage').classList.add('hidden');
       document.getElementById('mainDashboard').classList.add('hidden');
     }
 
-    function showLoginPage() {
-      hideAllPages();
-      document.getElementById('loginPage').classList.remove('hidden');
-    }
-
-    function showRegisterPage() {
-      hideAllPages();
-      document.getElementById('registerPage').classList.remove('hidden');
-    }
-
-    function showForgotPasswordPage() {
-      hideAllPages();
-      document.getElementById('forgotPasswordPage').classList.remove('hidden');
-    }
-
-    function showResetPasswordPage() {
-      hideAllPages();
-      document.getElementById('resetPasswordPage').classList.remove('hidden');
-    }
+    function showLoginPage() { hideAllPages(); document.getElementById('loginPage').classList.remove('hidden'); }
+    function showRegisterPage() { hideAllPages(); document.getElementById('registerPage').classList.remove('hidden'); }
+    function showForgotPasswordPage() { hideAllPages(); document.getElementById('forgotPasswordPage').classList.remove('hidden'); }
 
     async function checkAuth() {
-      supabaseClient.auth.onAuthStateChange(async (event, session) => {
-        if (event === 'PASSWORD_RECOVERY') {
-          showResetPasswordPage();
-          return;
-        }
-      });
-
       const { data: { user } } = await supabaseClient.auth.getUser();
       if (user) {
         currentUser = user;
-        const { data: profile } = await supabaseClient
-          .from('profiles')
-          .select('role')
-          .eq('id', user.id)
-          .single();
+        hideAllPages();
+        document.getElementById('mainDashboard').classList.remove('hidden');
+        document.getElementById('userEmailDisplay').innerText = user.email;
         
+        const { data: profile } = await supabaseClient.from('profiles').select('role').eq('id', user.id).single();
         currentUserRole = profile?.role || 'staff';
-        showDashboard();
+        document.getElementById('userRoleBadge').innerText = currentUserRole;
+
+        document.getElementById('taskDate').value = new Date().toISOString().split('T')[0];
+        fetchTodayShiftSummary();
+        fetchTasks();
       } else {
         showLoginPage();
       }
@@ -846,364 +552,85 @@
 
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = document.getElementById('loginEmail').value;
-      const password = document.getElementById('loginPassword').value;
-      const errBox = document.getElementById('loginError');
-      errBox.classList.add('hidden');
-
-      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: document.getElementById('loginEmail').value,
+        password: document.getElementById('loginPassword').value
+      });
       if (error) {
-        errBox.innerText = 'เข้าสู่ระบบไม่สำเร็จ: ' + error.message;
-        errBox.classList.remove('hidden');
-        showToast('เข้าสู่ระบบไม่สำเร็จ', error.message, 'error');
+        document.getElementById('loginError').innerText = error.message;
+        document.getElementById('loginError').classList.remove('hidden');
       } else {
-        currentUser = data.user;
-        showToast('เข้าสู่ระบบสำเร็จ', `ยินดีต้อนรับ ${email}`, 'success');
         checkAuth();
       }
     });
 
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = document.getElementById('regEmail').value;
-      const password = document.getElementById('regPassword').value;
-      const confirmPassword = document.getElementById('regConfirmPassword').value;
-      const msgBox = document.getElementById('registerMessage');
-      msgBox.classList.add('hidden');
-
-      if (password !== confirmPassword) {
-        msgBox.innerText = 'รหัสผ่านทั้งสองช่องไม่ตรงกัน';
-        msgBox.className = "bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center";
-        msgBox.classList.remove('hidden');
-        showToast('ข้อผิดพลาด', 'รหัสผ่านทั้งสองช่องไม่ตรงกัน', 'error');
-        return;
-      }
-
-      const { data, error } = await supabaseClient.auth.signUp({
-        email: email,
-        password: password,
-        options: {
-          emailRedirectTo: window.location.href
-        }
+      const { error } = await supabaseClient.auth.signUp({
+        email: document.getElementById('regEmail').value,
+        password: document.getElementById('regPassword').value
       });
-
       if (error) {
-        msgBox.innerText = 'สมัครสมาชิกไม่สำเร็จ: ' + error.message;
-        msgBox.className = "bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center";
-        showToast('สมัครสมาชิกไม่สำเร็จ', error.message, 'error');
+        showToast('สมัครไม่สำเร็จ', error.message, 'error');
       } else {
-        msgBox.innerText = 'สมัครสมาชิกสำเร็จ! กรุณาเช็กอีเมลเพื่อกดยืนยันตัวตน (Confirm Email) ก่อนเข้าสู่ระบบ';
-        msgBox.className = "bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 p-3 rounded-xl text-xs text-center";
-        showToast('สมัครสมาชิกสำเร็จ', 'กรุณาเช็กอีเมลเพื่อยืนยันตัวตน', 'success');
-        setTimeout(() => {
-          showLoginPage();
-        }, 4000);
-      }
-      msgBox.classList.remove('hidden');
-    });
-
-    document.getElementById('forgotPasswordForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('forgotEmail').value;
-      const msgBox = document.getElementById('forgotMessage');
-      msgBox.classList.add('hidden');
-
-      const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + window.location.pathname,
-      });
-
-      if (error) {
-        msgBox.innerText = 'เกิดข้อผิดพลาด: ' + error.message;
-        msgBox.className = "bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center";
-        showToast('เกิดข้อผิดพลาด', error.message, 'error');
-      } else {
-        msgBox.innerText = 'ส่งลิงก์รีเซ็ตรหัสผ่านไปที่อีเมลเรียบร้อยแล้ว!';
-        msgBox.className = "bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 p-3 rounded-xl text-xs text-center";
-        showToast('ส่งอีเมลแล้ว', 'โปรดเช็กอินบ็อกซ์ของคุณเพื่อตั้งรหัสผ่านใหม่', 'success');
-      }
-      msgBox.classList.remove('hidden');
-    });
-
-    document.getElementById('resetPasswordForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const newPassword = document.getElementById('newPassword').value;
-      const confirmNewPassword = document.getElementById('confirmNewPassword').value;
-      const msgBox = document.getElementById('resetMessage');
-      msgBox.classList.add('hidden');
-
-      if (newPassword !== confirmNewPassword) {
-        msgBox.innerText = 'รหัสผ่านทั้งสองช่องไม่ตรงกัน';
-        msgBox.className = "bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center";
-        msgBox.classList.remove('hidden');
-        showToast('ข้อผิดพลาด', 'รหัสผ่านทั้งสองช่องไม่ตรงกัน', 'error');
-        return;
-      }
-
-      const { error } = await supabaseClient.auth.updateUser({ password: newPassword });
-
-      if (error) {
-        msgBox.innerText = 'บันทึกไม่สำเร็จ: ' + error.message;
-        msgBox.className = "bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center";
-        showToast('บันทึกไม่สำเร็จ', error.message, 'error');
-      } else {
-        showToast('สำเร็จ', 'เปลี่ยนรหัสผ่านสำเร็จเรียบร้อย!', 'success');
+        showToast('สำเร็จ', 'กรุณาเช็กอีเมลเพื่อยืนยันตัวตน', 'success');
         showLoginPage();
       }
-      msgBox.classList.remove('hidden');
     });
 
     async function handleLogout() {
       await supabaseClient.auth.signOut();
-      currentUser = null;
-      showToast('ออกจากระบบ', 'คุณได้ออกจากระบบเรียบร้อยแล้ว', 'info');
       showLoginPage();
     }
 
-    function showDashboard() {
-      hideAllPages();
-      document.getElementById('mainDashboard').classList.remove('hidden');
-
-      document.getElementById('userEmailDisplay').innerText = currentUser.email;
-      const roleBadge = document.getElementById('userRoleBadge');
-      roleBadge.innerText = currentUserRole;
-      
-      const isSupervisor = (currentUserRole === 'admin' || currentUserRole === 'supervisor');
-
-      const formStatusSelect = document.getElementById('status');
-      if (isSupervisor) {
-        roleBadge.className = "bg-rose-500/30 text-rose-200 border border-rose-400/30 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase";
-        document.getElementById('btnExport').classList.remove('hidden');
-        formStatusSelect.disabled = false;
-      } else {
-        roleBadge.className = "bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase";
-        document.getElementById('btnExport').classList.add('hidden');
-        formStatusSelect.value = 'Pending';
-        formStatusSelect.disabled = true;
-      }
-
-      setDefaultTaskDate();
-      renderShiftData();
-      fetchTasks();
-    }
-
-    // ----------------------------------------------------
-    // Data Fetching & Filter Logic
-    // ----------------------------------------------------
+    // Task Management Logic
     async function fetchTasks() {
-      let { data, error } = await supabaseClient.from('tasks').select('*').order('date', { ascending: false }).order('id', { ascending: false });
-
-      if (error) {
-        console.error(error);
-        return;
-      }
-
+      const { data } = await supabaseClient.from('tasks').select('*').order('date', { ascending: false });
       rawTasks = data || [];
       applyFilters();
     }
 
     function applyFilters() {
       const mode = document.getElementById('dateRangeMode').value;
-      const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-      const deptFilter = document.getElementById('filterDept').value.toLowerCase();
-      const statusFilter = document.getElementById('filterStatus').value;
       const todayStr = new Date().toISOString().split('T')[0];
-
-      let startDate = document.getElementById('startDate').value;
-      let endDate = document.getElementById('endDate').value;
+      const search = document.getElementById('searchInput').value.toLowerCase();
 
       currentTasks = rawTasks.filter(t => {
-        let matchesDate = true;
-        if (mode === 'today') {
-          matchesDate = (t.date === todayStr);
-        } else if (mode === 'custom') {
-          const matchesStartDate = !startDate || (t.date >= startDate);
-          const matchesEndDate = !endDate || (t.date <= endDate);
-          matchesDate = matchesStartDate && matchesEndDate;
-        }
-
-        const matchesSearch = !searchTerm || 
-          (t.title && t.title.toLowerCase().includes(searchTerm)) ||
-          (t.reporter && t.reporter.toLowerCase().includes(searchTerm)) ||
-          (t.assignee && t.assignee.toLowerCase().includes(searchTerm)) ||
-          (t.description && t.description.toLowerCase().includes(searchTerm));
-
-        const matchesDept = !deptFilter || (t.department && t.department.toLowerCase().includes(deptFilter));
-        const matchesStatus = !statusFilter || (t.status === statusFilter);
-
-        return matchesDate && matchesSearch && matchesDept && matchesStatus;
+        let matchDate = true;
+        if (mode === 'today') matchDate = (t.date === todayStr);
+        const matchSearch = !search || t.title.toLowerCase().includes(search) || (t.reporter && t.reporter.toLowerCase().includes(search));
+        return matchDate && matchSearch;
       });
 
-      updateStats();
-      renderCategoryChart();
-      renderTable();
-    }
-
-    function updateStats() {
       document.getElementById('statTotal').innerText = currentTasks.length;
       document.getElementById('statCompleted').innerText = currentTasks.filter(t => t.status === 'Completed').length;
       document.getElementById('statInProgress').innerText = currentTasks.filter(t => t.status === 'In Progress').length;
       document.getElementById('statPending').innerText = currentTasks.filter(t => t.status === 'Pending').length;
-    }
 
-    function resetFilter() {
-      document.getElementById('dateRangeMode').value = 'today';
-      document.getElementById('searchInput').value = '';
-      document.getElementById('startDate').value = '';
-      document.getElementById('endDate').value = '';
-      document.getElementById('filterDept').value = '';
-      document.getElementById('filterStatus').value = '';
-      toggleDateInputs();
-      applyFilters();
-    }
-
-    function renderCategoryChart() {
-      const counts = {};
-      currentTasks.forEach(t => {
-        const cat = t.category || 'other';
-        counts[cat] = (counts[cat] || 0) + 1;
-      });
-
-      const labels = Object.keys(counts);
-      const dataValues = Object.values(counts);
-
-      const ctx = document.getElementById('categoryChart').getContext('2d');
-
-      if (myChart) {
-        myChart.destroy();
-      }
-
-      myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'จำนวน Task',
-            data: dataValues,
-            backgroundColor: '#6366f1',
-            borderRadius: 6
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false }
-          },
-          scales: {
-            x: { ticks: { color: '#94a3b8', font: { family: 'Kanit' } }, grid: { display: false } },
-            y: { ticks: { color: '#94a3b8', font: { family: 'Kanit' }, stepSize: 1 }, grid: { color: '#334155' } }
-          }
-        }
-      });
-    }
-
-    function renderTable() {
       const tbody = document.getElementById('taskTableBody');
       tbody.innerHTML = '';
       document.getElementById('taskCount').innerText = `${currentTasks.length} รายการ`;
 
-      if (currentTasks.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-500">ไม่พบข้อมูล Task ตามเงื่อนไขที่เลือก</td></tr>`;
-        return;
-      }
-
-      const isSupervisor = (currentUserRole === 'admin' || currentUserRole === 'supervisor');
-
-      const groupedTasks = {};
-      currentTasks.forEach(task => {
-        const taskDate = task.date || 'ไม่ระบุวันที่';
-        if (!groupedTasks[taskDate]) {
-          groupedTasks[taskDate] = [];
-        }
-        groupedTasks[taskDate].push(task);
-      });
-
-      Object.keys(groupedTasks).forEach(dateStr => {
-        const tasksInDate = groupedTasks[dateStr];
-
-        const headerRow = document.createElement('tr');
-        headerRow.className = "bg-slate-900/90 border-y border-indigo-500/30 font-bold text-xs text-indigo-300";
-        headerRow.innerHTML = `
-          <td colspan="5" class="py-2.5 px-4 bg-indigo-950/40">
-            <div class="flex items-center justify-between">
-              <span class="flex items-center gap-2">
-                <span>📅</span> วันที่ ${dateStr}
-              </span>
-              <span class="bg-indigo-500/20 text-indigo-300 px-2.5 py-0.5 rounded-full border border-indigo-500/30 text-[11px] font-normal">
-                ${tasksInDate.length} รายการ
-              </span>
-            </div>
-          </td>
+      currentTasks.forEach(t => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-800/60";
+        tr.innerHTML = `
+          <td class="p-3 font-medium text-white">${t.title}<br><span class="text-xs text-slate-400">${t.description || ''}</span></td>
+          <td class="p-3 text-xs"><span class="text-indigo-300">แจ้ง: ${t.reporter || '-'}</span><br><span class="text-cyan-300">แผนก: ${t.department || '-'}</span></td>
+          <td class="p-3"><span class="bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded text-xs">${t.category}</span></td>
+          <td class="p-3"><span class="px-2 py-1 rounded text-xs bg-amber-500/20 text-amber-300">${t.status}</span></td>
+          <td class="p-3"><button onclick="deleteTask(${t.id})" class="text-rose-400 hover:text-rose-300 text-xs bg-rose-500/10 px-2 py-1 rounded">ลบ</button></td>
         `;
-        tbody.appendChild(headerRow);
-
-        tasksInDate.forEach(task => {
-          let priorityBadge = 'bg-slate-700 text-slate-300 border-slate-600';
-          if (task.priority === 'High') priorityBadge = 'bg-amber-500/20 text-amber-300 border-amber-500/30';
-          if (task.priority === 'Urgent') priorityBadge = 'bg-rose-500/20 text-rose-300 border-rose-500/30';
-
-          let statusBadge = 'bg-orange-500/20 text-orange-300 border-orange-500/40';
-          if (task.status === 'In Progress') statusBadge = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
-          if (task.status === 'Completed') statusBadge = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
-          if (task.status === 'Cancelled') statusBadge = 'bg-rose-500/20 text-rose-300 border-rose-500/40';
-
-          const canDelete = isSupervisor || currentUser.id === task.user_id;
-
-          const statusHTML = isSupervisor ? `
-            <select onchange="updateStatus(${task.id}, this.value)" class="text-xs font-medium border rounded-lg px-2 py-1 ${statusBadge} bg-slate-900 outline-none cursor-pointer">
-              <option value="Pending" ${task.status === 'Pending' ? 'selected' : ''}>Pending</option>
-              <option value="In Progress" ${task.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
-              <option value="Completed" ${task.status === 'Completed' ? 'selected' : ''}>Completed</option>
-              <option value="Cancelled" ${task.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
-            </select>
-          ` : `
-            <span class="text-xs font-medium border rounded-lg px-2.5 py-1 ${statusBadge} inline-block">
-              ${task.status || 'Pending'}
-            </span>
-          `;
-
-          const quickActionHTML = (task.status !== 'Completed') ? `
-            <button onclick="updateStatus(${task.id}, 'Completed')" title="จบงานด่วน" class="text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 px-2 py-1 rounded-md text-xs font-medium transition-all mr-1">
-              ✓ จบงาน
-            </button>
-          ` : '';
-
-          const tr = document.createElement('tr');
-          tr.className = "hover:bg-slate-800/60 transition-colors";
-          tr.innerHTML = `
-            <td class="p-3 font-medium text-white">
-              ${task.title} <span class="border ${priorityBadge} px-1.5 py-0.5 rounded text-[10px] ml-1 font-semibold">${task.priority}</span><br>
-              <span class="text-xs text-slate-400 font-normal">${task.description || '-'}</span>
-            </td>
-            <td class="p-3 whitespace-nowrap text-xs">
-              <span class="text-slate-400">แจ้ง:</span> <span class="text-indigo-300 font-medium">${task.reporter || '-'}</span><br>
-              <span class="text-slate-400">แผนก:</span> <span class="text-cyan-300 font-medium">${task.department || '-'}</span><br>
-              <span class="text-slate-400">ผู้รับ:</span> <span class="text-purple-300 font-medium">${task.assignee || '-'}</span>
-            </td>
-            <td class="p-3 whitespace-nowrap"><span class="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-1 rounded-md text-xs font-semibold">${task.category}</span></td>
-            <td class="p-3 whitespace-nowrap">${statusHTML}</td>
-            <td class="p-3 whitespace-nowrap">
-              ${quickActionHTML}
-              ${canDelete ? `<button onclick="deleteTask(${task.id})" class="text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 px-2.5 py-1 rounded-md text-xs font-medium transition-all">ลบ</button>` : `<span class="text-slate-600 text-xs">-</span>`}
-            </td>
-          `;
-          tbody.appendChild(tr);
-        });
+        tbody.appendChild(tr);
       });
     }
 
-    // Submit Task
     document.getElementById('taskForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      
-      const selectedDate = document.getElementById('taskDate').value || new Date().toISOString().split('T')[0];
-      const title = document.getElementById('title').value;
-
       const newTask = {
         user_id: currentUser.id,
-        date: selectedDate,
-        title: title,
+        date: document.getElementById('taskDate').value,
+        title: document.getElementById('title').value,
         reporter: document.getElementById('reporter').value,
         department: document.getElementById('department').value,
         assignee: document.getElementById('assignee').value || currentUser.email.split('@')[0],
@@ -1214,91 +641,30 @@
       };
 
       const { error } = await supabaseClient.from('tasks').insert([newTask]);
-
-      if (error) {
-        showToast('เกิดข้อผิดพลาด', error.message, 'error');
-      } else {
-        showToast('บันทึก Task สำเร็จ!', `เพิ่มงาน "${title}" เข้าสู่ระบบเรียบร้อย`, 'success');
-        sendBrowserNotification('📝 บันทึก Task ใหม่สำเร็จ', `งาน: ${title}`);
-        sendLineTaskAlert(newTask);
-
+      if (!error) {
+        showToast('บันทึก Task สำเร็จ', 'เพิ่มงานเรียบร้อยแล้ว', 'success');
         e.target.reset();
-        checkAuth();
+        document.getElementById('taskDate').value = new Date().toISOString().split('T')[0];
+        fetchTasks();
       }
     });
 
-    async function updateStatus(id, newStatus) {
-      const { error } = await supabaseClient.from('tasks').update({ status: newStatus }).eq('id', id);
-      if (error) {
-        showToast('อัปเดตไม่สำเร็จ', error.message, 'error');
-      } else {
-        showToast('อัปเดตสถานะสำเร็จ', `เปลี่ยนสถานะเป็น ${newStatus} เรียบร้อยแล้ว`, 'info');
-        sendBrowserNotification('🔄 อัปเดตสถานะ Task', `Task ID #${id} ปรับสถานะเป็น ${newStatus}`);
+    async function deleteTask(id) {
+      if (confirm('ยืนยันลบ Task นี้?')) {
+        await supabaseClient.from('tasks').delete().eq('id', id);
         fetchTasks();
       }
     }
 
-    async function deleteTask(id) {
-      if (confirm('ยืนยันลบ Task นี้?')) {
-        const { error } = await supabaseClient.from('tasks').delete().eq('id', id);
-        if (error) {
-          showToast('ลบไม่สำเร็จ', error.message, 'error');
-        } else {
-          showToast('ลบรายการสำเร็จ', `ลบ Task ID #${id} เรียบร้อยแล้ว`, 'error');
-          fetchTasks();
-        }
-      }
+    function toggleDateInputs() {
+      const mode = document.getElementById('dateRangeMode').value;
+      document.getElementById('customDateGroup').classList.toggle('hidden', mode !== 'custom');
     }
 
-    // Export Excel
-    function exportToExcel() {
-      if (currentTasks.length === 0) {
-        showToast('ไม่มีข้อมูล', 'ไม่มีรายการ Task สำหรับ Export', 'warning');
-        return;
-      }
-
-      let lastDate = '';
-
-      const dataToExport = currentTasks.map((t) => {
-        let displayDate = t.date || '';
-        if (displayDate === lastDate) {
-          displayDate = '';
-        } else {
-          lastDate = displayDate;
-        }
-
-        return {
-          'Date': displayDate,
-          'Category': t.category || '-',
-          'Task Name': t.title || '-',
-          'Priority': t.priority || 'Normal',
-          'Status': t.status || 'Pending',
-          'Description / Outcome': t.description || '-',
-          'Dept': t.department || '-',
-          'Reporter': t.reporter || '-',
-          'Fix By': t.assignee || '-'
-        };
-      });
-
-      const worksheet = XLSX.utils.json_to_sheet(dataToExport);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "IT Task Log");
-
-      worksheet['!cols'] = [
-        { wch: 13 },
-        { wch: 17 },
-        { wch: 40 },
-        { wch: 13 },
-        { wch: 13 },
-        { wch: 70 },
-        { wch: 12 },
-        { wch: 20 },
-        { wch: 13 }
-      ];
-
-      const today = new Date().toISOString().split('T')[0];
-      XLSX.writeFile(workbook, `IT_Task_Report_${today}.xlsx`);
-      showToast('Export สำเร็จ!', 'ดาวน์โหลดไฟล์ Excel เรียบร้อยแล้ว', 'success');
+    function resetFilter() {
+      document.getElementById('dateRangeMode').value = 'today';
+      document.getElementById('searchInput').value = '';
+      fetchTasks();
     }
 
     checkAuth();
