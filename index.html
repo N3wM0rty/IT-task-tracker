@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IT Task Tracker & Management System</title>
+  <title>IT Task Tracker & Shift Management System</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font support (Kanit) -->
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <!-- SheetJS CDN (สำหรับ Export Excel) -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <!-- Chart.js CDN (สำหรับสร้างกราฟสรุปงาน) -->
+  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Supabase JS Client CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -31,11 +31,9 @@
   <!-- ==================== PAGE 1: LOGIN ==================== -->
   <div id="loginPage" class="max-w-md mx-auto my-12 bg-slate-800/90 border border-slate-700/60 p-8 rounded-2xl shadow-2xl space-y-6">
     <div class="text-center space-y-2">
-      <div class="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">
-        ⚡
-      </div>
+      <div class="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">⚡</div>
       <h1 class="text-2xl font-bold text-white">IT Task Management</h1>
-      <p class="text-slate-400 text-xs">เข้าสู่ระบบเพื่อจัดการงานและออกรายงาน (Multi-Role)</p>
+      <p class="text-slate-400 text-xs">เข้าสู่ระบบเพื่อจัดการงานและตารางกะ (Multi-Role)</p>
     </div>
 
     <form id="loginForm" class="space-y-4">
@@ -67,9 +65,7 @@
   <!-- ==================== PAGE 2: REGISTER ==================== -->
   <div id="registerPage" class="hidden max-w-md mx-auto my-12 bg-slate-800/90 border border-slate-700/60 p-8 rounded-2xl shadow-2xl space-y-6">
     <div class="text-center space-y-2">
-      <div class="w-16 h-16 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">
-        👤
-      </div>
+      <div class="w-16 h-16 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">👤</div>
       <h1 class="text-2xl font-bold text-white">สมัครสมาชิก</h1>
       <p class="text-slate-400 text-xs">สร้างบัญชีผู้ใช้งานใหม่เข้าสู่ระบบ IT Task</p>
     </div>
@@ -94,16 +90,13 @@
         ← ย้อนกลับไปหน้าเข้าสู่ระบบ
       </button>
     </form>
-
     <div id="registerMessage" class="hidden p-3 rounded-xl text-xs text-center"></div>
   </div>
 
   <!-- ==================== PAGE 3: FORGOT PASSWORD ==================== -->
   <div id="forgotPasswordPage" class="hidden max-w-md mx-auto my-12 bg-slate-800/90 border border-slate-700/60 p-8 rounded-2xl shadow-2xl space-y-6">
     <div class="text-center space-y-2">
-      <div class="w-16 h-16 bg-gradient-to-tr from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">
-        🔑
-      </div>
+      <div class="w-16 h-16 bg-gradient-to-tr from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">🔑</div>
       <h1 class="text-2xl font-bold text-white">ลืมรหัสผ่าน</h1>
       <p class="text-slate-400 text-xs">กรอกอีเมลของคุณเพื่อรับลิงก์สำหรับตั้งรหัสผ่านใหม่</p>
     </div>
@@ -120,16 +113,13 @@
         ← ย้อนกลับไปหน้าเข้าสู่ระบบ
       </button>
     </form>
-
     <div id="forgotMessage" class="hidden p-3 rounded-xl text-xs text-center"></div>
   </div>
 
   <!-- ==================== PAGE 4: RESET PASSWORD ==================== -->
   <div id="resetPasswordPage" class="hidden max-w-md mx-auto my-12 bg-slate-800/90 border border-slate-700/60 p-8 rounded-2xl shadow-2xl space-y-6">
     <div class="text-center space-y-2">
-      <div class="w-16 h-16 bg-gradient-to-tr from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">
-        🔒
-      </div>
+      <div class="w-16 h-16 bg-gradient-to-tr from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">🔒</div>
       <h1 class="text-2xl font-bold text-white">ตั้งรหัสผ่านใหม่</h1>
       <p class="text-slate-400 text-xs">กรุณากรอกรหัสผ่านใหม่ของคุณ</p>
     </div>
@@ -147,7 +137,6 @@
         บันทึกรหัสผ่านใหม่
       </button>
     </form>
-
     <div id="resetMessage" class="hidden p-3 rounded-xl text-xs text-center"></div>
   </div>
 
@@ -184,6 +173,39 @@
         </button>
       </div>
     </header>
+
+    <!-- ⭐️ [เพิ่มใหม่]: การ์ดตารางกะ IT On Duty & ปุ่มแก้ไขตารางกะ ⭐️ -->
+    <div class="bg-slate-800/90 border border-slate-700/60 p-5 rounded-2xl shadow-xl space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-700/60 pb-3">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <span>📅</span> ตารางปฏิบัติงาน & IT On Duty ประจำวัน
+        </h3>
+        <div class="flex items-center gap-2">
+          <button onclick="sendLineShiftAlertFromUI()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs px-3 py-2 rounded-xl flex items-center gap-1.5 transition-all shadow-md">
+            <span>📲</span> ยิง LINE แจ้งกะ
+          </button>
+          <button onclick="toggleShiftEditModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs px-3 py-2 rounded-xl flex items-center gap-1.5 transition-all shadow-md">
+            <span>✏️</span> แก้ไขตารางกะ
+          </button>
+        </div>
+      </div>
+
+      <!-- โซนแสดงตารางกะปัจจุบัน -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-slate-900/60 border border-slate-700/50 p-3.5 rounded-xl">
+          <p class="text-xs text-slate-400 font-medium">☀️ กะเช้า (Morning Shift)</p>
+          <p id="dispShiftMorning" class="text-sm font-bold text-cyan-400 mt-1">คุณสมชาย (08:00 - 17:00)</p>
+        </div>
+        <div class="bg-slate-900/60 border border-slate-700/50 p-3.5 rounded-xl">
+          <p class="text-xs text-slate-400 font-medium">🌙 กะบ่าย/บ่ายดึก (Evening Shift)</p>
+          <p id="dispShiftEvening" class="text-sm font-bold text-purple-400 mt-1">Supatcha (13:00 - 22:00)</p>
+        </div>
+        <div class="bg-slate-900/60 border border-slate-700/50 p-3.5 rounded-xl">
+          <p class="text-xs text-slate-400 font-medium">☎️ Standby On-Call / ลา</p>
+          <p id="dispShiftOnCall" class="text-sm font-bold text-emerald-400 mt-1">Supatcha (ลา: คุณอนันต์)</p>
+        </div>
+      </div>
+    </div>
 
     <!-- Summary Stats Bar -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -415,11 +437,51 @@
     </div>
   </div>
 
+  <!-- ⭐️ [เพิ่มใหม่]: Modal ป๊อบอัพสำหรับแก้ตารางกะ ⭐️ -->
+  <div id="shiftModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-slate-800 border border-slate-700/80 rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl">
+      <div class="flex justify-between items-center border-b border-slate-700/60 pb-3">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <span>✏️</span> แก้ไขตารางกะ & IT On Duty
+        </h3>
+        <button onclick="toggleShiftEditModal()" class="text-slate-400 hover:text-white font-bold text-sm">✕</button>
+      </div>
+
+      <form id="shiftForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">☀️ กะเช้า (Morning Shift)</label>
+          <input type="text" id="inputShiftMorning" required placeholder="เช่น คุณสมชาย (08:00 - 17:00)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">🌙 กะบ่าย/บ่ายดึก (Evening Shift)</label>
+          <input type="text" id="inputShiftEvening" required placeholder="เช่น Supatcha (13:00 - 22:00)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">☎️ Standby On-Call</label>
+          <input type="text" id="inputShiftOnCall" required placeholder="เช่น Supatcha" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-300 mb-1">🔴 พนักงานแจ้งลา / หมายเหตุ</label>
+          <input type="text" id="inputShiftLeave" placeholder="เช่น คุณอนันต์ (ลาป่วย) หรือ - " class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+
+        <div class="flex items-center gap-2 pt-2">
+          <button type="submit" class="flex-1 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold py-2.5 rounded-xl text-xs transition-all shadow-md">
+            💾 บันทึกตารางกะ
+          </button>
+          <button type="button" onclick="toggleShiftEditModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 font-medium px-4 py-2.5 rounded-xl text-xs transition-all">
+            ยกเลิก
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
     const SUPABASE_URL = 'https://mpvyalurrgrymbvbmwcj.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_2sxnepbtIji-OK0ddOnQFA_cCin-yLu';
     
-    // 🟢 LINE Bot Access Token (ใส่เรียบร้อยแล้ว)
+    // 🟢 LINE Bot Access Token
     const LINE_ACCESS_TOKEN = '7LeHUPrb++DZ5vjtbXTR0GsPhY+ZIIpxjWs20hLwEmTaG7Hoy/kvGhVrbIIoOyOqgxksB8NQB90YcXvdZa2ZbQ6UJ1HGjQN0Y5W397jiC0ovlolV2iyLKWFkDEzWPMre/Qe3ZkqAG0vbmrsO0rCgFgdB04t89/1O/w1cDnyilFU=';
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -430,8 +492,146 @@
     let currentTasks = [];
     let myChart = null;
 
+    // ข้อมูลตารางกะในระบบ (บันทึกลง LocalStorage อัตโนมัติ)
+    let currentShiftData = JSON.parse(localStorage.getItem('it_shift_data')) || {
+      morning: 'คุณสมชาย (08:00 - 17:00)',
+      evening: 'Supatcha (13:00 - 22:00)',
+      onCall: 'Supatcha',
+      leave: 'ไม่มีผู้แจ้งลา'
+    };
+
     // ----------------------------------------------------
-    // 📲 LINE Bot Push Notification Helper
+    // 📅 Shift Management Functions
+    // ----------------------------------------------------
+    function renderShiftData() {
+      document.getElementById('dispShiftMorning').innerText = currentShiftData.morning;
+      document.getElementById('dispShiftEvening').innerText = currentShiftData.evening;
+      document.getElementById('dispShiftOnCall').innerText = `${currentShiftData.onCall} ${currentShiftData.leave !== 'ไม่มีผู้แจ้งลา' ? `(ลา: ${currentShiftData.leave})` : ''}`;
+      
+      document.getElementById('inputShiftMorning').value = currentShiftData.morning;
+      document.getElementById('inputShiftEvening').value = currentShiftData.evening;
+      document.getElementById('inputShiftOnCall').value = currentShiftData.onCall;
+      document.getElementById('inputShiftLeave').value = currentShiftData.leave;
+    }
+
+    function toggleShiftEditModal() {
+      const modal = document.getElementById('shiftModal');
+      modal.classList.toggle('hidden');
+    }
+
+    document.getElementById('shiftForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      currentShiftData = {
+        morning: document.getElementById('inputShiftMorning').value,
+        evening: document.getElementById('inputShiftEvening').value,
+        onCall: document.getElementById('inputShiftOnCall').value,
+        leave: document.getElementById('inputShiftLeave').value || 'ไม่มีผู้แจ้งลา'
+      };
+
+      localStorage.setItem('it_shift_data', JSON.stringify(currentShiftData));
+      renderShiftData();
+      toggleShiftEditModal();
+      showToast('อัปเดตตารางกะสำเร็จ!', 'บันทึกตารางกะใหม่เรียบร้อยแล้ว', 'success');
+    });
+
+    // 📲 ฟังก์ชันยิง LINE สรุปกะประจำวันเข้ากลุ่ม LINE
+    async function sendLineShiftAlertFromUI() {
+      if (!LINE_ACCESS_TOKEN) return;
+
+      const todayStr = new Date().toISOString().split('T')[0];
+
+      const flexPayload = {
+        type: "flex",
+        altText: `📢 ตารางปฏิบัติงาน IT & On Duty ประจำวันที่ ${todayStr}`,
+        contents: {
+          type: "bubble",
+          styles: { header: { backgroundColor: "#0284c7" } },
+          header: {
+            type: "box",
+            layout: "vertical",
+            contents: [
+              { type: "text", text: "📢 สรุปตารางปฏิบัติงาน & IT On Duty", weight: "bold", color: "#ffffff", size: "sm" },
+              { type: "text", text: `📅 วันที่: ${todayStr}`, size: "xs", color: "#e0f2fe", margin: "xs" }
+            ]
+          },
+          body: {
+            type: "box",
+            layout: "vertical",
+            contents: [
+              { type: "text", text: "🟢 พนักงานปฏิบัติงาน (On Duty)", weight: "bold", size: "xs", color: "#16a34a" },
+              {
+                type: "box",
+                layout: "vertical",
+                margin: "sm",
+                spacing: "xs",
+                contents: [
+                  {
+                    type: "box",
+                    layout: "baseline",
+                    contents: [
+                      { type: "text", text: "• กะเช้า:", size: "xs", color: "#64748b", flex: 3 },
+                      { type: "text", text: currentShiftData.morning, size: "xs", color: "#0f172a", flex: 5, weight: "bold" }
+                    ]
+                  },
+                  {
+                    type: "box",
+                    layout: "baseline",
+                    contents: [
+                      { type: "text", text: "• กะบ่าย:", size: "xs", color: "#64748b", flex: 3 },
+                      { type: "text", text: currentShiftData.evening, size: "xs", color: "#0f172a", flex: 5, weight: "bold" }
+                    ]
+                  },
+                  {
+                    type: "box",
+                    layout: "baseline",
+                    contents: [
+                      { type: "text", text: "• Standby:", size: "xs", color: "#64748b", flex: 3 },
+                      { type: "text", text: currentShiftData.onCall, size: "xs", color: "#0284c7", flex: 5, weight: "bold" }
+                    ]
+                  }
+                ]
+              },
+              { type: "separator", margin: "md" },
+              { type: "text", text: "🔴 พนักงานแจ้งลา / หยุด (On Leave)", weight: "bold", size: "xs", color: "#dc2626", margin: "md" },
+              {
+                type: "box",
+                layout: "vertical",
+                margin: "sm",
+                spacing: "xs",
+                contents: [
+                  {
+                    type: "box",
+                    layout: "baseline",
+                    contents: [
+                      { type: "text", text: "• สถานะลา:", size: "xs", color: "#ef4444", flex: 3, weight: "bold" },
+                      { type: "text", text: currentShiftData.leave, size: "xs", color: "#475569", flex: 5 }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      };
+
+      try {
+        await fetch('https://api.line.me/v2/bot/message/broadcast', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${LINE_ACCESS_TOKEN}`
+          },
+          body: JSON.stringify({ messages: [flexPayload] })
+        });
+        showToast('ยิง LINE ตารางกะสำเร็จ!', 'ส่งตารางกะเข้ากลุ่มเรียบร้อยแล้ว', 'success');
+      } catch (err) {
+        console.error('LINE Broadcast Error:', err);
+        showToast('เกิดข้อผิดพลาด', 'ยิง LINE ไม่สำเร็จ โปรดเช็กการตั้งค่า', 'error');
+      }
+    }
+
+    // ----------------------------------------------------
+    // 📲 LINE Bot Push Notification Helper (สำหรับ Task)
     // ----------------------------------------------------
     async function sendLineTaskAlert(taskData) {
       if (!LINE_ACCESS_TOKEN) return;
@@ -502,14 +702,13 @@
           },
           body: JSON.stringify({ messages: [flexPayload] })
         });
-        console.log('LINE Alert Broadcasted!');
       } catch (err) {
         console.error('LINE Broadcast Error:', err);
       }
     }
 
     // ----------------------------------------------------
-    // 🔔 Notification Helper Functions
+    // 🔔 Toast & Browser Notification Functions
     // ----------------------------------------------------
     function showToast(title, message, type = 'success') {
       const container = document.getElementById('toastContainer');
@@ -784,6 +983,7 @@
       }
 
       setDefaultTaskDate();
+      renderShiftData();
       fetchTasks();
     }
 
@@ -1020,8 +1220,6 @@
       } else {
         showToast('บันทึก Task สำเร็จ!', `เพิ่มงาน "${title}" เข้าสู่ระบบเรียบร้อย`, 'success');
         sendBrowserNotification('📝 บันทึก Task ใหม่สำเร็จ', `งาน: ${title}`);
-        
-        // 🟢 ยิง LINE Flex Message เข้ากลุ่ม LINE อัตโนมัติทันทีที่บันทึกงานใหม่
         sendLineTaskAlert(newTask);
 
         e.target.reset();
@@ -1087,15 +1285,15 @@
       XLSX.utils.book_append_sheet(workbook, worksheet, "IT Task Log");
 
       worksheet['!cols'] = [
-        { wch: 13 }, // Date
-        { wch: 17 }, // Category
-        { wch: 40 }, // Task Name
-        { wch: 13 }, // Priority
-        { wch: 13 }, // Status
-        { wch: 70 }, // Description / Outcome
-        { wch: 12 }, // Dept
-        { wch: 20 }, // Reporter
-        { wch: 13 }  // Fix By
+        { wch: 13 },
+        { wch: 17 },
+        { wch: 40 },
+        { wch: 13 },
+        { wch: 13 },
+        { wch: 70 },
+        { wch: 12 },
+        { wch: 20 },
+        { wch: 13 }
       ];
 
       const today = new Date().toISOString().split('T')[0];
