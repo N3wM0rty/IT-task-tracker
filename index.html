@@ -260,8 +260,14 @@
 
           <div class="bg-slate-800/90 border border-slate-700/60 p-6 rounded-2xl shadow-xl space-y-4">
             <div class="flex items-center justify-between">
-              <h2 class="text-lg font-bold text-white">📊 รายการงานในระบบ</h2>
-              <span id="taskCount" class="bg-indigo-500/20 text-indigo-300 text-xs px-3 py-1 rounded-full border border-indigo-500/30">0 รายการ</span>
+              <div class="flex items-center gap-3">
+                <h2 class="text-lg font-bold text-white">📊 รายการงานในระบบ</h2>
+                <span id="taskCount" class="bg-indigo-500/20 text-indigo-300 text-xs px-3 py-1 rounded-full border border-indigo-500/30">0 รายการ</span>
+              </div>
+              <!-- ⭐️ ปุ่ม Export Excel -->
+              <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow-lg flex items-center gap-1.5 transition">
+                <span>📥</span> Export Excel
+              </button>
             </div>
             <div class="overflow-x-auto">
               <table class="w-full text-left text-sm text-slate-300">
@@ -542,7 +548,6 @@
         showToast('อัปเดตสถานะไม่สำเร็จ', error.message, 'error');
       } else {
         showToast('อัปเดตสถานะเรียบร้อย', `เปลี่ยนสถานะเป็น ${newStatus}`, 'success');
-        // อัปเดตข้อมูลในดิสก์/หน่วยความจำ แล้ววาดตารางใหม่
         const targetTask = rawTasks.find(t => t.id === taskId);
         if (targetTask) targetTask.status = newStatus;
         applyFilters();
@@ -578,7 +583,6 @@
         tr.className = "hover:bg-slate-800/60";
         const taskTitle = t.title || t.task_name || '-';
         
-        // กำหนดสีของ Badge สถานะ
         let statusColorClass = 'bg-amber-500/20 text-amber-300 border-amber-500/30';
         if (t.status === 'Completed') statusColorClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30';
         if (t.status === 'In Progress') statusColorClass = 'bg-blue-500/20 text-blue-300 border-blue-500/30';
@@ -588,7 +592,7 @@
           <td class="p-3 text-xs"><span class="text-indigo-300">แจ้ง: ${t.reporter || '-'}</span><br><span class="text-cyan-300">แผนก: ${t.department || '-'}</span></td>
           <td class="p-3"><span class="bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded text-xs">${t.category || 'General'}</span></td>
           <td class="p-3">
-            <!-- ⭐️ Dropdown เลือกเปลี่ยนสถานะ -->
+            <!-- Dropdown เลือกเปลี่ยนสถานะ -->
             <select onchange="updateTaskStatus(${t.id}, this.value)" class="bg-slate-900 border border-slate-700 text-xs font-semibold rounded-lg px-2 py-1 outline-none ${statusColorClass}">
               <option value="Pending" ${t.status === 'Pending' ? 'selected' : ''}>Pending</option>
               <option value="In Progress" ${t.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
@@ -643,6 +647,53 @@
       document.getElementById('dateRangeMode').value = 'today';
       document.getElementById('searchInput').value = '';
       fetchTasks();
+    }
+
+    // ⭐️ ฟังก์ชัน Export Excel
+    function exportToExcel() {
+      if (currentTasks.length === 0) {
+        showToast('ไม่พบข้อมูล', 'ไม่มีรายการงานสำหรับ Export', 'error');
+        return;
+      }
+
+      const excelData = currentTasks.map((t, index) => {
+        return {
+          'ลำดับ': index + 1,
+          'วันที่ (Date)': t.date || (t.created_at ? t.created_at.split('T')[0] : ''),
+          'ชื่องาน (Task Name)': t.title || t.task_name || '',
+          'รายละเอียด (Description)': t.description || '-',
+          'หมวดหมู่ (Category)': t.category || 'General',
+          'ผู้แจ้ง (Reporter)': t.reporter || '-',
+          'แผนก (Department)': t.department || '-',
+          'ผู้รับงาน (Assignee)': t.assignee || '-',
+          'ความสำคัญ (Priority)': t.priority || 'Normal',
+          'สถานะ (Status)': t.status || 'Pending'
+        };
+      });
+
+      const worksheet = XLSX.utils.json_to_sheet(excelData);
+      const workbook = XLSX.utils.book_new();
+      
+      const wscols = [
+        { wch: 6 },
+        { wch: 12 },
+        { wch: 30 },
+        { wch: 40 },
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 10 },
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 12 }
+      ];
+      worksheet['!cols'] = wscols;
+
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Tasks_Report");
+
+      const todayStr = new Date().toISOString().split('T')[0];
+      XLSX.writeFile(workbook, `IT_Tasks_Report_${todayStr}.xlsx`);
+
+      showToast('Export สำเร็จ!', 'ดาวน์โหลดไฟล์ Excel เรียบร้อยแล้ว', 'success');
     }
 
     checkAuth();
