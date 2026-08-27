@@ -16,7 +16,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body { font-family: 'Kanit', sans-serif; }
-    /* Keyframe Animation สำหรับ In-App Toast Notification */
     @keyframes slideInRight {
       from { transform: translateX(100%); opacity: 0; }
       to { transform: translateX(0); opacity: 1; }
@@ -26,7 +25,7 @@
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen p-4 md:p-8 relative">
 
-  <!-- 🔔 Toast Container (สำหรับแสดง In-App Notification มุมขวาบน) -->
+  <!-- 🔔 Toast Container -->
   <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
 
   <!-- ==================== PAGE 1: LOGIN ==================== -->
@@ -65,7 +64,6 @@
     <div id="loginError" class="hidden bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center"></div>
   </div>
 
-
   <!-- ==================== PAGE 2: REGISTER ==================== -->
   <div id="registerPage" class="hidden max-w-md mx-auto my-12 bg-slate-800/90 border border-slate-700/60 p-8 rounded-2xl shadow-2xl space-y-6">
     <div class="text-center space-y-2">
@@ -100,7 +98,6 @@
     <div id="registerMessage" class="hidden p-3 rounded-xl text-xs text-center"></div>
   </div>
 
-
   <!-- ==================== PAGE 3: FORGOT PASSWORD ==================== -->
   <div id="forgotPasswordPage" class="hidden max-w-md mx-auto my-12 bg-slate-800/90 border border-slate-700/60 p-8 rounded-2xl shadow-2xl space-y-6">
     <div class="text-center space-y-2">
@@ -126,7 +123,6 @@
 
     <div id="forgotMessage" class="hidden p-3 rounded-xl text-xs text-center"></div>
   </div>
-
 
   <!-- ==================== PAGE 4: RESET PASSWORD ==================== -->
   <div id="resetPasswordPage" class="hidden max-w-md mx-auto my-12 bg-slate-800/90 border border-slate-700/60 p-8 rounded-2xl shadow-2xl space-y-6">
@@ -155,7 +151,6 @@
     <div id="resetMessage" class="hidden p-3 rounded-xl text-xs text-center"></div>
   </div>
 
-
   <!-- ==================== PAGE 5: MAIN DASHBOARD ==================== -->
   <div id="mainDashboard" class="hidden max-w-7xl mx-auto space-y-6">
     
@@ -169,12 +164,10 @@
       </div>
       
       <div class="flex items-center gap-3">
-        <!-- 🔔 ปุ่มเปิดการแจ้งเตือน Browser Notification -->
-        <button id="btnEnableNotification" onclick="requestNotificationPermission()" class="bg-slate-900/40 hover:bg-slate-900/60 backdrop-blur border border-white/20 text-xs font-semibold px-3 py-2 rounded-xl text-white flex items-center gap-1.5 transition-all" title="เปิดใช้งานการแจ้งเตือนบนเบราว์เซอร์">
+        <button id="btnEnableNotification" onclick="requestNotificationPermission()" class="bg-slate-900/40 hover:bg-slate-900/60 backdrop-blur border border-white/20 text-xs font-semibold px-3 py-2 rounded-xl text-white flex items-center gap-1.5 transition-all">
           <span>🔔</span> เปิดแจ้งเตือน
         </button>
 
-        <!-- User Badge -->
         <div class="bg-slate-900/40 backdrop-blur border border-white/10 p-2.5 rounded-xl flex items-center gap-3">
           <div class="text-right">
             <p id="userEmailDisplay" class="text-xs font-semibold text-white">user@resort.com</p>
@@ -185,7 +178,6 @@
           </button>
         </div>
 
-        <!-- Export Button (Supervisor Only) -->
         <button id="btnExport" onclick="exportToExcel()" class="hidden bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-4 py-3 rounded-xl text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
           Export Excel
@@ -225,7 +217,7 @@
       </div>
     </div>
 
-    <!-- การ์ดแสดงกราฟสรุปงานตาม Category -->
+    <!-- Analytics Chart -->
     <div class="bg-slate-800/90 border border-slate-700/60 p-5 rounded-2xl shadow-xl">
       <h3 class="text-sm font-bold text-slate-300 mb-3 flex items-center gap-2">
         <span>📈</span> สรุปจำนวนงานแยกตาม Category (Analytics Chart)
@@ -337,23 +329,35 @@
         
         <!-- Filter Box -->
         <div class="bg-slate-800/90 border border-slate-700/60 p-4 rounded-2xl shadow-xl flex flex-wrap items-end gap-3 text-sm">
-          <div class="flex-1 min-w-[150px]">
+          
+          <div class="w-[130px]">
+            <label class="block text-xs font-medium text-indigo-300 mb-1">📅 มุมมองวันที่</label>
+            <select id="dateRangeMode" onchange="toggleDateInputs(); applyFilters();" class="w-full bg-indigo-950/80 border border-indigo-500/50 text-indigo-200 font-medium rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="today" selected>เฉพาะวันนี้</option>
+              <option value="all">ทุกวันทั้งหมด</option>
+              <option value="custom">ระบุช่วงวันที่</option>
+            </select>
+          </div>
+
+          <div class="flex-1 min-w-[140px]">
             <label class="block text-xs font-medium text-slate-300 mb-1">🔍 ค้นหา (Search)</label>
-            <input type="text" id="searchInput" oninput="applyFilters()" placeholder="พิมพ์งาน, ผู้แจ้ง, ผู้รับ..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
+            <input type="text" id="searchInput" oninput="applyFilters()" placeholder="พิมพ์งาน, ผู้แจ้ง..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
           </div>
 
-          <div class="w-[120px]">
-            <label class="block text-xs font-medium text-slate-300 mb-1">ตั้งแต่วันที่</label>
-            <input type="date" id="startDate" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
-          </div>
-          <div class="w-[120px]">
-            <label class="block text-xs font-medium text-slate-300 mb-1">ถึงวันที่</label>
-            <input type="date" id="endDate" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
+          <div id="customDateGroup" class="hidden flex gap-2">
+            <div class="w-[115px]">
+              <label class="block text-xs font-medium text-slate-300 mb-1">ตั้งแต่วันที่</label>
+              <input type="date" id="startDate" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none">
+            </div>
+            <div class="w-[115px]">
+              <label class="block text-xs font-medium text-slate-300 mb-1">ถึงวันที่</label>
+              <input type="date" id="endDate" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none">
+            </div>
           </div>
 
-          <div class="w-[110px]">
+          <div class="w-[100px]">
             <label class="block text-xs font-medium text-slate-300 mb-1">แผนก</label>
-            <select id="filterDept" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
+            <select id="filterDept" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none">
               <option value="">ทั้งหมด</option>
               <option value="FO">FO</option>
               <option value="HK">HK</option>
@@ -364,9 +368,9 @@
             </select>
           </div>
 
-          <div class="w-[110px]">
+          <div class="w-[100px]">
             <label class="block text-xs font-medium text-slate-300 mb-1">สถานะ</label>
-            <select id="filterStatus" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none focus:ring-2 focus:ring-indigo-500">
+            <select id="filterStatus" onchange="applyFilters()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white outline-none">
               <option value="">ทั้งหมด</option>
               <option value="Pending">Pending</option>
               <option value="In Progress">In Progress</option>
@@ -400,7 +404,7 @@
                 </tr>
               </thead>
               <tbody id="taskTableBody" class="divide-y divide-slate-700/50">
-                <!-- ข้อมูลแบบแยกวันต่อวันจะแสดงที่นี่ -->
+                <!-- ข้อมูลแสดงที่นี่ -->
               </tbody>
             </table>
           </div>
@@ -414,6 +418,9 @@
   <script>
     const SUPABASE_URL = 'https://mpvyalurrgrymbvbmwcj.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_2sxnepbtIji-OK0ddOnQFA_cCin-yLu';
+    
+    // 🟢 LINE Bot Access Token (ใส่เรียบร้อยแล้ว)
+    const LINE_ACCESS_TOKEN = '7LeHUPrb++DZ5vjtbXTR0GsPhY+ZIIpxjWs20hLwEmTaG7Hoy/kvGhVrbIIoOyOqgxksB8NQB90YcXvdZa2ZbQ6UJ1HGjQN0Y5W397jiC0ovlolV2iyLKWFkDEzWPMre/Qe3ZkqAG0vbmrsO0rCgFgdB04t89/1O/w1cDnyilFU=';
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
@@ -422,6 +429,84 @@
     let rawTasks = [];
     let currentTasks = [];
     let myChart = null;
+
+    // ----------------------------------------------------
+    // 📲 LINE Bot Push Notification Helper
+    // ----------------------------------------------------
+    async function sendLineTaskAlert(taskData) {
+      if (!LINE_ACCESS_TOKEN) return;
+
+      const flexPayload = {
+        type: "flex",
+        altText: `🚨 งาน IT ใหม่: ${taskData.title}`,
+        contents: {
+          type: "bubble",
+          styles: { header: { backgroundColor: "#6366f1" } },
+          header: {
+            type: "box",
+            layout: "vertical",
+            contents: [
+              { type: "text", text: "⚡ มีการบันทึก Task ใหม่เข้าระบบ", weight: "bold", color: "#ffffff", size: "sm" }
+            ]
+          },
+          body: {
+            type: "box",
+            layout: "vertical",
+            contents: [
+              { type: "text", text: taskData.title, weight: "bold", size: "md", color: "#0f172a" },
+              { type: "text", text: `หมวดหมู่: ${taskData.category} | ความสำคัญ: ${taskData.priority}`, size: "xs", color: "#64748b", margin: "xs" },
+              { type: "separator", margin: "md" },
+              {
+                type: "box",
+                layout: "vertical",
+                margin: "md",
+                spacing: "sm",
+                contents: [
+                  {
+                    type: "box",
+                    layout: "baseline",
+                    contents: [
+                      { type: "text", text: "👤 ผู้แจ้งงาน:", size: "xs", color: "#94a3b8", flex: 3 },
+                      { type: "text", text: `${taskData.reporter || '-'} (แผนก: ${taskData.department || '-'})`, size: "xs", color: "#334155", flex: 5 }
+                    ]
+                  },
+                  {
+                    type: "box",
+                    layout: "baseline",
+                    contents: [
+                      { type: "text", text: "🛠️ ผู้รับงาน:", size: "xs", color: "#94a3b8", flex: 3 },
+                      { type: "text", text: taskData.assignee || '-', size: "xs", color: "#2563eb", flex: 5, weight: "bold" }
+                    ]
+                  },
+                  {
+                    type: "box",
+                    layout: "baseline",
+                    contents: [
+                      { type: "text", text: "💬 รายละเอียด:", size: "xs", color: "#94a3b8", flex: 3 },
+                      { type: "text", text: taskData.description || "-", size: "xs", color: "#334155", flex: 5 }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      };
+
+      try {
+        await fetch('https://api.line.me/v2/bot/message/broadcast', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${LINE_ACCESS_TOKEN}`
+          },
+          body: JSON.stringify({ messages: [flexPayload] })
+        });
+        console.log('LINE Alert Broadcasted!');
+      } catch (err) {
+        console.error('LINE Broadcast Error:', err);
+      }
+    }
 
     // ----------------------------------------------------
     // 🔔 Notification Helper Functions
@@ -495,6 +580,16 @@
       const taskDateInput = document.getElementById('taskDate');
       if (taskDateInput) {
         taskDateInput.value = new Date().toISOString().split('T')[0];
+      }
+    }
+
+    function toggleDateInputs() {
+      const mode = document.getElementById('dateRangeMode').value;
+      const group = document.getElementById('customDateGroup');
+      if (mode === 'custom') {
+        group.classList.remove('hidden');
+      } else {
+        group.classList.add('hidden');
       }
     }
 
@@ -708,25 +803,35 @@
     }
 
     function applyFilters() {
+      const mode = document.getElementById('dateRangeMode').value;
       const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-      const startDate = document.getElementById('startDate').value;
-      const endDate = document.getElementById('endDate').value;
       const deptFilter = document.getElementById('filterDept').value.toLowerCase();
       const statusFilter = document.getElementById('filterStatus').value;
+      const todayStr = new Date().toISOString().split('T')[0];
+
+      let startDate = document.getElementById('startDate').value;
+      let endDate = document.getElementById('endDate').value;
 
       currentTasks = rawTasks.filter(t => {
+        let matchesDate = true;
+        if (mode === 'today') {
+          matchesDate = (t.date === todayStr);
+        } else if (mode === 'custom') {
+          const matchesStartDate = !startDate || (t.date >= startDate);
+          const matchesEndDate = !endDate || (t.date <= endDate);
+          matchesDate = matchesStartDate && matchesEndDate;
+        }
+
         const matchesSearch = !searchTerm || 
           (t.title && t.title.toLowerCase().includes(searchTerm)) ||
           (t.reporter && t.reporter.toLowerCase().includes(searchTerm)) ||
           (t.assignee && t.assignee.toLowerCase().includes(searchTerm)) ||
           (t.description && t.description.toLowerCase().includes(searchTerm));
 
-        const matchesStartDate = !startDate || (t.date >= startDate);
-        const matchesEndDate = !endDate || (t.date <= endDate);
         const matchesDept = !deptFilter || (t.department && t.department.toLowerCase().includes(deptFilter));
         const matchesStatus = !statusFilter || (t.status === statusFilter);
 
-        return matchesSearch && matchesStartDate && matchesEndDate && matchesDept && matchesStatus;
+        return matchesDate && matchesSearch && matchesDept && matchesStatus;
       });
 
       updateStats();
@@ -742,11 +847,13 @@
     }
 
     function resetFilter() {
+      document.getElementById('dateRangeMode').value = 'today';
       document.getElementById('searchInput').value = '';
       document.getElementById('startDate').value = '';
       document.getElementById('endDate').value = '';
       document.getElementById('filterDept').value = '';
       document.getElementById('filterStatus').value = '';
+      toggleDateInputs();
       applyFilters();
     }
 
@@ -791,20 +898,18 @@
       });
     }
 
-    // ⭐️ ฟังก์ชัน Render แสดงผลตารางแบบ "แบ่งแยกวันต่อวัน (Group By Date Header)" ⭐️
     function renderTable() {
       const tbody = document.getElementById('taskTableBody');
       tbody.innerHTML = '';
       document.getElementById('taskCount').innerText = `${currentTasks.length} รายการ`;
 
       if (currentTasks.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-500">ไม่พบข้อมูล Task</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-500">ไม่พบข้อมูล Task ตามเงื่อนไขที่เลือก</td></tr>`;
         return;
       }
 
       const isSupervisor = (currentUserRole === 'admin' || currentUserRole === 'supervisor');
 
-      // 1. จัดกลุ่มงานตามวันที่
       const groupedTasks = {};
       currentTasks.forEach(task => {
         const taskDate = task.date || 'ไม่ระบุวันที่';
@@ -814,11 +919,9 @@
         groupedTasks[taskDate].push(task);
       });
 
-      // 2. วนลูปสร้างแถบวันที่ (Date Header) และรายการงานในวันนั้น
       Object.keys(groupedTasks).forEach(dateStr => {
         const tasksInDate = groupedTasks[dateStr];
 
-        // --- แถบหัวข้อคั่นวันที่ (Group Header Row) ---
         const headerRow = document.createElement('tr');
         headerRow.className = "bg-slate-900/90 border-y border-indigo-500/30 font-bold text-xs text-indigo-300";
         headerRow.innerHTML = `
@@ -835,7 +938,6 @@
         `;
         tbody.appendChild(headerRow);
 
-        // --- รายการงานในวันนั้น ---
         tasksInDate.forEach(task => {
           let priorityBadge = 'bg-slate-700 text-slate-300 border-slate-600';
           if (task.priority === 'High') priorityBadge = 'bg-amber-500/20 text-amber-300 border-amber-500/30';
@@ -918,6 +1020,10 @@
       } else {
         showToast('บันทึก Task สำเร็จ!', `เพิ่มงาน "${title}" เข้าสู่ระบบเรียบร้อย`, 'success');
         sendBrowserNotification('📝 บันทึก Task ใหม่สำเร็จ', `งาน: ${title}`);
+        
+        // 🟢 ยิง LINE Flex Message เข้ากลุ่ม LINE อัตโนมัติทันทีที่บันทึกงานใหม่
+        sendLineTaskAlert(newTask);
+
         e.target.reset();
         checkAuth();
       }
