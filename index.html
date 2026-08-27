@@ -102,7 +102,6 @@
       </div>
       
       <div class="flex flex-wrap items-center gap-3">
-        <!-- ⭐️ ปุ่มสลับหน้าเว็บ (Dashboard <-> Shift Management) -->
         <button onclick="switchTab('tasks')" id="tabBtnTasks" class="bg-white/20 hover:bg-white/35 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow">
           📋 หน้าจัดการ Task งาน
         </button>
@@ -277,7 +276,7 @@
       </div>
     </div>
 
-    <!-- ==================== TAB 2: SHIFT MANAGEMENT VIEW (หน้าแยกจัดการกะล่วงหน้า) ==================== -->
+    <!-- ==================== TAB 2: SHIFT MANAGEMENT VIEW ==================== -->
     <div id="viewShifts" class="hidden space-y-6">
       <div class="bg-slate-800/90 border border-slate-700/60 p-6 rounded-2xl shadow-xl space-y-6">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-700 pb-4">
@@ -293,7 +292,7 @@
           </div>
         </div>
 
-        <!-- ฟอร์มแก้ไขกะของวันที่เลือก -->
+        <!-- ฟอร์มแก้ไขกะ -->
         <form id="shiftManageForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="bg-slate-900/60 border border-slate-700/60 p-4 rounded-xl space-y-3">
             <h4 class="text-xs font-bold text-indigo-300 uppercase tracking-wider">☀️ กะเช้า (Morning Shift)</h4>
@@ -339,9 +338,7 @@
     let currentTasks = [];
     let todayShiftCache = { morning: '-', evening: '-', onCall: '-', leave: 'ไม่มี' };
 
-    // ----------------------------------------------------
     // Tab Navigation Logic
-    // ----------------------------------------------------
     function switchTab(tabName) {
       const btnTasks = document.getElementById('tabBtnTasks');
       const btnShifts = document.getElementById('tabBtnShifts');
@@ -366,18 +363,16 @@
       }
     }
 
-    // ----------------------------------------------------
-    // Shift Database Operations
-    // ----------------------------------------------------
+    // Shift Operations
     async function fetchTodayShiftSummary() {
       const todayStr = new Date().toISOString().split('T')[0];
       document.getElementById('todayDateStr').innerText = todayStr;
 
-      const { data, error } = await supabaseClient
+      const { data } = await supabaseClient
         .from('shifts')
         .select('*')
         .eq('shift_date', todayStr)
-        .single();
+        .maybeSingle();
 
       if (data) {
         todayShiftCache = {
@@ -398,11 +393,11 @@
       const selectedDate = document.getElementById('manageShiftDate').value;
       if (!selectedDate) return;
 
-      const { data, error } = await supabaseClient
+      const { data } = await supabaseClient
         .from('shifts')
         .select('*')
         .eq('shift_date', selectedDate)
-        .single();
+        .maybeSingle();
 
       if (data) {
         document.getElementById('mMorning').value = data.morning_staff || '';
@@ -441,13 +436,10 @@
       }
     });
 
-    // ----------------------------------------------------
-    // LINE Alert for Shifts (ยิงผ่าน Supabase RPC)
-    // ----------------------------------------------------
+    // LINE Alert
     async function sendLineShiftAlertFromUI() {
       try {
-        const { data, error } = await supabaseClient.rpc('send_line_shift_now');
-
+        const { error } = await supabaseClient.rpc('send_line_shift_now');
         if (error) {
           showToast('ยิงไม่สำเร็จ', error.message, 'error');
         } else {
@@ -458,9 +450,7 @@
       }
     }
 
-    // ----------------------------------------------------
-    // Toast & Navigation Helpers
-    // ----------------------------------------------------
+    // Toast Helpers
     function showToast(title, message, type = 'success') {
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
@@ -489,7 +479,7 @@
         document.getElementById('mainDashboard').classList.remove('hidden');
         document.getElementById('userEmailDisplay').innerText = user.email;
         
-        const { data: profile } = await supabaseClient.from('profiles').select('role').eq('id', user.id).single();
+        const { data: profile } = await supabaseClient.from('profiles').select('role').eq('id', user.id).maybeSingle();
         currentUserRole = profile?.role || 'staff';
         document.getElementById('userRoleBadge').innerText = currentUserRole;
 
@@ -503,7 +493,7 @@
 
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const { data, error } = await supabaseClient.auth.signInWithPassword({
+      const { error } = await supabaseClient.auth.signInWithPassword({
         email: document.getElementById('loginEmail').value,
         password: document.getElementById('loginPassword').value
       });
@@ -534,11 +524,29 @@
       showLoginPage();
     }
 
-    // Task Management Logic
+    // Task Operations
     async function fetchTasks() {
-      const { data } = await supabaseClient.from('tasks').select('*').order('date', { ascending: false });
+      const { data } = await supabaseClient.from('tasks').select('*').order('created_at', { ascending: false });
       rawTasks = data || [];
       applyFilters();
+    }
+
+    // ⭐️ ฟังก์ชันอัปเดตสถานะงานโดยตรง
+    async function updateTaskStatus(taskId, newStatus) {
+      const { error } = await supabaseClient
+        .from('tasks')
+        .update({ status: newStatus })
+        .eq('id', taskId);
+
+      if (error) {
+        showToast('อัปเดตสถานะไม่สำเร็จ', error.message, 'error');
+      } else {
+        showToast('อัปเดตสถานะเรียบร้อย', `เปลี่ยนสถานะเป็น ${newStatus}`, 'success');
+        // อัปเดตข้อมูลในดิสก์/หน่วยความจำ แล้ววาดตารางใหม่
+        const targetTask = rawTasks.find(t => t.id === taskId);
+        if (targetTask) targetTask.status = newStatus;
+        applyFilters();
+      }
     }
 
     function applyFilters() {
@@ -548,8 +556,11 @@
 
       currentTasks = rawTasks.filter(t => {
         let matchDate = true;
-        if (mode === 'today') matchDate = (t.date === todayStr);
-        const matchSearch = !search || t.title.toLowerCase().includes(search) || (t.reporter && t.reporter.toLowerCase().includes(search));
+        const taskDateStr = t.date || (t.created_at ? t.created_at.split('T')[0] : '');
+        if (mode === 'today') matchDate = (taskDateStr === todayStr);
+        
+        const taskTitle = t.title || t.task_name || '';
+        const matchSearch = !search || taskTitle.toLowerCase().includes(search) || (t.reporter && t.reporter.toLowerCase().includes(search));
         return matchDate && matchSearch;
       });
 
@@ -565,12 +576,28 @@
       currentTasks.forEach(t => {
         const tr = document.createElement('tr');
         tr.className = "hover:bg-slate-800/60";
+        const taskTitle = t.title || t.task_name || '-';
+        
+        // กำหนดสีของ Badge สถานะ
+        let statusColorClass = 'bg-amber-500/20 text-amber-300 border-amber-500/30';
+        if (t.status === 'Completed') statusColorClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30';
+        if (t.status === 'In Progress') statusColorClass = 'bg-blue-500/20 text-blue-300 border-blue-500/30';
+
         tr.innerHTML = `
-          <td class="p-3 font-medium text-white">${t.title}<br><span class="text-xs text-slate-400">${t.description || ''}</span></td>
+          <td class="p-3 font-medium text-white">${taskTitle}<br><span class="text-xs text-slate-400">${t.description || ''}</span></td>
           <td class="p-3 text-xs"><span class="text-indigo-300">แจ้ง: ${t.reporter || '-'}</span><br><span class="text-cyan-300">แผนก: ${t.department || '-'}</span></td>
-          <td class="p-3"><span class="bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded text-xs">${t.category}</span></td>
-          <td class="p-3"><span class="px-2 py-1 rounded text-xs bg-amber-500/20 text-amber-300">${t.status}</span></td>
-          <td class="p-3"><button onclick="deleteTask(${t.id})" class="text-rose-400 hover:text-rose-300 text-xs bg-rose-500/10 px-2 py-1 rounded">ลบ</button></td>
+          <td class="p-3"><span class="bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded text-xs">${t.category || 'General'}</span></td>
+          <td class="p-3">
+            <!-- ⭐️ Dropdown เลือกเปลี่ยนสถานะ -->
+            <select onchange="updateTaskStatus(${t.id}, this.value)" class="bg-slate-900 border border-slate-700 text-xs font-semibold rounded-lg px-2 py-1 outline-none ${statusColorClass}">
+              <option value="Pending" ${t.status === 'Pending' ? 'selected' : ''}>Pending</option>
+              <option value="In Progress" ${t.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+              <option value="Completed" ${t.status === 'Completed' ? 'selected' : ''}>Completed</option>
+            </select>
+          </td>
+          <td class="p-3">
+            <button onclick="deleteTask(${t.id})" class="text-rose-400 hover:text-rose-300 text-xs bg-rose-500/10 hover:bg-rose-500/20 px-2.5 py-1 rounded transition">ลบ</button>
+          </td>
         `;
         tbody.appendChild(tr);
       });
