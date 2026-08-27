@@ -329,7 +329,7 @@
   <script>
     const SUPABASE_URL = 'https://mpvyalurrgrymbvbmwcj.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_2sxnepbtIji-OK0ddOnQFA_cCin-yLu';
-    const LINE_ACCESS_TOKEN = '7LeHUPrb++DZ5vjtbXTR0GsPhY+ZIIpxjWs20hLwEmTaG7Hoy/kvGhVrbIIoOyOqgxksB8NQB90YcXvdZa2ZbQ6UJ1HGjQN0Y5W397jiC0ovlolV2iyLKWFkDEzWPMre/Qe3ZkqAG0vbmrsO0rCgFgdB04t89/1O/w1cDnyilFU=';
+    const LINE_ACCESS_TOKEN = '38as23B/zUjcDifwkZTLw+drYoY6aTvJzKHnGph8Emm/av3xqwvBzVjGu+VA+XeNgxksB8NQB90YcXvdZa2ZbQ6UJ1HGjQN0Y5W397jiC0pwQfeBCfISvV1uzG6CsAo+Lyk40i3Ig1ur+k/kgRDZhQdB04t89/1O/w1cDnyilFU=';
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
@@ -359,7 +359,6 @@
         btnShifts.className = "bg-white/20 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow";
         btnTasks.className = "bg-slate-900/40 text-indigo-100 font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow";
         
-        // เซ็ตวันที่ในหน้ากะเป็นวันนี้ถ้ายังไม่ได้เลือก
         if (!document.getElementById('manageShiftDate').value) {
           document.getElementById('manageShiftDate').value = new Date().toISOString().split('T')[0];
         }
@@ -443,67 +442,19 @@
     });
 
     // ----------------------------------------------------
-    // LINE Alert for Shifts
+    // LINE Alert for Shifts (ยิงผ่าน Supabase RPC)
     // ----------------------------------------------------
     async function sendLineShiftAlertFromUI() {
-      if (!LINE_ACCESS_TOKEN) return;
-      const todayStr = new Date().toISOString().split('T')[0];
-
-      const flexPayload = {
-        type: "flex",
-        altText: `📢 ตารางปฏิบัติงาน IT & On Duty ประจำวันที่ ${todayStr}`,
-        contents: {
-          type: "bubble",
-          styles: { header: { backgroundColor: "#0284c7" } },
-          header: {
-            type: "box",
-            layout: "vertical",
-            contents: [
-              { type: "text", text: "📢 สรุปตารางปฏิบัติงาน & IT On Duty", weight: "bold", color: "#ffffff", size: "sm" },
-              { type: "text", text: `📅 วันที่: ${todayStr}`, size: "xs", color: "#e0f2fe", margin: "xs" }
-            ]
-          },
-          body: {
-            type: "box",
-            layout: "vertical",
-            contents: [
-              { type: "text", text: "🟢 พนักงานปฏิบัติงาน (On Duty)", weight: "bold", size: "xs", color: "#16a34a" },
-              {
-                type: "box",
-                layout: "vertical",
-                margin: "sm",
-                spacing: "xs",
-                contents: [
-                  { type: "box", layout: "baseline", contents: [{ type: "text", text: "• กะเช้า:", size: "xs", color: "#64748b", flex: 3 }, { type: "text", text: todayShiftCache.morning, size: "xs", color: "#0f172a", flex: 5, weight: "bold" }] },
-                  { type: "box", layout: "baseline", contents: [{ type: "text", text: "• กะบ่าย:", size: "xs", color: "#64748b", flex: 3 }, { type: "text", text: todayShiftCache.evening, size: "xs", color: "#0f172a", flex: 5, weight: "bold" }] },
-                  { type: "box", layout: "baseline", contents: [{ type: "text", text: "• Standby:", size: "xs", color: "#64748b", flex: 3 }, { type: "text", text: todayShiftCache.onCall, size: "xs", color: "#0284c7", flex: 5, weight: "bold" }] }
-                ]
-              },
-              { type: "separator", margin: "md" },
-              { type: "text", text: "🔴 พนักงานแจ้งลา / หยุด (On Leave)", weight: "bold", size: "xs", color: "#dc2626", margin: "md" },
-              {
-                type: "box",
-                layout: "vertical",
-                margin: "sm",
-                spacing: "xs",
-                contents: [
-                  { type: "box", layout: "baseline", contents: [{ type: "text", text: "• สถานะลา:", size: "xs", color: "#ef4444", flex: 3, weight: "bold" }, { type: "text", text: todayShiftCache.leave, size: "xs", color: "#475569", flex: 5 }] }
-                ]
-              }
-            ]
-          }
-        }
-      };
-
       try {
-        await fetch('https://api.line.me/v2/bot/message/broadcast', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${LINE_ACCESS_TOKEN}` },
-          body: JSON.stringify({ messages: [flexPayload] })
-        });
-        showToast('ยิง LINE ตารางกะสำเร็จ!', 'ส่งตารางกะเข้ากลุ่มเรียบร้อยแล้ว', 'success');
+        const { data, error } = await supabaseClient.rpc('send_line_shift_now');
+
+        if (error) {
+          showToast('ยิงไม่สำเร็จ', error.message, 'error');
+        } else {
+          showToast('ยิง LINE สำเร็จ!', 'ส่งตารางกะเข้ากลุ่มเรียบร้อยแล้ว', 'success');
+        }
       } catch (err) {
-        showToast('เกิดข้อผิดพลาด', 'ยิง LINE ไม่สำเร็จ', 'error');
+        showToast('เกิดข้อผิดพลาด', err.message, 'error');
       }
     }
 
