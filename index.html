@@ -264,7 +264,6 @@
                 <h2 class="text-lg font-bold text-white">📊 รายการงานในระบบ</h2>
                 <span id="taskCount" class="bg-indigo-500/20 text-indigo-300 text-xs px-3 py-1 rounded-full border border-indigo-500/30">0 รายการ</span>
               </div>
-              <!-- ⭐️ ปุ่ม Export Excel -->
               <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow-lg flex items-center gap-1.5 transition">
                 <span>📥</span> Export Excel
               </button>
@@ -344,7 +343,6 @@
     let currentTasks = [];
     let todayShiftCache = { morning: '-', evening: '-', onCall: '-', leave: 'ไม่มี' };
 
-    // Tab Navigation Logic
     function switchTab(tabName) {
       const btnTasks = document.getElementById('tabBtnTasks');
       const btnShifts = document.getElementById('tabBtnShifts');
@@ -369,7 +367,6 @@
       }
     }
 
-    // Shift Operations
     async function fetchTodayShiftSummary() {
       const todayStr = new Date().toISOString().split('T')[0];
       document.getElementById('todayDateStr').innerText = todayStr;
@@ -442,7 +439,6 @@
       }
     });
 
-    // LINE Alert
     async function sendLineShiftAlertFromUI() {
       try {
         const { error } = await supabaseClient.rpc('send_line_shift_now');
@@ -456,7 +452,6 @@
       }
     }
 
-    // Toast Helpers
     function showToast(title, message, type = 'success') {
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
@@ -530,15 +525,68 @@
       showLoginPage();
     }
 
-    // Task Operations
     async function fetchTasks() {
       const { data } = await supabaseClient.from('tasks').select('*').order('created_at', { ascending: false });
       rawTasks = data || [];
       applyFilters();
     }
 
-    // ⭐️ ฟังก์ชันอัปเดตสถานะงานโดยตรง
+    // ⭐️ ฟังก์ชันยิงแจ้งเตือนปิดเคส (Completed) เข้ากลุ่ม LINE อัตโนมัติ
+    async function sendLineTaskCompletedAlert(task) {
+      try {
+        let targetGroupId = "Cfafe0612e9bd3891010287c99030a612"; // กลุ่มเริ่มต้น
+        if (task.description && task.description.includes('LINE_GROUP_ID:')) {
+          targetGroupId = task.description.split('LINE_GROUP_ID:')[1].trim();
+        }
+
+        const taskTitle = task.title || task.task_name || 'งานระบบ';
+        const reporterName = task.reporter || 'LINE User';
+        const fixer = task.assignee || currentUser.email.split('@')[0];
+
+        await fetch('https://api.line.me/v2/bot/message/push', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${LINE_ACCESS_TOKEN}`
+          },
+          body: JSON.stringify({
+            to: targetGroupId,
+            messages: [{
+              type: 'flex',
+              altText: '✅ ปิดเคส/ดำเนินการเสร็จสิ้นเรียบร้อยแล้ว',
+              contents: {
+                type: 'bubble',
+                header: {
+                  type: 'box',
+                  layout: 'vertical',
+                  backgroundColor: '#0284c7',
+                  contents: [
+                    { type: 'text', text: '✅ ปิดเคส / ดำเนินการเรียบร้อย!', weight: 'bold', color: '#ffffff', size: 'sm' }
+                  ]
+                },
+                body: {
+                  type: 'box',
+                  layout: 'vertical',
+                  contents: [
+                    { type: 'text', text: `• งาน: ${taskTitle}`, size: 'xs', weight: 'bold', color: '#0f172a' },
+                    { type: 'text', text: `• ผู้แจ้ง: ${reporterName}`, size: 'xs', color: '#334155', margin: 'xs' },
+                    { type: 'text', text: `• ผู้ดำเนินการ: ${fixer}`, size: 'xs', color: '#0369a1', margin: 'xs' },
+                    { type: 'text', text: '• สถานะ: 🎉 เสร็จสิ้น (Completed)', size: 'xs', weight: 'bold', color: '#16a34a', margin: 'xs' }
+                  ]
+                }
+              }
+            }]
+          })
+        });
+      } catch (err) {
+        console.error('Error sending LINE completion alert:', err);
+      }
+    }
+
+    // ⭐️ ฟังก์ชันอัปเดตสถานะงาน (พร้อมระบบส่งแจ้งเตือนถ้าเปลี่ยนเป็น Completed)
     async function updateTaskStatus(taskId, newStatus) {
+      const targetTask = rawTasks.find(t => t.id === taskId);
+      
       const { error } = await supabaseClient
         .from('tasks')
         .update({ status: newStatus })
@@ -548,8 +596,13 @@
         showToast('อัปเดตสถานะไม่สำเร็จ', error.message, 'error');
       } else {
         showToast('อัปเดตสถานะเรียบร้อย', `เปลี่ยนสถานะเป็น ${newStatus}`, 'success');
-        const targetTask = rawTasks.find(t => t.id === taskId);
         if (targetTask) targetTask.status = newStatus;
+        
+        // 🚀 ถ้านะถูกเปลี่ยนเป็น Completed ให้ส่ง LINE แจ้งปิดเคสทันที
+        if (newStatus === 'Completed' && targetTask) {
+          sendLineTaskCompletedAlert(targetTask);
+        }
+        
         applyFilters();
       }
     }
@@ -592,7 +645,6 @@
           <td class="p-3 text-xs"><span class="text-indigo-300">แจ้ง: ${t.reporter || '-'}</span><br><span class="text-cyan-300">แผนก: ${t.department || '-'}</span></td>
           <td class="p-3"><span class="bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded text-xs">${t.category || 'General'}</span></td>
           <td class="p-3">
-            <!-- Dropdown เลือกเปลี่ยนสถานะ -->
             <select onchange="updateTaskStatus(${t.id}, this.value)" class="bg-slate-900 border border-slate-700 text-xs font-semibold rounded-lg px-2 py-1 outline-none ${statusColorClass}">
               <option value="Pending" ${t.status === 'Pending' ? 'selected' : ''}>Pending</option>
               <option value="In Progress" ${t.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
@@ -649,14 +701,12 @@
       fetchTasks();
     }
 
-    // ⭐️ ฟังก์ชัน Export Excel ตามหัวตารางใหม่
     function exportToExcel() {
       if (currentTasks.length === 0) {
         showToast('ไม่พบข้อมูล', 'ไม่มีรายการงานสำหรับ Export', 'error');
         return;
       }
 
-      // จัดเรียงคอลัมน์ตรงตามลำดับ: Date, Category, Task Name, Priority, Status, Description / Outcome, Dept, Reporter, Fix By
       const excelData = currentTasks.map(t => {
         return {
           'Date': t.date || (t.created_at ? t.created_at.split('T')[0] : ''),
@@ -675,15 +725,15 @@
       const workbook = XLSX.utils.book_new();
       
       const wscols = [
-        { wch: 14 }, // Date
-        { wch: 16 }, // Category
-        { wch: 32 }, // Task Name
-        { wch: 12 }, // Priority
-        { wch: 14 }, // Status
-        { wch: 45 }, // Description / Outcome
-        { wch: 12 }, // Dept
-        { wch: 18 }, // Reporter
-        { wch: 18 }  // Fix By
+        { wch: 14 },
+        { wch: 16 },
+        { wch: 32 },
+        { wch: 12 },
+        { wch: 14 },
+        { wch: 45 },
+        { wch: 12 },
+        { wch: 18 },
+        { wch: 18 }
       ];
       worksheet['!cols'] = wscols;
 
