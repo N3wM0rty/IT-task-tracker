@@ -649,25 +649,25 @@
       fetchTasks();
     }
 
-    // ⭐️ ฟังก์ชัน Export Excel
+    // ⭐️ ฟังก์ชัน Export Excel ตามหัวตารางใหม่
     function exportToExcel() {
       if (currentTasks.length === 0) {
         showToast('ไม่พบข้อมูล', 'ไม่มีรายการงานสำหรับ Export', 'error');
         return;
       }
 
-      const excelData = currentTasks.map((t, index) => {
+      // จัดเรียงคอลัมน์ตรงตามลำดับ: Date, Category, Task Name, Priority, Status, Description / Outcome, Dept, Reporter, Fix By
+      const excelData = currentTasks.map(t => {
         return {
-          'ลำดับ': index + 1,
-          'วันที่ (Date)': t.date || (t.created_at ? t.created_at.split('T')[0] : ''),
-          'ชื่องาน (Task Name)': t.title || t.task_name || '',
-          'รายละเอียด (Description)': t.description || '-',
-          'หมวดหมู่ (Category)': t.category || 'General',
-          'ผู้แจ้ง (Reporter)': t.reporter || '-',
-          'แผนก (Department)': t.department || '-',
-          'ผู้รับงาน (Assignee)': t.assignee || '-',
-          'ความสำคัญ (Priority)': t.priority || 'Normal',
-          'สถานะ (Status)': t.status || 'Pending'
+          'Date': t.date || (t.created_at ? t.created_at.split('T')[0] : ''),
+          'Category': t.category || 'General',
+          'Task Name': t.title || t.task_name || '',
+          'Priority': t.priority || 'Normal',
+          'Status': t.status || 'Pending',
+          'Description / Outcome': t.description || '-',
+          'Dept': t.department || '-',
+          'Reporter': t.reporter || '-',
+          'Fix By': t.assignee || '-'
         };
       });
 
@@ -675,16 +675,15 @@
       const workbook = XLSX.utils.book_new();
       
       const wscols = [
-        { wch: 6 },
-        { wch: 12 },
-        { wch: 30 },
-        { wch: 40 },
-        { wch: 15 },
-        { wch: 15 },
-        { wch: 10 },
-        { wch: 15 },
-        { wch: 15 },
-        { wch: 12 }
+        { wch: 14 }, // Date
+        { wch: 16 }, // Category
+        { wch: 32 }, // Task Name
+        { wch: 12 }, // Priority
+        { wch: 14 }, // Status
+        { wch: 45 }, // Description / Outcome
+        { wch: 12 }, // Dept
+        { wch: 18 }, // Reporter
+        { wch: 18 }  // Fix By
       ];
       worksheet['!cols'] = wscols;
 
