@@ -27,29 +27,51 @@
     body.theme-light { background-color: #f1f5f9; color: #0f172a; }
     body.theme-cyber { background-color: #090d16; color: #00f2fe; }
     body.theme-emerald { background-color: #064e3b; color: #ecfdf5; }
-    
-    /* 🐉 Dragon Ball Theme (Orange & Deep Blue Aura) */
     body.theme-dragonball { 
       background-color: #1a0c02; 
       color: #ffedd5; 
       background-image: radial-gradient(circle at 50% 0%, #ea580c22, transparent 70%);
     }
 
+    /* Cards Styling per Theme */
     .theme-dark .card-bg { background-color: rgba(30, 41, 59, 0.9); border-color: rgba(51, 65, 85, 0.6); }
     .theme-light .card-bg { background-color: #ffffff; border-color: #e2e8f0; color: #1e293b; }
     .theme-cyber .card-bg { background-color: rgba(13, 17, 28, 0.95); border-color: #00f2fe44; }
     .theme-emerald .card-bg { background-color: rgba(6, 78, 59, 0.8); border-color: #059669; }
-    
-    /* Dragon Ball Card Styling */
     .theme-dragonball .card-bg { 
       background-color: rgba(30, 16, 5, 0.9); 
       border-color: #ea580c88; 
       box-shadow: 0 4px 20px -2px rgba(234, 88, 12, 0.25);
     }
 
+    /* 🎨 Header Banner Themes Gradient */
+    .theme-dragonball header {
+      background: linear-gradient(135deg, #c2410c 0%, #ea580c 45%, #1e3a8a 100%) !important;
+      border: 1px solid #fdba74;
+      box-shadow: 0 0 25px rgba(234, 88, 12, 0.4);
+    }
+    .theme-dark header {
+      background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 50%, #06b6d4 100%) !important;
+      border: 1px solid #6366f1;
+    }
+    .theme-light header {
+      background: linear-gradient(135deg, #2563eb 0%, #0284c7 50%, #4f46e5 100%) !important;
+      border: 1px solid #93c5fd;
+    }
+    .theme-cyber header {
+      background: linear-gradient(135deg, #c026d3 0%, #9333ea 50%, #06b6d4 100%) !important;
+      border: 1px solid #00f2fe;
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+    }
+    .theme-emerald header {
+      background: linear-gradient(135deg, #059669 0%, #0d9488 50%, #15803d 100%) !important;
+      border: 1px solid #34d399;
+    }
+
     /* Light Theme Input Overrides */
     .theme-light input, .theme-light select, .theme-light textarea { background-color: #f8fafc !important; color: #0f172a !important; border-color: #cbd5e1 !important; }
     .theme-light .text-white { color: #0f172a !important; }
+    .theme-light header .text-white { color: #ffffff !important; }
     .theme-light .text-slate-300, .theme-light .text-slate-400 { color: #475569 !important; }
     .theme-light thead { background-color: #e2e8f0 !important; color: #0f172a !important; }
 
@@ -58,11 +80,6 @@
       background-color: #2a1405 !important;
       border-color: #f97316 !important;
       color: #ffedd5 !important;
-    }
-    .theme-dragonball header {
-      background: linear-gradient(135deg, #c2410c 0%, #ea580c 50%, #1e3a8a 100%) !important;
-      border: 1px solid #fdba74;
-      box-shadow: 0 0 25px rgba(234, 88, 12, 0.4);
     }
   </style>
 </head>
@@ -74,7 +91,7 @@
   <!-- ==================== PAGE 1: LOGIN ==================== -->
   <div id="loginPage" class="max-w-md mx-auto my-12 card-bg border p-8 rounded-2xl shadow-2xl space-y-6">
     <div class="text-center space-y-2">
-      <div class="w-16 h-16 bg-gradient-to-tr from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">🐉</div>
+      <div class="w-16 h-16 bg-gradient-to-tr from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">⚡</div>
       <h1 class="text-2xl font-bold text-white">IT Task Management</h1>
       <p class="text-slate-400 text-xs">เข้าสู่ระบบเพื่อจัดการงานและตารางกะ</p>
     </div>
@@ -135,20 +152,20 @@
   <!-- ==================== PAGE 4: MAIN DASHBOARD ==================== -->
   <div id="mainDashboard" class="hidden max-w-7xl mx-auto space-y-6">
     
-    <!-- Header banner -->
-    <header class="bg-gradient-to-r from-orange-600 via-amber-600 to-blue-800 p-6 rounded-2xl shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <!-- Header banner (ไล่สีเปลี่ยนตามธีม) -->
+    <header class="p-6 rounded-2xl shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all duration-300">
       <div>
         <h1 class="text-2xl md:text-3xl font-bold text-white flex items-center gap-2">
-          <span>🐉</span> IT Task Tracker & Shift Management
+          <span id="themeHeaderIcon">🐉</span> IT Task Tracker & Shift Management
         </h1>
-        <p class="text-amber-100 text-xs md:text-sm mt-1">ระบบจัดการงาน IT ประจำวัน และตารางกะ On Duty</p>
+        <p class="text-white/90 text-xs md:text-sm mt-1">ระบบจัดการงาน IT ประจำวัน และตารางกะ On Duty</p>
       </div>
       
       <div class="flex flex-wrap items-center gap-3">
         <!-- 🎨 ปุ่มสลับธีม -->
-        <div class="bg-slate-900/50 backdrop-blur border border-amber-400/40 px-3 py-1.5 rounded-xl flex items-center gap-2 shadow">
-          <span class="text-xs text-amber-200 font-semibold">🎨 ธีม:</span>
-          <select id="themeSelector" onchange="changeTheme(this.value)" class="bg-slate-800 text-orange-300 text-xs font-bold rounded-lg p-1 outline-none border border-orange-500/50">
+        <div class="bg-black/30 backdrop-blur border border-white/20 px-3 py-1.5 rounded-xl flex items-center gap-2 shadow">
+          <span class="text-xs text-white font-semibold">🎨 ธีม:</span>
+          <select id="themeSelector" onchange="changeTheme(this.value)" class="bg-slate-900/80 text-white text-xs font-bold rounded-lg p-1 outline-none border border-white/20">
             <option value="theme-dragonball" selected>🐉 Dragon Ball</option>
             <option value="theme-dark">🌙 Dark Slate</option>
             <option value="theme-light">☀️ Light Clean</option>
@@ -160,14 +177,14 @@
         <button onclick="switchTab('tasks')" id="tabBtnTasks" class="bg-white/20 hover:bg-white/35 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow">
           📋 หน้าจัดการ Task งาน
         </button>
-        <button onclick="switchTab('shifts')" id="tabBtnShifts" class="bg-slate-900/40 hover:bg-slate-900/60 text-amber-100 font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow">
+        <button onclick="switchTab('shifts')" id="tabBtnShifts" class="bg-slate-900/40 hover:bg-slate-900/60 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow">
           📅 หน้าจัดการตารางกะ
         </button>
 
         <div class="bg-slate-900/40 backdrop-blur border border-white/10 p-2.5 rounded-xl flex items-center gap-3">
           <div class="text-right">
             <p id="userEmailDisplay" class="text-xs font-semibold text-white">user@resort.com</p>
-            <span id="userRoleBadge" class="bg-orange-500/30 text-amber-200 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase border border-orange-400/40">Role</span>
+            <span id="userRoleBadge" class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full font-bold uppercase border border-white/20">Role</span>
           </div>
           <button onclick="handleLogout()" class="bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 px-3 py-1.5 rounded-lg text-xs font-medium">ออก</button>
         </div>
@@ -418,6 +435,17 @@
 
     function changeTheme(themeName) {
       document.body.className = `${themeName} min-h-screen p-4 md:p-8 relative`;
+      
+      // เปลี่ยนไอคอนหัวข้อแบนเนอร์ตามธีม
+      const iconSpan = document.getElementById('themeHeaderIcon');
+      if (iconSpan) {
+        if (themeName === 'theme-dragonball') iconSpan.innerText = '🐉';
+        else if (themeName === 'theme-dark') iconSpan.innerText = '⚡';
+        else if (themeName === 'theme-light') iconSpan.innerText = '☀️';
+        else if (themeName === 'theme-cyber') iconSpan.innerText = '🌌';
+        else if (themeName === 'theme-emerald') iconSpan.innerText = '🍃';
+      }
+
       localStorage.setItem('preferred_theme', themeName);
     }
 
@@ -437,12 +465,12 @@
         viewTasks.classList.remove('hidden');
         viewShifts.classList.add('hidden');
         btnTasks.className = "bg-white/20 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow";
-        btnShifts.className = "bg-slate-900/40 text-amber-100 font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow";
+        btnShifts.className = "bg-slate-900/40 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow";
       } else {
         viewTasks.classList.add('hidden');
         viewShifts.classList.remove('hidden');
         btnShifts.className = "bg-white/20 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow";
-        btnTasks.className = "bg-slate-900/40 text-amber-100 font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow";
+        btnTasks.className = "bg-slate-900/40 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow";
         
         if (!document.getElementById('manageShiftDate').value) {
           document.getElementById('manageShiftDate').value = new Date().toISOString().split('T')[0];
@@ -729,7 +757,7 @@
           <td class="p-3 font-medium text-white">
             ${taskTitle}
             <div class="flex items-center gap-1.5 mt-1">
-              <span class="bg-amber-500/20 text-orange-300 border border-orange-500/30 text-[10px] px-2 py-0.5 rounded-full font-semibold">📍 ${locationStr}</span>
+              <span class="bg-orange-500/20 text-orange-300 border border-orange-500/30 text-[10px] px-2 py-0.5 rounded-full font-semibold">📍 ${locationStr}</span>
               <span class="text-xs text-slate-400">${t.description || ''}</span>
             </div>
           </td>
