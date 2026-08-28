@@ -176,6 +176,18 @@
               <label class="block text-xs font-medium text-slate-300 mb-1">ชื่อ Task / งานที่ทำ</label>
               <input type="text" id="title" required placeholder="เช่น รีเซ็ต Password" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white outline-none focus:ring-2 focus:ring-indigo-500">
             </div>
+            
+            <!-- 📍 ตัวเลือก Location -->
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">📍 สถานที่ / โครงการ (Location)</label>
+              <select id="location" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white outline-none">
+                <option value="Radisson" selected>Radisson</option>
+                <option value="Laya Suites">Laya Suites</option>
+                <option value="BB Horizon">BB Horizon</option>
+                <option value="Other Location">Other Location</option>
+              </select>
+            </div>
+
             <div>
               <label class="block text-xs font-medium text-slate-300 mb-1">📅 วันที่ทำรายการ</label>
               <input type="date" id="taskDate" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white outline-none">
@@ -201,11 +213,25 @@
                 <option value="PC/ Laptop">PC/ Laptop</option>
                 <option value="Opera V.5">Opera V.5</option>
                 <option value="Opera Cloud">Opera Cloud</option>
+                <option value="MC">MC</option>
+                <option value="MC/2">MC/2</option>
+                <option value="Door">Door</option>
+                <option value="Door/2">Door/2</option>
+                <option value="SUN">SUN</option>
+                <option value="SUN/2">SUN/2</option>
                 <option value="Wi-Fi">Wi-Fi</option>
+                <option value="Wi-Fi/2">Wi-Fi/2</option>
+                <option value="Passport">Passport</option>
                 <option value="CCTV">CCTV</option>
+                <option value="TV">TV</option>
+                <option value="Phone">Phone</option>
+                <option value="Phone/2">Phone/2</option>
+                <option value="Silverman">Silverman</option>
+                <option value="Interface">Interface</option>
+                <option value="Interface/2">Interface/2</option>
                 <option value="Print">Print</option>
-                <option value="General work">General work</option>
                 <option value="other">other</option>
+                <option value="General work" selected>General work</option>
               </select>
             </div>
             <div class="grid grid-cols-2 gap-3">
@@ -271,7 +297,7 @@
             <div class="overflow-x-auto">
               <table class="w-full text-left text-sm text-slate-300">
                 <thead class="bg-slate-900/80 border-b border-slate-700 text-xs">
-                  <tr><th class="p-3">งานที่ทำ</th><th class="p-3">ผู้แจ้ง / แผนก / ผู้รับ</th><th class="p-3">Category</th><th class="p-3">สถานะ</th><th class="p-3">การจัดการ</th></tr>
+                  <tr><th class="p-3">งานที่ทำ / สถานที่</th><th class="p-3">ผู้แจ้ง / แผนก / ผู้รับ</th><th class="p-3">Category</th><th class="p-3">สถานะ</th><th class="p-3">การจัดการ</th></tr>
                 </thead>
                 <tbody id="taskTableBody" class="divide-y divide-slate-700/50"></tbody>
               </table>
@@ -531,10 +557,9 @@
       applyFilters();
     }
 
-    // ⭐️ ฟังก์ชันยิงแจ้งเตือนปิดเคส (Completed) เข้ากลุ่ม LINE อัตโนมัติ
     async function sendLineTaskCompletedAlert(task) {
       try {
-        let targetGroupId = "Cfafe0612e9bd3891010287c99030a612"; // กลุ่มเริ่มต้น
+        let targetGroupId = "Cfafe0612e9bd3891010287c99030a612";
         if (task.description && task.description.includes('LINE_GROUP_ID:')) {
           targetGroupId = task.description.split('LINE_GROUP_ID:')[1].trim();
         }
@@ -542,6 +567,7 @@
         const taskTitle = task.title || task.task_name || 'งานระบบ';
         const reporterName = task.reporter || 'LINE User';
         const fixer = task.assignee || currentUser.email.split('@')[0];
+        const taskLoc = task.location || 'Radisson';
 
         await fetch('https://api.line.me/v2/bot/message/push', {
           method: 'POST',
@@ -569,8 +595,9 @@
                   layout: 'vertical',
                   contents: [
                     { type: 'text', text: `• งาน: ${taskTitle}`, size: 'xs', weight: 'bold', color: '#0f172a' },
+                    { type: 'text', text: `• สถานที่: 📍 ${taskLoc}`, size: 'xs', color: '#0369a1', weight: 'bold', margin: 'xs' },
                     { type: 'text', text: `• ผู้แจ้ง: ${reporterName}`, size: 'xs', color: '#334155', margin: 'xs' },
-                    { type: 'text', text: `• ผู้ดำเนินการ: ${fixer}`, size: 'xs', color: '#0369a1', margin: 'xs' },
+                    { type: 'text', text: `• ผู้ดำเนินการ: ${fixer}`, size: 'xs', color: '#475569', margin: 'xs' },
                     { type: 'text', text: '• สถานะ: 🎉 เสร็จสิ้น (Completed)', size: 'xs', weight: 'bold', color: '#16a34a', margin: 'xs' }
                   ]
                 }
@@ -583,7 +610,6 @@
       }
     }
 
-    // ⭐️ ฟังก์ชันอัปเดตสถานะงาน (พร้อมระบบส่งแจ้งเตือนถ้าเปลี่ยนเป็น Completed)
     async function updateTaskStatus(taskId, newStatus) {
       const targetTask = rawTasks.find(t => t.id === taskId);
       
@@ -598,7 +624,6 @@
         showToast('อัปเดตสถานะเรียบร้อย', `เปลี่ยนสถานะเป็น ${newStatus}`, 'success');
         if (targetTask) targetTask.status = newStatus;
         
-        // 🚀 ถ้านะถูกเปลี่ยนเป็น Completed ให้ส่ง LINE แจ้งปิดเคสทันที
         if (newStatus === 'Completed' && targetTask) {
           sendLineTaskCompletedAlert(targetTask);
         }
@@ -618,7 +643,8 @@
         if (mode === 'today') matchDate = (taskDateStr === todayStr);
         
         const taskTitle = t.title || t.task_name || '';
-        const matchSearch = !search || taskTitle.toLowerCase().includes(search) || (t.reporter && t.reporter.toLowerCase().includes(search));
+        const taskLoc = t.location || '';
+        const matchSearch = !search || taskTitle.toLowerCase().includes(search) || taskLoc.toLowerCase().includes(search) || (t.reporter && t.reporter.toLowerCase().includes(search));
         return matchDate && matchSearch;
       });
 
@@ -635,15 +661,22 @@
         const tr = document.createElement('tr');
         tr.className = "hover:bg-slate-800/60";
         const taskTitle = t.title || t.task_name || '-';
+        const locationStr = t.location || 'Radisson';
         
         let statusColorClass = 'bg-amber-500/20 text-amber-300 border-amber-500/30';
         if (t.status === 'Completed') statusColorClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30';
         if (t.status === 'In Progress') statusColorClass = 'bg-blue-500/20 text-blue-300 border-blue-500/30';
 
         tr.innerHTML = `
-          <td class="p-3 font-medium text-white">${taskTitle}<br><span class="text-xs text-slate-400">${t.description || ''}</span></td>
+          <td class="p-3 font-medium text-white">
+            ${taskTitle}
+            <div class="flex items-center gap-1.5 mt-1">
+              <span class="bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[10px] px-2 py-0.5 rounded-full font-semibold">📍 ${locationStr}</span>
+              <span class="text-xs text-slate-400">${t.description || ''}</span>
+            </div>
+          </td>
           <td class="p-3 text-xs"><span class="text-indigo-300">แจ้ง: ${t.reporter || '-'}</span><br><span class="text-cyan-300">แผนก: ${t.department || '-'}</span></td>
-          <td class="p-3"><span class="bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded text-xs">${t.category || 'General'}</span></td>
+          <td class="p-3"><span class="bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded text-xs">${t.category || 'General work'}</span></td>
           <td class="p-3">
             <select onchange="updateTaskStatus(${t.id}, this.value)" class="bg-slate-900 border border-slate-700 text-xs font-semibold rounded-lg px-2 py-1 outline-none ${statusColorClass}">
               <option value="Pending" ${t.status === 'Pending' ? 'selected' : ''}>Pending</option>
@@ -665,6 +698,7 @@
         user_id: currentUser.id,
         date: document.getElementById('taskDate').value,
         title: document.getElementById('title').value,
+        location: document.getElementById('location').value,
         reporter: document.getElementById('reporter').value,
         department: document.getElementById('department').value,
         assignee: document.getElementById('assignee').value || currentUser.email.split('@')[0],
@@ -710,7 +744,8 @@
       const excelData = currentTasks.map(t => {
         return {
           'Date': t.date || (t.created_at ? t.created_at.split('T')[0] : ''),
-          'Category': t.category || 'General',
+          'Location': t.location || 'Radisson',
+          'Category': t.category || 'General work',
           'Task Name': t.title || t.task_name || '',
           'Priority': t.priority || 'Normal',
           'Status': t.status || 'Pending',
@@ -726,6 +761,7 @@
       
       const wscols = [
         { wch: 14 },
+        { wch: 16 },
         { wch: 16 },
         { wch: 32 },
         { wch: 12 },
