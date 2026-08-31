@@ -17,87 +17,64 @@
     }
     .toast-slide-in { animation: slideInRight 0.3s ease-out forwards; }
 
-    body.theme-dark { background-color: #0f172a; color: #f8fafc; }
-    body.theme-light { background-color: #f1f5f9; color: #0f172a; }
-    body.theme-cyber { background-color: #090d16; color: #00f2fe; }
-    body.theme-emerald { background-color: #064e3b; color: #ecfdf5; }
+    /* Theme Presets */
     body.theme-dragonball { 
-      background-color: #1a0c02; 
+      background-color: #0f172a; 
       color: #ffedd5; 
-      background-image: radial-gradient(circle at 50% 0%, #ea580c22, transparent 70%);
+      background-image: radial-gradient(circle at 50% 0%, rgba(234, 88, 12, 0.15), transparent 70%);
     }
+    body.theme-dark { background-color: #0b0f19; color: #f8fafc; }
+    body.theme-light { background-color: #f1f5f9; color: #0f172a; }
+    body.theme-cyber { background-color: #050811; color: #00f2fe; }
+    body.theme-emerald { background-color: #022c22; color: #ecfdf5; }
 
-    .theme-dark .card-bg { background-color: rgba(30, 41, 59, 0.9); border-color: rgba(51, 65, 85, 0.6); }
-    .theme-light .card-bg { background-color: #ffffff; border-color: #e2e8f0; color: #1e293b; }
-    .theme-cyber .card-bg { background-color: rgba(13, 17, 28, 0.95); border-color: #00f2fe44; }
-    .theme-emerald .card-bg { background-color: rgba(6, 78, 59, 0.8); border-color: #059669; }
-    .theme-dragonball .card-bg { 
-      background-color: rgba(30, 16, 5, 0.9); 
-      border-color: #ea580c88; 
-      box-shadow: 0 4px 20px -2px rgba(234, 88, 12, 0.25);
-    }
+    /* Card Backgrounds */
+    .theme-dragonball .card-bg { background-color: rgba(30, 20, 15, 0.75); border-color: rgba(234, 88, 12, 0.3); backdrop-filter: blur(12px); }
+    .theme-dark .card-bg { background-color: rgba(17, 24, 39, 0.75); border-color: rgba(55, 65, 81, 0.5); backdrop-filter: blur(12px); }
+    .theme-light .card-bg { background-color: #ffffff; border-color: #e2e8f0; color: #1e293b; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+    .theme-cyber .card-bg { background-color: rgba(10, 15, 30, 0.85); border-color: rgba(0, 242, 254, 0.3); backdrop-filter: blur(12px); }
+    .theme-emerald .card-bg { background-color: rgba(6, 78, 59, 0.5); border-color: rgba(16, 185, 129, 0.3); backdrop-filter: blur(12px); }
 
-    .theme-dragonball header {
-      background: linear-gradient(135deg, #c2410c 0%, #ea580c 45%, #1e3a8a 100%) !important;
-      border: 1px solid #fdba74;
-      box-shadow: 0 0 25px rgba(234, 88, 12, 0.4);
-    }
-    .theme-dark header {
-      background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 50%, #06b6d4 100%) !important;
-      border: 1px solid #6366f1;
-    }
-    .theme-light header {
-      background: linear-gradient(135deg, #2563eb 0%, #0284c7 50%, #4f46e5 100%) !important;
-      border: 1px solid #93c5fd;
-    }
-    .theme-cyber header {
-      background: linear-gradient(135deg, #c026d3 0%, #9333ea 50%, #06b6d4 100%) !important;
-      border: 1px solid #00f2fe;
-      box-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
-    }
-    .theme-emerald header {
-      background: linear-gradient(135deg, #059669 0%, #0d9488 50%, #15803d 100%) !important;
-      border: 1px solid #34d399;
-    }
+    /* Header Themes */
+    .theme-dragonball header { background: linear-gradient(135deg, #c2410c 0%, #ea580c 50%, #9a3412 100%) !important; }
+    .theme-dark header { background: linear-gradient(135deg, #312e81 0%, #4338ca 50%, #0284c7 100%) !important; }
+    .theme-light header { background: linear-gradient(135deg, #2563eb 0%, #0284c7 50%, #1d4ed8 100%) !important; }
+    .theme-cyber header { background: linear-gradient(135deg, #a21caf 0%, #7e22ce 50%, #0369a1 100%) !important; }
+    .theme-emerald header { background: linear-gradient(135deg, #047857 0%, #0f766e 50%, #15803d 100%) !important; }
 
+    /* Inputs Theme Fixes */
     .theme-light input, .theme-light select, .theme-light textarea { background-color: #f8fafc !important; color: #0f172a !important; border-color: #cbd5e1 !important; }
     .theme-light .text-white { color: #0f172a !important; }
     .theme-light header .text-white { color: #ffffff !important; }
     .theme-light .text-slate-300, .theme-light .text-slate-400 { color: #475569 !important; }
-    .theme-light thead { background-color: #e2e8f0 !important; color: #0f172a !important; }
-
-    .theme-dragonball input, .theme-dragonball select, .theme-dragonball textarea {
-      background-color: #2a1405 !important;
-      border-color: #f97316 !important;
-      color: #ffedd5 !important;
-    }
+    .theme-light thead { background-color: #f1f5f9 !important; color: #0f172a !important; }
   </style>
 </head>
-<body class="theme-dragonball min-h-screen p-4 md:p-8 relative">
+<body class="theme-dragonball min-h-screen p-3 md:p-6 relative antialiased">
 
   <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
 
   <!-- LOGIN PAGE -->
-  <div id="loginPage" class="max-w-md mx-auto my-12 card-bg border p-8 rounded-2xl shadow-2xl space-y-6">
-    <div class="text-center space-y-2">
-      <div class="w-16 h-16 bg-gradient-to-tr from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">⚡</div>
-      <h1 class="text-2xl font-bold text-white">IT Task Management</h1>
-      <p class="text-slate-400 text-xs">เข้าสู่ระบบเพื่อจัดการงานและตารางกะ</p>
+  <div id="loginPage" class="max-w-md mx-auto my-16 card-bg border p-8 rounded-3xl shadow-2xl space-y-6">
+    <div class="text-center space-y-3">
+      <div class="w-16 h-16 bg-gradient-to-tr from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg shadow-orange-500/30">⚡</div>
+      <h1 class="text-2xl font-bold text-white tracking-tight">IT Task Management</h1>
+      <p class="text-slate-400 text-xs">เข้าสู่ระบบเพื่อจัดการงานและตารางกะ IT On-Duty</p>
     </div>
 
     <form id="loginForm" class="space-y-4">
       <div>
-        <label class="block text-xs font-medium text-slate-300 mb-1">อีเมล (Email)</label>
-        <input type="email" id="loginEmail" required placeholder="admin@resort.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-orange-500 outline-none">
+        <label class="block text-xs font-medium text-slate-300 mb-1.5">อีเมล (Email)</label>
+        <input type="email" id="loginEmail" required placeholder="admin@resort.com" class="w-full bg-slate-900/80 border border-slate-700/80 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-orange-500 outline-none transition-all">
       </div>
       <div>
-        <div class="flex justify-between items-center mb-1">
+        <div class="flex justify-between items-center mb-1.5">
           <label class="block text-xs font-medium text-slate-300">รหัสผ่าน (Password)</label>
           <button type="button" onclick="showForgotPasswordPage()" class="text-[11px] text-orange-400 hover:text-orange-300 transition-colors">ลืมรหัสผ่าน?</button>
         </div>
-        <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-orange-500 outline-none">
+        <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full bg-slate-900/80 border border-slate-700/80 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-orange-500 outline-none transition-all">
       </div>
-      <button type="submit" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-semibold py-3 rounded-xl text-sm shadow-lg transition-all transform hover:-translate-y-0.5">
+      <button type="submit" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-semibold py-3 rounded-xl text-sm shadow-lg shadow-orange-500/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0">
         เข้าสู่ระบบ (Sign In)
       </button>
     </form>
@@ -105,52 +82,54 @@
   </div>
 
   <!-- REGISTER PAGE -->
-  <div id="registerPage" class="hidden max-w-md mx-auto my-12 card-bg border p-8 rounded-2xl shadow-2xl space-y-6">
+  <div id="registerPage" class="hidden max-w-md mx-auto my-16 card-bg border p-8 rounded-3xl shadow-2xl space-y-6">
     <div class="text-center space-y-2">
-      <div class="w-16 h-16 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">👤</div>
+      <div class="w-16 h-16 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg shadow-cyan-500/30">👤</div>
       <h1 class="text-2xl font-bold text-white">สมัครสมาชิก</h1>
     </div>
     <form id="registerForm" class="space-y-4">
       <div>
         <label class="block text-xs font-medium text-slate-300 mb-1">อีเมล (Email)</label>
-        <input type="email" id="regEmail" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white">
+        <input type="email" id="regEmail" required class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-sm text-white">
       </div>
       <div>
         <label class="block text-xs font-medium text-slate-300 mb-1">รหัสผ่าน</label>
-        <input type="password" id="regPassword" required minlength="6" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white">
+        <input type="password" id="regPassword" required minlength="6" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-sm text-white">
       </div>
-      <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-3 rounded-xl text-sm">สมัครสมาชิก</button>
-      <button type="button" onclick="showLoginPage()" class="w-full bg-slate-700 text-slate-300 py-2.5 rounded-xl text-xs">← ย้อนกลับ</button>
+      <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-3 rounded-xl text-sm shadow-lg">สมัครสมาชิก</button>
+      <button type="button" onclick="showLoginPage()" class="w-full bg-slate-800 text-slate-300 py-2.5 rounded-xl text-xs">← ย้อนกลับ</button>
     </form>
   </div>
 
   <!-- FORGOT PASSWORD PAGE -->
-  <div id="forgotPasswordPage" class="hidden max-w-md mx-auto my-12 card-bg border p-8 rounded-2xl shadow-2xl space-y-6">
+  <div id="forgotPasswordPage" class="hidden max-w-md mx-auto my-16 card-bg border p-8 rounded-3xl shadow-2xl space-y-6">
     <div class="text-center space-y-2">
       <h1 class="text-xl font-bold text-white">ลืมรหัสผ่าน</h1>
     </div>
     <form id="forgotPasswordForm" class="space-y-4">
-      <input type="email" id="forgotEmail" required placeholder="user@resort.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white">
-      <button type="submit" class="w-full bg-amber-600 text-white py-3 rounded-xl text-sm">ส่งลิงก์รีเซ็ต</button>
-      <button type="button" onclick="showLoginPage()" class="w-full bg-slate-700 text-slate-300 py-2.5 rounded-xl text-xs">← ย้อนกลับ</button>
+      <input type="email" id="forgotEmail" required placeholder="user@resort.com" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-sm text-white">
+      <button type="submit" class="w-full bg-amber-600 text-white py-3 rounded-xl text-sm shadow-lg">ส่งลิงก์รีเซ็ต</button>
+      <button type="button" onclick="showLoginPage()" class="w-full bg-slate-800 text-slate-300 py-2.5 rounded-xl text-xs">← ย้อนกลับ</button>
     </form>
   </div>
 
   <!-- MAIN DASHBOARD -->
   <div id="mainDashboard" class="hidden max-w-7xl mx-auto space-y-6">
     
-    <header class="p-6 rounded-2xl shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all duration-300">
-      <div>
-        <h1 class="text-2xl md:text-3xl font-bold text-white flex items-center gap-2">
-          <span id="themeHeaderIcon">🐉</span> IT Task Tracker & Shift Management
-        </h1>
-        <p class="text-white/90 text-xs md:text-sm mt-1">ระบบจัดการงาน IT ประจำวัน และตารางกะ On Duty</p>
+    <!-- HEADER NAVBAR -->
+    <header class="p-5 rounded-2xl shadow-xl border border-white/20 flex flex-col lg:flex-row lg:items-center justify-between gap-4 transition-all duration-300">
+      <div class="flex items-center gap-3">
+        <div class="p-3 bg-white/10 rounded-2xl backdrop-blur border border-white/20 text-2xl" id="themeHeaderIcon">🐉</div>
+        <div>
+          <h1 class="text-xl md:text-2xl font-bold text-white tracking-tight">IT Task Tracker & Shift Management</h1>
+          <p class="text-white/80 text-xs mt-0.5">ระบบจัดการงาน IT ประจำวัน และตารางกะ On Duty</p>
+        </div>
       </div>
       
-      <div class="flex flex-wrap items-center gap-3">
-        <div class="bg-black/30 backdrop-blur border border-white/20 px-3 py-1.5 rounded-xl flex items-center gap-2 shadow">
-          <span class="text-xs text-white font-semibold">🎨 ธีม:</span>
-          <select id="themeSelector" onchange="changeTheme(this.value)" class="bg-slate-900/80 text-white text-xs font-bold rounded-lg p-1 outline-none border border-white/20">
+      <div class="flex flex-wrap items-center gap-2.5">
+        <div class="bg-black/30 backdrop-blur border border-white/20 px-3 py-1.5 rounded-xl flex items-center gap-2 shadow-inner">
+          <span class="text-xs text-white font-medium">🎨 ธีม:</span>
+          <select id="themeSelector" onchange="changeTheme(this.value)" class="bg-slate-900/90 text-white text-xs font-bold rounded-lg p-1 outline-none border border-white/20 cursor-pointer">
             <option value="theme-dragonball" selected>🐉 Dragon Ball</option>
             <option value="theme-dark">🌙 Dark Slate</option>
             <option value="theme-light">☀️ Light Clean</option>
@@ -159,80 +138,86 @@
           </select>
         </div>
 
-        <button onclick="switchTab('tasks')" id="tabBtnTasks" class="bg-white/20 hover:bg-white/35 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow">
+        <button onclick="switchTab('tasks')" id="tabBtnTasks" class="bg-white/20 hover:bg-white/30 text-white font-semibold text-xs px-3.5 py-2 rounded-xl transition-all shadow">
           📋 หน้าจัดการ Task งาน
         </button>
-        <button onclick="switchTab('shifts')" id="tabBtnShifts" class="bg-slate-900/40 hover:bg-slate-900/60 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow">
+        <button onclick="switchTab('shifts')" id="tabBtnShifts" class="bg-slate-900/40 hover:bg-slate-900/60 text-white font-semibold text-xs px-3.5 py-2 rounded-xl transition-all shadow">
           📅 หน้าจัดการตารางกะ
         </button>
 
-        <div class="bg-slate-900/40 backdrop-blur border border-white/10 p-2.5 rounded-xl flex items-center gap-3">
+        <div class="bg-slate-900/50 backdrop-blur border border-white/10 p-2 rounded-xl flex items-center gap-2.5">
           <div class="text-right">
-            <p id="userEmailDisplay" class="text-xs font-semibold text-white">user@resort.com</p>
-            <span id="userRoleBadge" class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full font-bold uppercase border border-white/20">Role</span>
+            <p id="userEmailDisplay" class="text-xs font-semibold text-white leading-none">user@resort.com</p>
+            <span id="userRoleBadge" class="inline-block mt-1 bg-white/20 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase border border-white/20">Role</span>
           </div>
-          <button onclick="handleLogout()" class="bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 px-3 py-1.5 rounded-lg text-xs font-medium">ออก</button>
+          <button onclick="handleLogout()" class="bg-rose-500/20 hover:bg-rose-500/40 border border-rose-500/30 text-rose-200 px-2.5 py-1.5 rounded-lg text-xs font-medium transition">ออก</button>
         </div>
       </div>
     </header>
 
+    <!-- TASKS VIEW -->
     <div id="viewTasks" class="space-y-6">
       
+      <!-- TODAY SHIFT SUMMARY CARD -->
       <div class="card-bg border p-5 rounded-2xl shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h3 class="text-sm font-bold text-white flex items-center gap-2">
             <span>📅</span> ตารางปฏิบัติงาน & IT On Duty ประจำวันนี้ (<span id="todayDateStr"></span>)
           </h3>
-          <div class="flex flex-wrap gap-4 mt-2 text-xs text-slate-300">
-            <div>☀️ กะเช้า: <span id="summaryMorning" class="text-cyan-400 font-bold">-</span></div>
-            <div>🌙 กะบ่าย: <span id="summaryEvening" class="text-purple-400 font-bold">-</span></div>
-            <div>☎️ On-Call: <span id="summaryOnCall" class="text-emerald-400 font-bold">-</span></div>
-            <div>🔴 ลา: <span id="summaryLeave" class="text-rose-400 font-bold">-</span></div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3 text-xs">
+            <div class="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/20"><span class="text-slate-400 block text-[10px]">☀️ กะเช้า</span><span id="summaryMorning" class="text-cyan-400 font-bold text-sm">-</span></div>
+            <div class="p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/20"><span class="text-slate-400 block text-[10px]">🌙 กะบ่าย</span><span id="summaryEvening" class="text-purple-400 font-bold text-sm">-</span></div>
+            <div class="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20"><span class="text-slate-400 block text-[10px]">☎️ On-Call</span><span id="summaryOnCall" class="text-emerald-400 font-bold text-sm">-</span></div>
+            <div class="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20"><span class="text-slate-400 block text-[10px]">🔴 ลา / หยุด</span><span id="summaryLeave" class="text-rose-400 font-bold text-sm">-</span></div>
           </div>
         </div>
-        <div class="flex gap-2">
-          <button onclick="sendLineShiftAlertFromUI()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs px-3.5 py-2.5 rounded-xl flex items-center gap-1.5 shadow">
+        <div class="flex sm:flex-col gap-2 justify-end">
+          <button onclick="sendLineShiftAlertFromUI()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs px-4 py-2.5 rounded-xl flex items-center justify-center gap-1.5 shadow-md transition">
             <span>📲</span> ยิง LINE แจ้งกะวันนี้
           </button>
-          <button onclick="switchTab('shifts')" class="bg-orange-600 hover:bg-orange-500 text-white font-medium text-xs px-3.5 py-2.5 rounded-xl flex items-center gap-1.5 shadow">
+          <button onclick="switchTab('shifts')" class="bg-orange-600/80 hover:bg-orange-500 text-white font-medium text-xs px-4 py-2.5 rounded-xl flex items-center justify-center gap-1.5 shadow-md transition">
             <span>✏️</span> ไปหน้าจัดการกะ
           </button>
         </div>
       </div>
 
+      <!-- STATS COUNTER -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="card-bg border p-4 rounded-xl flex items-center justify-between">
-          <div><p class="text-slate-400 text-xs">งานทั้งหมด</p><p id="statTotal" class="text-2xl font-bold text-white mt-1">0</p></div>
-          <div class="w-10 h-10 bg-orange-500/20 text-orange-400 rounded-lg flex items-center justify-center font-bold">📁</div>
+        <div class="card-bg border p-4 rounded-2xl flex items-center justify-between shadow-lg">
+          <div><p class="text-slate-400 text-xs">งานทั้งหมด</p><p id="statTotal" class="text-2xl font-bold text-white mt-0.5">0</p></div>
+          <div class="w-11 h-11 bg-orange-500/20 text-orange-400 rounded-xl flex items-center justify-center text-xl font-bold border border-orange-500/30">📁</div>
         </div>
-        <div class="card-bg border p-4 rounded-xl flex items-center justify-between">
-          <div><p class="text-slate-400 text-xs">เสร็จสิ้น (Completed)</p><p id="statCompleted" class="text-2xl font-bold text-emerald-400 mt-1">0</p></div>
-          <div class="w-10 h-10 bg-emerald-500/20 text-emerald-400 rounded-lg flex items-center justify-center font-bold">✅</div>
+        <div class="card-bg border p-4 rounded-2xl flex items-center justify-between shadow-lg">
+          <div><p class="text-slate-400 text-xs">เสร็จสิ้น (Completed)</p><p id="statCompleted" class="text-2xl font-bold text-emerald-400 mt-0.5">0</p></div>
+          <div class="w-11 h-11 bg-emerald-500/20 text-emerald-400 rounded-xl flex items-center justify-center text-xl font-bold border border-emerald-500/30">✅</div>
         </div>
-        <div class="card-bg border p-4 rounded-xl flex items-center justify-between">
-          <div><p class="text-slate-400 text-xs">กำลังทำ (In Progress)</p><p id="statInProgress" class="text-2xl font-bold text-amber-400 mt-1">0</p></div>
-          <div class="w-10 h-10 bg-amber-500/20 text-amber-400 rounded-lg flex items-center justify-center font-bold">⏳</div>
+        <div class="card-bg border p-4 rounded-2xl flex items-center justify-between shadow-lg">
+          <div><p class="text-slate-400 text-xs">กำลังทำ (In Progress)</p><p id="statInProgress" class="text-2xl font-bold text-amber-400 mt-0.5">0</p></div>
+          <div class="w-11 h-11 bg-amber-500/20 text-amber-400 rounded-xl flex items-center justify-center text-xl font-bold border border-amber-500/30">⏳</div>
         </div>
-        <div class="card-bg border p-4 rounded-xl flex items-center justify-between">
-          <div><p class="text-slate-400 text-xs">รอดำเนินการ (Pending)</p><p id="statPending" class="text-2xl font-bold text-orange-400 mt-1">0</p></div>
-          <div class="w-10 h-10 bg-orange-500/20 text-orange-400 rounded-lg flex items-center justify-center font-bold">📌</div>
+        <div class="card-bg border p-4 rounded-2xl flex items-center justify-between shadow-lg">
+          <div><p class="text-slate-400 text-xs">รอดำเนินการ (Pending)</p><p id="statPending" class="text-2xl font-bold text-rose-400 mt-0.5">0</p></div>
+          <div class="w-11 h-11 bg-rose-500/20 text-rose-400 rounded-xl flex items-center justify-center text-xl font-bold border border-rose-500/30">📌</div>
         </div>
       </div>
 
+      <!-- TASK FORM & LIST -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="card-bg border p-6 rounded-2xl shadow-xl h-fit">
-          <h2 class="text-lg font-bold mb-4 text-white flex items-center gap-2">
+        
+        <!-- NEW TASK FORM -->
+        <div class="card-bg border p-6 rounded-2xl shadow-xl h-fit space-y-4">
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
             <span class="text-orange-400">📝</span> บันทึกงานใหม่
           </h2>
-          <form id="taskForm" class="space-y-4">
+          <form id="taskForm" class="space-y-3.5">
             <div>
               <label class="block text-xs font-medium text-slate-300 mb-1">ชื่อ Task / งานที่ทำ</label>
-              <input type="text" id="title" required placeholder="เช่น รีเซ็ต Password" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white outline-none focus:ring-2 focus:ring-orange-500">
+              <input type="text" id="title" required placeholder="เช่น รีเซ็ต Password" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:ring-2 focus:ring-orange-500 transition">
             </div>
             
             <div>
               <label class="block text-xs font-medium text-slate-300 mb-1">📍 สถานที่ / โครงการ (Location)</label>
-              <select id="location" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white outline-none">
+              <select id="location" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
                 <option value="Radisson" selected>Radisson</option>
                 <option value="Laya Suites">Laya Suites</option>
                 <option value="BB Horizon">BB Horizon</option>
@@ -242,25 +227,25 @@
 
             <div>
               <label class="block text-xs font-medium text-slate-300 mb-1">📅 วันที่ทำรายการ</label>
-              <input type="date" id="taskDate" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white outline-none">
+              <input type="date" id="taskDate" required class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
             </div>
             <div class="grid grid-cols-3 gap-2">
               <div>
-                <label class="block text-[11px] font-medium text-slate-300 mb-1">ผู้แจ้ง</label>
-                <input type="text" id="reporter" placeholder="คุณสมชาย" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white">
+                <label class="block text-[10px] font-medium text-slate-300 mb-1">ผู้แจ้ง</label>
+                <input type="text" id="reporter" placeholder="คุณสมชาย" class="w-full bg-slate-900/80 border border-slate-700 rounded-lg p-2 text-xs text-white">
               </div>
               <div>
-                <label class="block text-[11px] font-medium text-slate-300 mb-1">แผนก</label>
-                <input type="text" id="department" placeholder="FO, HK" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white">
+                <label class="block text-[10px] font-medium text-slate-300 mb-1">แผนก</label>
+                <input type="text" id="department" placeholder="FO, HK" class="w-full bg-slate-900/80 border border-slate-700 rounded-lg p-2 text-xs text-white">
               </div>
               <div>
-                <label class="block text-[11px] font-medium text-slate-300 mb-1">ผู้รับงาน</label>
-                <input type="text" id="assignee" placeholder="New" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white">
+                <label class="block text-[10px] font-medium text-slate-300 mb-1">ผู้รับงาน</label>
+                <input type="text" id="assignee" placeholder="New" class="w-full bg-slate-900/80 border border-slate-700 rounded-lg p-2 text-xs text-white">
               </div>
             </div>
             <div>
               <label class="block text-xs font-medium text-slate-300 mb-1">หมวดหมู่</label>
-              <select id="category" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white outline-none">
+              <select id="category" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
                 <option value="POS">POS</option>
                 <option value="PC/ Laptop">PC/ Laptop</option>
                 <option value="Opera Cloud">Opera Cloud</option>
@@ -279,10 +264,10 @@
                 <option value="General work" selected>General work</option>
               </select>
             </div>
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-2 gap-2.5">
               <div>
                 <label class="block text-xs font-medium text-slate-300 mb-1">สถานะ</label>
-                <select id="status" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white outline-none">
+                <select id="status" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
                   <option value="Pending" selected>Pending</option>
                   <option value="In Progress">In Progress</option>
                   <option value="Completed">Completed</option>
@@ -290,7 +275,7 @@
               </div>
               <div>
                 <label class="block text-xs font-medium text-slate-300 mb-1">ความสำคัญ</label>
-                <select id="priority" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white outline-none">
+                <select id="priority" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
                   <option value="Normal">Normal</option>
                   <option value="High">High</option>
                   <option value="Urgent">Urgent</option>
@@ -298,20 +283,21 @@
               </div>
             </div>
             <div>
-              <label class="block text-xs font-medium text-slate-300 mb-1">รายละเอียด</label>
-              <textarea id="description" rows="2" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2 text-sm text-white"></textarea>
+              <label class="block text-xs font-medium text-slate-300 mb-1">รายละเอียดเพิ่มเติม</label>
+              <textarea id="description" rows="2" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2 text-xs text-white outline-none"></textarea>
             </div>
-            <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 text-white font-semibold py-3 rounded-xl text-sm shadow">
+            <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 text-white font-semibold py-3 rounded-xl text-xs shadow-lg transition-all transform active:scale-98">
               + บันทึก Task เข้าระบบ
             </button>
           </form>
         </div>
 
+        <!-- TASK TABLE LIST & FILTERS -->
         <div class="lg:col-span-2 space-y-4">
-          <div class="card-bg border p-4 rounded-2xl shadow-xl flex flex-wrap items-end gap-3 text-sm">
+          <div class="card-bg border p-4 rounded-2xl shadow-xl flex flex-wrap items-end gap-3 text-xs">
             <div class="w-[130px]">
               <label class="block text-xs font-medium text-amber-300 mb-1">📅 มุมมองวันที่</label>
-              <select id="dateRangeMode" onchange="toggleDateInputs(); applyFilters();" class="w-full bg-amber-950/80 border border-amber-500/50 text-amber-200 rounded-lg p-2 text-xs outline-none">
+              <select id="dateRangeMode" onchange="toggleDateInputs(); applyFilters();" class="w-full bg-slate-900/80 border border-slate-700 text-amber-200 rounded-lg p-2 text-xs outline-none">
                 <option value="today" selected>เฉพาะวันนี้</option>
                 <option value="all">ทุกวันทั้งหมด</option>
                 <option value="custom">ระบุช่วงวันที่</option>
@@ -319,70 +305,79 @@
             </div>
             <div class="flex-1 min-w-[140px]">
               <label class="block text-xs font-medium text-slate-300 mb-1">🔍 ค้นหา</label>
-              <input type="text" id="searchInput" oninput="applyFilters()" placeholder="พิมพ์ค้นหา..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white">
+              <input type="text" id="searchInput" oninput="applyFilters()" placeholder="พิมพ์ค้นหาเคส, ผู้แจ้ง, สถานที่..." class="w-full bg-slate-900/80 border border-slate-700 rounded-lg p-2 text-xs text-white">
             </div>
             <div id="customDateGroup" class="hidden flex gap-2">
-              <input type="date" id="startDate" onchange="applyFilters()" class="w-[115px] bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white">
-              <input type="date" id="endDate" onchange="applyFilters()" class="w-[115px] bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white">
+              <input type="date" id="startDate" onchange="applyFilters()" class="w-[115px] bg-slate-900/80 border border-slate-700 rounded-lg p-2 text-xs text-white">
+              <input type="date" id="endDate" onchange="applyFilters()" class="w-[115px] bg-slate-900/80 border border-slate-700 rounded-lg p-2 text-xs text-white">
             </div>
-            <div><button onclick="resetFilter()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 px-3 py-2 rounded-lg text-xs">ล้าง</button></div>
+            <div><button onclick="resetFilter()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2 rounded-lg text-xs transition">ล้าง</button></div>
           </div>
 
-          <div class="card-bg border p-6 rounded-2xl shadow-xl space-y-4">
+          <div class="card-bg border p-5 rounded-2xl shadow-xl space-y-4">
             <div class="flex items-center justify-between">
-              <div class="flex items-center gap-3">
-                <h2 class="text-lg font-bold text-white">📊 รายการงานในระบบ</h2>
-                <span id="taskCount" class="bg-orange-500/20 text-orange-300 text-xs px-3 py-1 rounded-full border border-orange-500/30">0 รายการ</span>
+              <div class="flex items-center gap-2.5">
+                <h2 class="text-base font-bold text-white">📊 รายการงานในระบบ</h2>
+                <span id="taskCount" class="bg-orange-500/20 text-orange-300 text-[11px] px-2.5 py-0.5 rounded-full border border-orange-500/30">0 รายการ</span>
               </div>
-              <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow-lg flex items-center gap-1.5 transition">
+              <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-xl text-xs font-medium shadow-md flex items-center gap-1.5 transition">
                 <span>📥</span> Export Excel
               </button>
             </div>
-            <div class="overflow-x-auto">
-              <table class="w-full text-left text-sm text-slate-300">
-                <thead class="bg-slate-900/80 border-b border-slate-700 text-xs">
-                  <tr><th class="p-3">งานที่ทำ / สถานที่</th><th class="p-3">ผู้แจ้ง / แผนก / ผู้รับ</th><th class="p-3">Category</th><th class="p-3">สถานะ</th><th class="p-3">การจัดการ</th></tr>
+            
+            <div class="overflow-x-auto rounded-xl border border-slate-700/50">
+              <table class="w-full text-left text-xs text-slate-300">
+                <thead class="bg-slate-900/90 text-slate-300 font-semibold border-b border-slate-700">
+                  <tr>
+                    <th class="p-3">งานที่ทำ / สถานที่</th>
+                    <th class="p-3">ผู้แจ้ง / แผนก / ผู้รับ</th>
+                    <th class="p-3">Category</th>
+                    <th class="p-3">สถานะ</th>
+                    <th class="p-3 text-center">จัดการ</th>
+                  </tr>
                 </thead>
-                <tbody id="taskTableBody" class="divide-y divide-slate-700/50"></tbody>
+                <tbody id="taskTableBody" class="divide-y divide-slate-800/80"></tbody>
               </table>
             </div>
           </div>
         </div>
+
       </div>
     </div>
 
+    <!-- SHIFTS VIEW -->
     <div id="viewShifts" class="hidden space-y-6">
       <div class="card-bg border p-6 rounded-2xl shadow-xl space-y-6">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-700 pb-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-700/80 pb-4">
           <div>
-            <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <h2 class="text-lg font-bold text-white flex items-center gap-2">
               <span>📅</span> ระบบจัดการและบันทึกตารางกะล่วงหน้า (Shift Management)
             </h2>
             <p class="text-slate-400 text-xs mt-1">เลือกวันที่ต้องการเพื่อดูหรือบันทึก/แก้ไขตารางกะล่วงหน้าของทีม IT</p>
           </div>
           <div class="flex items-center gap-2">
             <input type="date" id="manageShiftDate" onchange="loadShiftForDate()" class="bg-slate-900 border border-orange-500/50 text-orange-200 text-xs font-semibold rounded-xl p-2.5 outline-none">
-            <button onclick="loadShiftForDate()" class="bg-orange-600 hover:bg-orange-500 text-white font-medium text-xs px-4 py-2.5 rounded-xl shadow">เรียกดู</button>
+            <button onclick="loadShiftForDate()" class="bg-orange-600 hover:bg-orange-500 text-white font-medium text-xs px-4 py-2.5 rounded-xl shadow transition">เรียกดู</button>
           </div>
         </div>
 
         <form id="shiftManageForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="bg-slate-900/60 border border-slate-700/60 p-4 rounded-xl space-y-3">
+          <div class="bg-slate-900/60 border border-slate-700/60 p-4 rounded-xl space-y-2">
             <h4 class="text-xs font-bold text-orange-300 uppercase tracking-wider">☀️ กะเช้า (Morning Shift)</h4>
             <input type="text" id="mMorning" required placeholder="เช่น New (08:00 - 17:00)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:ring-2 focus:ring-orange-500">
           </div>
 
-          <div class="bg-slate-900/60 border border-slate-700/60 p-4 rounded-xl space-y-3">
+          <div class="bg-slate-900/60 border border-slate-700/60 p-4 rounded-xl space-y-2">
             <h4 class="text-xs font-bold text-purple-300 uppercase tracking-wider">🌙 กะบ่าย (Evening Shift)</h4>
             <input type="text" id="mEvening" placeholder="เช่น P'Puen ITM (10:00 - 19:00)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:ring-2 focus:ring-orange-500">
           </div>
 
-          <div class="bg-slate-900/60 border border-slate-700/60 p-4 rounded-xl space-y-3">
+          <div class="bg-slate-900/60 border border-slate-700/60 p-4 rounded-xl space-y-2">
             <h4 class="text-xs font-bold text-emerald-300 uppercase tracking-wider">☎️ Standby On-Call</h4>
             <input type="text" id="mOnCall" required placeholder="เช่น New หรือ P'Puen ITM" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:ring-2 focus:ring-orange-500">
           </div>
 
-          <div class="bg-slate-900/60 border border-slate-700/60 p-4 rounded-xl space-y-3">
+          <div class="bg-slate-900/60 border border-slate-700/60 p-4 rounded-xl space-y-2">
             <h4 class="text-xs font-bold text-rose-300 uppercase tracking-wider">🔴 สถานะลา / หยุด (Leave & Day Off)</h4>
             <input type="text" id="mLeave" placeholder="เช่น ไม่มี หรือ P'Puen ITM (Day Off)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:ring-2 focus:ring-orange-500">
           </div>
@@ -412,7 +407,7 @@
     let todayShiftCache = { morning: '-', evening: '-', onCall: '-', leave: 'ไม่มี' };
 
     function changeTheme(themeName) {
-      document.body.className = `${themeName} min-h-screen p-4 md:p-8 relative`;
+      document.body.className = `${themeName} min-h-screen p-3 md:p-6 relative antialiased`;
       
       const iconSpan = document.getElementById('themeHeaderIcon');
       if (iconSpan) {
@@ -441,13 +436,13 @@
       if (tabName === 'tasks') {
         viewTasks.classList.remove('hidden');
         viewShifts.classList.add('hidden');
-        btnTasks.className = "bg-white/20 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow";
-        btnShifts.className = "bg-slate-900/40 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow";
+        btnTasks.className = "bg-white/20 text-white font-semibold text-xs px-3.5 py-2 rounded-xl transition-all shadow";
+        btnShifts.className = "bg-slate-900/40 text-white font-semibold text-xs px-3.5 py-2 rounded-xl transition-all shadow";
       } else {
         viewTasks.classList.add('hidden');
         viewShifts.classList.remove('hidden');
-        btnShifts.className = "bg-white/20 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow";
-        btnTasks.className = "bg-slate-900/40 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow";
+        btnShifts.className = "bg-white/20 text-white font-semibold text-xs px-3.5 py-2 rounded-xl transition-all shadow";
+        btnTasks.className = "bg-slate-900/40 text-white font-semibold text-xs px-3.5 py-2 rounded-xl transition-all shadow";
         
         if (!document.getElementById('manageShiftDate').value) {
           document.getElementById('manageShiftDate').value = new Date().toISOString().split('T')[0];
@@ -544,8 +539,8 @@
     function showToast(title, message, type = 'success') {
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
-      toast.className = `pointer-events-auto p-4 rounded-xl border shadow-xl backdrop-blur flex items-start gap-3 toast-slide-in ${type === 'error' ? 'bg-rose-500/90 border-rose-400 text-white' : 'bg-emerald-500/90 border-emerald-400 text-white'}`;
-      toast.innerHTML = `<span class="text-xl">✅</span><div class="flex-1"><h4 class="text-xs font-bold">${title}</h4><p class="text-xs opacity-90">${message}</p></div>`;
+      toast.className = `pointer-events-auto p-3.5 rounded-xl border shadow-2xl backdrop-blur flex items-start gap-3 toast-slide-in ${type === 'error' ? 'bg-rose-500/90 border-rose-400 text-white' : 'bg-emerald-500/90 border-emerald-400 text-white'}`;
+      toast.innerHTML = `<span class="text-lg">✅</span><div class="flex-1"><h4 class="text-xs font-bold">${title}</h4><p class="text-[11px] opacity-90">${message}</p></div>`;
       container.appendChild(toast);
       setTimeout(() => toast.remove(), 3500);
     }
@@ -620,7 +615,6 @@
       applyFilters();
     }
 
-    // 🌟 ยิงแจ้งปิดเคส (ตั้งกลุ่มหลักเป็น Ccd002ce6191a6b295253aa8d2a3f1f9a)
     async function sendLineTaskCompletedAlert(task) {
       try {
         let targetGroupId = "Ccd002ce6191a6b295253aa8d2a3f1f9a";
@@ -723,7 +717,7 @@
 
       currentTasks.forEach(t => {
         const tr = document.createElement('tr');
-        tr.className = "hover:bg-slate-800/60";
+        tr.className = "hover:bg-slate-800/40 transition-colors";
         const taskTitle = t.title || t.task_name || '-';
         const locationStr = t.location || 'Radisson';
         
@@ -733,23 +727,28 @@
 
         tr.innerHTML = `
           <td class="p-3 font-medium text-white">
-            ${taskTitle}
+            <span class="text-xs font-semibold block">${taskTitle}</span>
             <div class="flex items-center gap-1.5 mt-1">
-              <span class="bg-orange-500/20 text-orange-300 border border-orange-500/30 text-[10px] px-2 py-0.5 rounded-full font-semibold">📍 ${locationStr}</span>
-              <span class="text-xs text-slate-400">${t.description || ''}</span>
+              <span class="bg-orange-500/20 text-orange-300 border border-orange-500/30 text-[9px] px-2 py-0.5 rounded-full font-semibold">📍 ${locationStr}</span>
+              <span class="text-[11px] text-slate-400 truncate max-w-[200px]">${t.description || ''}</span>
             </div>
           </td>
-          <td class="p-3 text-xs"><span class="text-orange-300">แจ้ง: ${t.reporter || '-'}</span><br><span class="text-amber-300">แผนก: ${t.department || '-'}</span></td>
-          <td class="p-3"><span class="bg-orange-500/20 text-amber-300 px-2 py-0.5 rounded text-xs border border-orange-500/30">${t.category || 'General work'}</span></td>
+          <td class="p-3 text-[11px]">
+            <span class="text-orange-300 block">ผู้แจ้ง: ${t.reporter || '-'}</span>
+            <span class="text-slate-400">แผนก: ${t.department || '-'} | รับ: ${t.assignee || '-'}</span>
+          </td>
           <td class="p-3">
-            <select onchange="updateTaskStatus(${t.id}, this.value)" class="bg-slate-900 border border-slate-700 text-xs font-semibold rounded-lg px-2 py-1 outline-none ${statusColorClass}">
+            <span class="bg-slate-800/80 text-amber-300 px-2 py-0.5 rounded text-[10px] border border-slate-700/80 font-medium">${t.category || 'General work'}</span>
+          </td>
+          <td class="p-3">
+            <select onchange="updateTaskStatus(${t.id}, this.value)" class="bg-slate-900 border border-slate-700 text-[11px] font-semibold rounded-lg px-2 py-1 outline-none cursor-pointer ${statusColorClass}">
               <option value="Pending" ${t.status === 'Pending' ? 'selected' : ''}>Pending</option>
               <option value="In Progress" ${t.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
               <option value="Completed" ${t.status === 'Completed' ? 'selected' : ''}>Completed</option>
             </select>
           </td>
-          <td class="p-3">
-            <button onclick="deleteTask(${t.id})" class="text-rose-400 hover:text-rose-300 text-xs bg-rose-500/10 hover:bg-rose-500/20 px-2.5 py-1 rounded transition">ลบ</button>
+          <td class="p-3 text-center">
+            <button onclick="deleteTask(${t.id})" class="text-rose-400 hover:text-rose-300 text-[11px] bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 px-2.5 py-1 rounded-lg transition">ลบ</button>
           </td>
         `;
         tbody.appendChild(tr);
