@@ -68,7 +68,7 @@
       border: 1px solid #34d399;
     }
 
-    /* Light Theme Input Overrides */
+    /* Light Theme Overrides */
     .theme-light input, .theme-light select, .theme-light textarea { background-color: #f8fafc !important; color: #0f172a !important; border-color: #cbd5e1 !important; }
     .theme-light .text-white { color: #0f172a !important; }
     .theme-light header .text-white { color: #ffffff !important; }
@@ -85,10 +85,9 @@
 </head>
 <body class="theme-dragonball min-h-screen p-4 md:p-8 relative">
 
-  <!-- 🔔 Toast Container -->
   <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
 
-  <!-- ==================== PAGE 1: LOGIN ==================== -->
+  <!-- LOGIN PAGE -->
   <div id="loginPage" class="max-w-md mx-auto my-12 card-bg border p-8 rounded-2xl shadow-2xl space-y-6">
     <div class="text-center space-y-2">
       <div class="w-16 h-16 bg-gradient-to-tr from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">⚡</div>
@@ -115,7 +114,7 @@
     <div id="loginError" class="hidden bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs text-center"></div>
   </div>
 
-  <!-- ==================== PAGE 2: REGISTER ==================== -->
+  <!-- REGISTER PAGE -->
   <div id="registerPage" class="hidden max-w-md mx-auto my-12 card-bg border p-8 rounded-2xl shadow-2xl space-y-6">
     <div class="text-center space-y-2">
       <div class="w-16 h-16 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-lg">👤</div>
@@ -136,7 +135,7 @@
     <div id="registerMessage" class="hidden p-3 rounded-xl text-xs text-center"></div>
   </div>
 
-  <!-- ==================== PAGE 3: FORGOT PASSWORD ==================== -->
+  <!-- FORGOT PASSWORD PAGE -->
   <div id="forgotPasswordPage" class="hidden max-w-md mx-auto my-12 card-bg border p-8 rounded-2xl shadow-2xl space-y-6">
     <div class="text-center space-y-2">
       <h1 class="text-xl font-bold text-white">ลืมรหัสผ่าน</h1>
@@ -149,10 +148,9 @@
     <div id="forgotMessage" class="hidden p-3 rounded-xl text-xs text-center"></div>
   </div>
 
-  <!-- ==================== PAGE 4: MAIN DASHBOARD ==================== -->
+  <!-- MAIN DASHBOARD -->
   <div id="mainDashboard" class="hidden max-w-7xl mx-auto space-y-6">
     
-    <!-- Header banner (ไล่สีเปลี่ยนตามธีม) -->
     <header class="p-6 rounded-2xl shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all duration-300">
       <div>
         <h1 class="text-2xl md:text-3xl font-bold text-white flex items-center gap-2">
@@ -162,7 +160,6 @@
       </div>
       
       <div class="flex flex-wrap items-center gap-3">
-        <!-- 🎨 ปุ่มสลับธีม -->
         <div class="bg-black/30 backdrop-blur border border-white/20 px-3 py-1.5 rounded-xl flex items-center gap-2 shadow">
           <span class="text-xs text-white font-semibold">🎨 ธีม:</span>
           <select id="themeSelector" onchange="changeTheme(this.value)" class="bg-slate-900/80 text-white text-xs font-bold rounded-lg p-1 outline-none border border-white/20">
@@ -191,10 +188,8 @@
       </div>
     </header>
 
-    <!-- ==================== TAB 1: TASK TRACKER VIEW ==================== -->
     <div id="viewTasks" class="space-y-6">
       
-      <!-- การ์ดสรุปกะวันนี้แบบย่อ -->
       <div class="card-bg border p-5 rounded-2xl shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h3 class="text-sm font-bold text-white flex items-center gap-2">
@@ -217,7 +212,6 @@
         </div>
       </div>
 
-      <!-- Stats & Chart -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div class="card-bg border p-4 rounded-xl flex items-center justify-between">
           <div><p class="text-slate-400 text-xs">งานทั้งหมด</p><p id="statTotal" class="text-2xl font-bold text-white mt-1">0</p></div>
@@ -238,7 +232,6 @@
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Form บันทึกงาน -->
         <div class="card-bg border p-6 rounded-2xl shadow-xl h-fit">
           <h2 class="text-lg font-bold mb-4 text-white flex items-center gap-2">
             <span class="text-orange-400">📝</span> บันทึกงานใหม่
@@ -249,7 +242,6 @@
               <input type="text" id="title" required placeholder="เช่น รีเซ็ต Password" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white outline-none focus:ring-2 focus:ring-orange-500">
             </div>
             
-            <!-- 📍 ตัวเลือก Location -->
             <div>
               <label class="block text-xs font-medium text-slate-300 mb-1">📍 สถานที่ / โครงการ (Location)</label>
               <select id="location" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-sm text-white outline-none">
@@ -327,7 +319,6 @@
           </form>
         </div>
 
-        <!-- รายการ Task Log & Table -->
         <div class="lg:col-span-2 space-y-4">
           <div class="card-bg border p-4 rounded-2xl shadow-xl flex flex-wrap items-end gap-3 text-sm">
             <div class="w-[130px]">
@@ -372,7 +363,6 @@
       </div>
     </div>
 
-    <!-- ==================== TAB 2: SHIFT MANAGEMENT VIEW ==================== -->
     <div id="viewShifts" class="hidden space-y-6">
       <div class="card-bg border p-6 rounded-2xl shadow-xl space-y-6">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-700 pb-4">
@@ -436,7 +426,6 @@
     function changeTheme(themeName) {
       document.body.className = `${themeName} min-h-screen p-4 md:p-8 relative`;
       
-      // เปลี่ยนไอคอนหัวข้อแบนเนอร์ตามธีม
       const iconSpan = document.getElementById('themeHeaderIcon');
       if (iconSpan) {
         if (themeName === 'theme-dragonball') iconSpan.innerText = '🐉';
@@ -643,9 +632,10 @@
       applyFilters();
     }
 
+    // 🌟 ฟังก์ชันยิงแจ้งปิดเคส (ตั้งกลุ่มหลักเป็น Ccd002ce6191a6b295253aa8d2a3f1f9a)
     async function sendLineTaskCompletedAlert(task) {
       try {
-        let targetGroupId = "Cfafe0612e9bd3891010287c99030a612";
+        let targetGroupId = "Ccd002ce6191a6b295253aa8d2a3f1f9a";
         if (task.description && task.description.includes('LINE_GROUP_ID:')) {
           targetGroupId = task.description.split('LINE_GROUP_ID:')[1].trim();
         }
