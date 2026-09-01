@@ -125,7 +125,7 @@
         </div>
       </div>
       
-      <div class="flex flex-wrap items-center gap-2.5">
+      <div class="flex flex-wrap items-center gap-2">
         <div class="bg-black/30 backdrop-blur border border-white/20 px-3 py-1.5 rounded-xl flex items-center gap-2 shadow-inner">
           <span class="text-xs text-white font-medium">🎨 ธีม:</span>
           <select id="themeSelector" onchange="changeTheme(this.value)" class="bg-slate-900/90 text-white text-xs font-bold rounded-lg p-1 outline-none border border-white/20 cursor-pointer">
@@ -137,10 +137,14 @@
           </select>
         </div>
 
-        <button onclick="switchTab('tasks')" id="tabBtnTasks" class="bg-white/20 hover:bg-white/30 text-white font-semibold text-xs px-3.5 py-2 rounded-xl transition-all shadow">
-          📋 หน้าจัดการ Task งาน
+        <!-- 3 PAGE TABS -->
+        <button onclick="switchTab('createTask')" id="tabBtnCreateTask" class="bg-white/20 hover:bg-white/30 text-white font-semibold text-xs px-3 py-2 rounded-xl transition-all shadow">
+          📝 บันทึกงานใหม่
         </button>
-        <button onclick="switchTab('shifts')" id="tabBtnShifts" class="bg-slate-900/40 hover:bg-slate-900/60 text-white font-semibold text-xs px-3.5 py-2 rounded-xl transition-all shadow">
+        <button onclick="switchTab('tasks')" id="tabBtnTasks" class="bg-slate-900/40 hover:bg-slate-900/60 text-white font-semibold text-xs px-3 py-2 rounded-xl transition-all shadow">
+          📊 หน้ารายการ Task งาน
+        </button>
+        <button onclick="switchTab('shifts')" id="tabBtnShifts" class="bg-slate-900/40 hover:bg-slate-900/60 text-white font-semibold text-xs px-3 py-2 rounded-xl transition-all shadow">
           📅 หน้าจัดการตารางกะ
         </button>
 
@@ -154,7 +158,102 @@
       </div>
     </header>
 
-    <!-- TASKS VIEW -->
+    <!-- PAGE 1: CREATE TASK PAGE -->
+    <div id="viewCreateTask" class="hidden max-w-2xl mx-auto space-y-6">
+      <div class="card-bg border p-6 rounded-3xl shadow-2xl space-y-4">
+        <h2 class="text-lg font-bold text-white flex items-center gap-2 border-b border-slate-700/80 pb-3">
+          <span class="text-orange-400">📝</span> บันทึกเคส / งานใหม่
+        </h2>
+        <form id="taskForm" class="space-y-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">ชื่อ Task / งานที่ทำ</label>
+            <input type="text" id="title" required placeholder="เช่น รีเซ็ต Password" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-xs text-white outline-none focus:ring-2 focus:ring-orange-500 transition">
+          </div>
+          
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">📍 สถานที่ / โครงการ (Location)</label>
+            <select id="location" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-xs text-white outline-none">
+              <option value="Radisson" selected>Radisson</option>
+              <option value="Laya Suites">Laya Suites</option>
+              <option value="BB Horizon">BB Horizon</option>
+              <option value="Other Location">Other Location</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">📅 วันที่ทำรายการ</label>
+            <input type="date" id="taskDate" required class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-xs text-white outline-none">
+          </div>
+
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">ผู้แจ้ง</label>
+              <input type="text" id="reporter" placeholder="คุณสมชาย" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">แผนก</label>
+              <input type="text" id="department" placeholder="FO, HK" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">ผู้รับงาน</label>
+              <input type="text" id="assignee" placeholder="New" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">หมวดหมู่</label>
+            <select id="category" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-xs text-white outline-none">
+              <option value="POS">POS</option>
+              <option value="PC/ Laptop">PC/ Laptop</option>
+              <option value="Opera Cloud">Opera Cloud</option>
+              <option value="MC">MC</option>
+              <option value="Door">Door</option>
+              <option value="SUN">SUN</option>
+              <option value="Wi-Fi">Wi-Fi</option>
+              <option value="Passport">Passport</option>
+              <option value="CCTV">CCTV</option>
+              <option value="TV">TV</option>
+              <option value="Phone">Phone</option>
+              <option value="Silverman">Silverman</option>
+              <option value="Interface">Interface</option>
+              <option value="Print">Print</option>
+              <option value="other">other</option>
+              <option value="General work" selected>General work</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">สถานะ</label>
+              <select id="status" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-xs text-white outline-none">
+                <option value="Pending" selected>Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1">ความสำคัญ</label>
+              <select id="priority" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-xs text-white outline-none">
+                <option value="Normal">Normal</option>
+                <option value="High">High</option>
+                <option value="Urgent">Urgent</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-1">รายละเอียดเพิ่มเติม</label>
+            <textarea id="description" rows="3" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-xs text-white outline-none"></textarea>
+          </div>
+
+          <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 text-white font-bold py-3.5 rounded-xl text-sm shadow-lg transition-all transform active:scale-98">
+            + บันทึก Task เข้าระบบ
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- PAGE 2: TASKS LIST VIEW -->
     <div id="viewTasks" class="space-y-6">
       
       <!-- TODAY SHIFT SUMMARY CARD -->
@@ -200,152 +299,59 @@
         </div>
       </div>
 
-      <!-- TASK FORM & LIST -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        <!-- NEW TASK FORM -->
-        <div class="card-bg border p-6 rounded-2xl shadow-xl h-fit space-y-4">
-          <h2 class="text-base font-bold text-white flex items-center gap-2">
-            <span class="text-orange-400">📝</span> บันทึกงานใหม่
-          </h2>
-          <form id="taskForm" class="space-y-3.5">
-            <div>
-              <label class="block text-xs font-medium text-slate-300 mb-1">ชื่อ Task / งานที่ทำ</label>
-              <input type="text" id="title" required placeholder="เช่น รีเซ็ต Password" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:ring-2 focus:ring-orange-500 transition">
-            </div>
-            
-            <div>
-              <label class="block text-xs font-medium text-slate-300 mb-1">📍 สถานที่ / โครงการ (Location)</label>
-              <select id="location" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
-                <option value="Radisson" selected>Radisson</option>
-                <option value="Laya Suites">Laya Suites</option>
-                <option value="BB Horizon">BB Horizon</option>
-                <option value="Other Location">Other Location</option>
-              </select>
-            </div>
+      <!-- FILTER & TASK TABLE -->
+      <div class="space-y-4">
+        <div class="card-bg border p-4 rounded-2xl shadow-xl flex flex-wrap items-end gap-3 text-xs">
+          <div class="w-[130px]">
+            <label class="block text-xs font-medium text-amber-300 mb-1">📅 มุมมองวันที่</label>
+            <select id="dateRangeMode" onchange="toggleDateInputs(); applyFilters();" class="w-full bg-slate-900/80 border border-slate-700 text-amber-200 rounded-lg p-2 text-xs outline-none">
+              <option value="today" selected>เฉพาะวันนี้</option>
+              <option value="all">ทุกวันทั้งหมด</option>
+              <option value="custom">ระบุช่วงวันที่</option>
+            </select>
+          </div>
+          <div class="flex-1 min-w-[140px]">
+            <label class="block text-xs font-medium text-slate-300 mb-1">🔍 ค้นหา</label>
+            <input type="text" id="searchInput" oninput="applyFilters()" placeholder="พิมพ์เลขเคส เช่น #2026-00001 หรือพิมพ์ค้นหา..." class="w-full bg-slate-900/80 border border-slate-700 rounded-lg p-2 text-xs text-white">
+          </div>
+          <div id="customDateGroup" class="hidden flex gap-2">
+            <input type="date" id="startDate" onchange="applyFilters()" class="w-[115px] bg-slate-900/80 border border-slate-700 rounded-lg p-2 text-xs text-white">
+            <input type="date" id="endDate" onchange="applyFilters()" class="w-[115px] bg-slate-900/80 border border-slate-700 rounded-lg p-2 text-xs text-white">
+          </div>
+          <div><button onclick="resetFilter()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2 rounded-lg text-xs transition">ล้าง</button></div>
+        </div>
 
-            <div>
-              <label class="block text-xs font-medium text-slate-300 mb-1">📅 วันที่ทำรายการ</label>
-              <input type="date" id="taskDate" required class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
+        <div class="card-bg border p-5 rounded-2xl shadow-xl space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <h2 class="text-base font-bold text-white">📊 รายการงานในระบบ</h2>
+              <span id="taskCount" class="bg-orange-500/20 text-orange-300 text-[11px] px-2.5 py-0.5 rounded-full border border-orange-500/30">0 รายการ</span>
             </div>
-            <div class="grid grid-cols-3 gap-2">
-              <div>
-                <label class="block text-[10px] font-medium text-slate-300 mb-1">ผู้แจ้ง</label>
-                <input type="text" id="reporter" placeholder="คุณสมชาย" class="w-full bg-slate-900/80 border border-slate-700 rounded-lg p-2 text-xs text-white">
-              </div>
-              <div>
-                <label class="block text-[10px] font-medium text-slate-300 mb-1">แผนก</label>
-                <input type="text" id="department" placeholder="FO, HK" class="w-full bg-slate-900/80 border border-slate-700 rounded-lg p-2 text-xs text-white">
-              </div>
-              <div>
-                <label class="block text-[10px] font-medium text-slate-300 mb-1">ผู้รับงาน</label>
-                <input type="text" id="assignee" placeholder="New" class="w-full bg-slate-900/80 border border-slate-700 rounded-lg p-2 text-xs text-white">
-              </div>
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-slate-300 mb-1">หมวดหมู่</label>
-              <select id="category" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
-                <option value="POS">POS</option>
-                <option value="PC/ Laptop">PC/ Laptop</option>
-                <option value="Opera Cloud">Opera Cloud</option>
-                <option value="MC">MC</option>
-                <option value="Door">Door</option>
-                <option value="SUN">SUN</option>
-                <option value="Wi-Fi">Wi-Fi</option>
-                <option value="Passport">Passport</option>
-                <option value="CCTV">CCTV</option>
-                <option value="TV">TV</option>
-                <option value="Phone">Phone</option>
-                <option value="Silverman">Silverman</option>
-                <option value="Interface">Interface</option>
-                <option value="Print">Print</option>
-                <option value="other">other</option>
-                <option value="General work" selected>General work</option>
-              </select>
-            </div>
-            <div class="grid grid-cols-2 gap-2.5">
-              <div>
-                <label class="block text-xs font-medium text-slate-300 mb-1">สถานะ</label>
-                <select id="status" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
-                  <option value="Pending" selected>Pending</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Completed">Completed</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-medium text-slate-300 mb-1">ความสำคัญ</label>
-                <select id="priority" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
-                  <option value="Normal">Normal</option>
-                  <option value="High">High</option>
-                  <option value="Urgent">Urgent</option>
-                </select>
-              </div>
-            </div>
-            <div>
-              <label class="block text-xs font-medium text-slate-300 mb-1">รายละเอียดเพิ่มเติม</label>
-              <textarea id="description" rows="2" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-2 text-xs text-white outline-none"></textarea>
-            </div>
-            <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 text-white font-semibold py-3 rounded-xl text-xs shadow-lg transition-all transform active:scale-98">
-              + บันทึก Task เข้าระบบ
+            <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-xl text-xs font-medium shadow-md flex items-center gap-1.5 transition">
+              <span>📥</span> Export Excel
             </button>
-          </form>
-        </div>
-
-        <!-- TASK TABLE LIST & FILTERS -->
-        <div class="lg:col-span-2 space-y-4">
-          <div class="card-bg border p-4 rounded-2xl shadow-xl flex flex-wrap items-end gap-3 text-xs">
-            <div class="w-[130px]">
-              <label class="block text-xs font-medium text-amber-300 mb-1">📅 มุมมองวันที่</label>
-              <select id="dateRangeMode" onchange="toggleDateInputs(); applyFilters();" class="w-full bg-slate-900/80 border border-slate-700 text-amber-200 rounded-lg p-2 text-xs outline-none">
-                <option value="today" selected>เฉพาะวันนี้</option>
-                <option value="all">ทุกวันทั้งหมด</option>
-                <option value="custom">ระบุช่วงวันที่</option>
-              </select>
-            </div>
-            <div class="flex-1 min-w-[140px]">
-              <label class="block text-xs font-medium text-slate-300 mb-1">🔍 ค้นหา</label>
-              <input type="text" id="searchInput" oninput="applyFilters()" placeholder="พิมพ์เลขเคส เช่น #2026-00001 หรือพิมพ์ค้นหา..." class="w-full bg-slate-900/80 border border-slate-700 rounded-lg p-2 text-xs text-white">
-            </div>
-            <div id="customDateGroup" class="hidden flex gap-2">
-              <input type="date" id="startDate" onchange="applyFilters()" class="w-[115px] bg-slate-900/80 border border-slate-700 rounded-lg p-2 text-xs text-white">
-              <input type="date" id="endDate" onchange="applyFilters()" class="w-[115px] bg-slate-900/80 border border-slate-700 rounded-lg p-2 text-xs text-white">
-            </div>
-            <div><button onclick="resetFilter()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2 rounded-lg text-xs transition">ล้าง</button></div>
           </div>
-
-          <div class="card-bg border p-5 rounded-2xl shadow-xl space-y-4">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2.5">
-                <h2 class="text-base font-bold text-white">📊 รายการงานในระบบ</h2>
-                <span id="taskCount" class="bg-orange-500/20 text-orange-300 text-[11px] px-2.5 py-0.5 rounded-full border border-orange-500/30">0 รายการ</span>
-              </div>
-              <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-xl text-xs font-medium shadow-md flex items-center gap-1.5 transition">
-                <span>📥</span> Export Excel
-              </button>
-            </div>
-            
-            <div class="overflow-x-auto rounded-xl border border-slate-700/50">
-              <table class="w-full text-left text-xs text-slate-300">
-                <thead class="bg-slate-900/90 text-slate-300 font-semibold border-b border-slate-700">
-                  <tr>
-                    <th class="p-3">เลขเคส</th>
-                    <th class="p-3">งานที่ทำ / สถานที่</th>
-                    <th class="p-3">ผู้แจ้ง / แผนก / ผู้รับ</th>
-                    <th class="p-3">Category</th>
-                    <th class="p-3">สถานะ</th>
-                    <th class="p-3 text-center">จัดการ</th>
-                  </tr>
-                </thead>
-                <tbody id="taskTableBody" class="divide-y divide-slate-800/80"></tbody>
-              </table>
-            </div>
+          
+          <div class="overflow-x-auto rounded-xl border border-slate-700/50">
+            <table class="w-full text-left text-xs text-slate-300">
+              <thead class="bg-slate-900/90 text-slate-300 font-semibold border-b border-slate-700">
+                <tr>
+                  <th class="p-3">เลขเคส</th>
+                  <th class="p-3">งานที่ทำ / สถานที่</th>
+                  <th class="p-3">ผู้แจ้ง / แผนก / ผู้รับ</th>
+                  <th class="p-3">Category</th>
+                  <th class="p-3">สถานะ</th>
+                  <th class="p-3 text-center">จัดการ</th>
+                </tr>
+              </thead>
+              <tbody id="taskTableBody" class="divide-y divide-slate-800/80"></tbody>
+            </table>
           </div>
         </div>
-
       </div>
     </div>
 
-    <!-- SHIFTS VIEW -->
+    <!-- PAGE 3: SHIFTS MANAGEMENT VIEW -->
     <div id="viewShifts" class="hidden space-y-6">
       <div class="card-bg border p-6 rounded-2xl shadow-xl space-y-6">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-700/80 pb-4">
@@ -427,22 +433,34 @@
       changeTheme(savedTheme);
     }
 
+    // 🌟 ระบบ Switch 3 หน้า
     function switchTab(tabName) {
+      const btnCreateTask = document.getElementById('tabBtnCreateTask');
       const btnTasks = document.getElementById('tabBtnTasks');
       const btnShifts = document.getElementById('tabBtnShifts');
+      
+      const viewCreateTask = document.getElementById('viewCreateTask');
       const viewTasks = document.getElementById('viewTasks');
       const viewShifts = document.getElementById('viewShifts');
 
-      if (tabName === 'tasks') {
+      // ปิดทุกหน้าก่อน
+      viewCreateTask.classList.add('hidden');
+      viewTasks.classList.add('hidden');
+      viewShifts.classList.add('hidden');
+
+      btnCreateTask.className = "bg-slate-900/40 text-white font-semibold text-xs px-3 py-2 rounded-xl transition-all shadow";
+      btnTasks.className = "bg-slate-900/40 text-white font-semibold text-xs px-3 py-2 rounded-xl transition-all shadow";
+      btnShifts.className = "bg-slate-900/40 text-white font-semibold text-xs px-3 py-2 rounded-xl transition-all shadow";
+
+      if (tabName === 'createTask') {
+        viewCreateTask.classList.remove('hidden');
+        btnCreateTask.className = "bg-white/20 text-white font-semibold text-xs px-3 py-2 rounded-xl transition-all shadow";
+      } else if (tabName === 'tasks') {
         viewTasks.classList.remove('hidden');
-        viewShifts.classList.add('hidden');
-        btnTasks.className = "bg-white/20 text-white font-semibold text-xs px-3.5 py-2 rounded-xl transition-all shadow";
-        btnShifts.className = "bg-slate-900/40 text-white font-semibold text-xs px-3.5 py-2 rounded-xl transition-all shadow";
-      } else {
-        viewTasks.classList.add('hidden');
+        btnTasks.className = "bg-white/20 text-white font-semibold text-xs px-3 py-2 rounded-xl transition-all shadow";
+      } else if (tabName === 'shifts') {
         viewShifts.classList.remove('hidden');
-        btnShifts.className = "bg-white/20 text-white font-semibold text-xs px-3.5 py-2 rounded-xl transition-all shadow";
-        btnTasks.className = "bg-slate-900/40 text-white font-semibold text-xs px-3.5 py-2 rounded-xl transition-all shadow";
+        btnShifts.className = "bg-white/20 text-white font-semibold text-xs px-3 py-2 rounded-xl transition-all shadow";
         
         if (!document.getElementById('manageShiftDate').value) {
           document.getElementById('manageShiftDate').value = new Date().toISOString().split('T')[0];
@@ -571,6 +589,9 @@
         document.getElementById('taskDate').value = new Date().toISOString().split('T')[0];
         fetchTodayShiftSummary();
         fetchTasks();
+        
+        // เปิดหน้าแสดง Task รายการงานเป็นหน้าแรก
+        switchTab('tasks');
       } else {
         showLoginPage();
       }
@@ -783,6 +804,8 @@
         e.target.reset();
         document.getElementById('taskDate').value = new Date().toISOString().split('T')[0];
         fetchTasks();
+        // พอบันทึกเสร็จให้สลับไปหน้ารายการงานทันที
+        switchTab('tasks');
       }
     });
 
