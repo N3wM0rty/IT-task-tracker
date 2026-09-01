@@ -7,7 +7,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body { font-family: 'Kanit', sans-serif; transition: background-color 0.3s, color 0.3s; }
@@ -305,7 +304,7 @@
             </div>
             <div class="flex-1 min-w-[140px]">
               <label class="block text-xs font-medium text-slate-300 mb-1">🔍 ค้นหา</label>
-              <input type="text" id="searchInput" oninput="applyFilters()" placeholder="พิมพ์ค้นหาเคส, ผู้แจ้ง, สถานที่..." class="w-full bg-slate-900/80 border border-slate-700 rounded-lg p-2 text-xs text-white">
+              <input type="text" id="searchInput" oninput="applyFilters()" placeholder="พิมพ์เลขเคส เช่น #2026-00001 หรือพิมพ์ค้นหา..." class="w-full bg-slate-900/80 border border-slate-700 rounded-lg p-2 text-xs text-white">
             </div>
             <div id="customDateGroup" class="hidden flex gap-2">
               <input type="date" id="startDate" onchange="applyFilters()" class="w-[115px] bg-slate-900/80 border border-slate-700 rounded-lg p-2 text-xs text-white">
@@ -329,6 +328,7 @@
               <table class="w-full text-left text-xs text-slate-300">
                 <thead class="bg-slate-900/90 text-slate-300 font-semibold border-b border-slate-700">
                   <tr>
+                    <th class="p-3">เลขเคส</th>
                     <th class="p-3">งานที่ทำ / สถานที่</th>
                     <th class="p-3">ผู้แจ้ง / แผนก / ผู้รับ</th>
                     <th class="p-3">Category</th>
@@ -622,6 +622,7 @@
           targetGroupId = task.description.split('LINE_GROUP_ID:')[1].trim();
         }
 
+        const caseId = task.case_id || `#2026-${String(task.id).padStart(5, '0')}`;
         const taskTitle = task.title || task.task_name || 'งานระบบ';
         const reporterName = task.reporter || 'LINE User';
         const fixer = task.assignee || currentUser.email.split('@')[0];
@@ -637,7 +638,7 @@
             to: targetGroupId,
             messages: [{
               type: 'flex',
-              altText: '✅ ปิดเคส/ดำเนินการเสร็จสิ้นเรียบร้อยแล้ว',
+              altText: `✅ ปิดเคส ${caseId} เรียบร้อยแล้ว`,
               contents: {
                 type: 'bubble',
                 header: {
@@ -645,7 +646,7 @@
                   layout: 'vertical',
                   backgroundColor: '#0284c7',
                   contents: [
-                    { type: 'text', text: '✅ ปิดเคส / ดำเนินการเรียบร้อย!', weight: 'bold', color: '#ffffff', size: 'sm' }
+                    { type: 'text', text: `✅ ปิดเคส ${caseId} เรียบร้อย!`, weight: 'bold', color: '#ffffff', size: 'sm' }
                   ]
                 },
                 body: {
@@ -700,9 +701,10 @@
         const taskDateStr = t.date || (t.created_at ? t.created_at.split('T')[0] : '');
         if (mode === 'today') matchDate = (taskDateStr === todayStr);
         
+        const caseIdStr = (t.case_id || `#2026-${String(t.id).padStart(5, '0')}`).toLowerCase();
         const taskTitle = t.title || t.task_name || '';
         const taskLoc = t.location || '';
-        const matchSearch = !search || taskTitle.toLowerCase().includes(search) || taskLoc.toLowerCase().includes(search) || (t.reporter && t.reporter.toLowerCase().includes(search));
+        const matchSearch = !search || caseIdStr.includes(search) || taskTitle.toLowerCase().includes(search) || taskLoc.toLowerCase().includes(search) || (t.reporter && t.reporter.toLowerCase().includes(search));
         return matchDate && matchSearch;
       });
 
@@ -718,6 +720,7 @@
       currentTasks.forEach(t => {
         const tr = document.createElement('tr');
         tr.className = "hover:bg-slate-800/40 transition-colors";
+        const caseIdStr = t.case_id || `#2026-${String(t.id).padStart(5, '0')}`;
         const taskTitle = t.title || t.task_name || '-';
         const locationStr = t.location || 'Radisson';
         
@@ -726,11 +729,14 @@
         if (t.status === 'In Progress') statusColorClass = 'bg-blue-500/20 text-blue-300 border-blue-500/30';
 
         tr.innerHTML = `
+          <td class="p-3">
+            <span class="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-mono text-[11px] font-bold px-2 py-1 rounded-md inline-block">${caseIdStr}</span>
+          </td>
           <td class="p-3 font-medium text-white">
             <span class="text-xs font-semibold block">${taskTitle}</span>
             <div class="flex items-center gap-1.5 mt-1">
               <span class="bg-orange-500/20 text-orange-300 border border-orange-500/30 text-[9px] px-2 py-0.5 rounded-full font-semibold">📍 ${locationStr}</span>
-              <span class="text-[11px] text-slate-400 truncate max-w-[200px]">${t.description || ''}</span>
+              <span class="text-[11px] text-slate-400 truncate max-w-[180px]">${t.description || ''}</span>
             </div>
           </td>
           <td class="p-3 text-[11px]">
@@ -806,6 +812,7 @@
 
       const excelData = currentTasks.map(t => {
         return {
+          'Case ID': t.case_id || `#2026-${String(t.id).padStart(5, '0')}`,
           'Date': t.date || (t.created_at ? t.created_at.split('T')[0] : ''),
           'Location': t.location || 'Radisson',
           'Category': t.category || 'General work',
@@ -823,6 +830,7 @@
       const workbook = XLSX.utils.book_new();
       
       const wscols = [
+        { wch: 14 },
         { wch: 14 },
         { wch: 16 },
         { wch: 16 },
