@@ -137,11 +137,10 @@
           </select>
         </div>
 
-        <!-- 3 PAGE TABS -->
-        <button onclick="switchTab('createTask')" id="tabBtnCreateTask" class="bg-white/20 hover:bg-white/30 text-white font-semibold text-xs px-3 py-2 rounded-xl transition-all shadow">
+        <button onclick="switchTab('createTask')" id="tabBtnCreateTask" class="bg-slate-900/40 hover:bg-slate-900/60 text-white font-semibold text-xs px-3 py-2 rounded-xl transition-all shadow">
           📝 บันทึกงานใหม่
         </button>
-        <button onclick="switchTab('tasks')" id="tabBtnTasks" class="bg-slate-900/40 hover:bg-slate-900/60 text-white font-semibold text-xs px-3 py-2 rounded-xl transition-all shadow">
+        <button onclick="switchTab('tasks')" id="tabBtnTasks" class="bg-white/20 hover:bg-white/30 text-white font-semibold text-xs px-3 py-2 rounded-xl transition-all shadow">
           📊 หน้ารายการ Task งาน
         </button>
         <button onclick="switchTab('shifts')" id="tabBtnShifts" class="bg-slate-900/40 hover:bg-slate-900/60 text-white font-semibold text-xs px-3 py-2 rounded-xl transition-all shadow">
@@ -302,14 +301,23 @@
       <!-- FILTER & TASK TABLE -->
       <div class="space-y-4">
         <div class="card-bg border p-4 rounded-2xl shadow-xl flex flex-wrap items-end gap-3 text-xs">
-          <div class="w-[130px]">
+          <div class="w-[140px]">
             <label class="block text-xs font-medium text-amber-300 mb-1">📅 มุมมองวันที่</label>
             <select id="dateRangeMode" onchange="toggleDateInputs(); applyFilters();" class="w-full bg-slate-900/80 border border-slate-700 text-amber-200 rounded-lg p-2 text-xs outline-none">
               <option value="today" selected>เฉพาะวันนี้</option>
+              <option value="month">เฉพาะเดือนนี้</option>
+              <option value="selectMonth">เลือกเดือน/ปี...</option>
               <option value="all">ทุกวันทั้งหมด</option>
               <option value="custom">ระบุช่วงวันที่</option>
             </select>
           </div>
+
+          <!-- ตัวเลือกเลือกเดือน/ปี -->
+          <div id="selectMonthGroup" class="hidden">
+            <label class="block text-xs font-medium text-amber-300 mb-1">📆 เลือกเดือน</label>
+            <input type="month" id="monthPicker" onchange="applyFilters()" class="bg-slate-900/80 border border-slate-700 text-amber-200 rounded-lg p-1.5 text-xs outline-none">
+          </div>
+
           <div class="flex-1 min-w-[140px]">
             <label class="block text-xs font-medium text-slate-300 mb-1">🔍 ค้นหา</label>
             <input type="text" id="searchInput" oninput="applyFilters()" placeholder="พิมพ์เลขเคส เช่น #2026-00001 หรือพิมพ์ค้นหา..." class="w-full bg-slate-900/80 border border-slate-700 rounded-lg p-2 text-xs text-white">
@@ -433,7 +441,6 @@
       changeTheme(savedTheme);
     }
 
-    // 🌟 ระบบ Switch 3 หน้า
     function switchTab(tabName) {
       const btnCreateTask = document.getElementById('tabBtnCreateTask');
       const btnTasks = document.getElementById('tabBtnTasks');
@@ -443,7 +450,6 @@
       const viewTasks = document.getElementById('viewTasks');
       const viewShifts = document.getElementById('viewShifts');
 
-      // ปิดทุกหน้าก่อน
       viewCreateTask.classList.add('hidden');
       viewTasks.classList.add('hidden');
       viewShifts.classList.add('hidden');
@@ -590,7 +596,6 @@
         fetchTodayShiftSummary();
         fetchTasks();
         
-        // เปิดหน้าแสดง Task รายการงานเป็นหน้าแรก
         switchTab('tasks');
       } else {
         showLoginPage();
@@ -712,15 +717,25 @@
       }
     }
 
+    // 🌟 ฟังก์ชันกรองข้อมูลตามวันที่ / รายเดือน
     function applyFilters() {
       const mode = document.getElementById('dateRangeMode').value;
       const todayStr = new Date().toISOString().split('T')[0];
+      const currentMonthPrefix = todayStr.substring(0, 7); // YYYY-MM
       const search = document.getElementById('searchInput').value.toLowerCase();
+      const selectedMonthVal = document.getElementById('monthPicker').value;
 
       currentTasks = rawTasks.filter(t => {
         let matchDate = true;
         const taskDateStr = t.date || (t.created_at ? t.created_at.split('T')[0] : '');
-        if (mode === 'today') matchDate = (taskDateStr === todayStr);
+        
+        if (mode === 'today') {
+          matchDate = (taskDateStr === todayStr);
+        } else if (mode === 'month') {
+          matchDate = taskDateStr.startsWith(currentMonthPrefix);
+        } else if (mode === 'selectMonth') {
+          matchDate = selectedMonthVal ? taskDateStr.startsWith(selectedMonthVal) : true;
+        }
         
         const caseIdStr = (t.case_id || `#2026-${String(t.id).padStart(5, '0')}`).toLowerCase();
         const taskTitle = t.title || t.task_name || '';
@@ -804,7 +819,6 @@
         e.target.reset();
         document.getElementById('taskDate').value = new Date().toISOString().split('T')[0];
         fetchTasks();
-        // พอบันทึกเสร็จให้สลับไปหน้ารายการงานทันที
         switchTab('tasks');
       }
     });
@@ -819,11 +833,17 @@
     function toggleDateInputs() {
       const mode = document.getElementById('dateRangeMode').value;
       document.getElementById('customDateGroup').classList.toggle('hidden', mode !== 'custom');
+      document.getElementById('selectMonthGroup').classList.toggle('hidden', mode !== 'selectMonth');
+      
+      if (mode === 'selectMonth' && !document.getElementById('monthPicker').value) {
+        document.getElementById('monthPicker').value = new Date().toISOString().substring(0, 7);
+      }
     }
 
     function resetFilter() {
       document.getElementById('dateRangeMode').value = 'today';
       document.getElementById('searchInput').value = '';
+      toggleDateInputs();
       fetchTasks();
     }
 
