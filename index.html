@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IT TASK TRACKER - RADISSON</title>
+  <title>IT TASK TRACKER - FEASTABLES BRIGHT BLUE</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -66,6 +66,13 @@
       box-shadow: 2px 2px 0px #000000;
     }
 
+    .feast-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: 3px 3px 0px #000000 !important;
+    }
+
     .feast-input {
       background-color: #ffffff !important;
       color: #000000 !important;
@@ -85,7 +92,6 @@
 
   <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
 
-  <!-- LOGIN PAGE -->
   <div id="loginPage" class="max-w-md mx-auto my-16 feast-card-yellow p-8 space-y-6">
     <div class="text-center space-y-2">
       <div class="w-20 h-20 bg-black text-yellow-400 rounded-2xl border-4 border-black flex items-center justify-center text-4xl mx-auto shadow-[4px_4px_0px_#000]">⚡</div>
@@ -112,7 +118,6 @@
     <div id="loginError" class="hidden bg-rose-500 text-white border-2 border-black p-3 rounded-xl text-xs font-bold text-center"></div>
   </div>
 
-  <!-- REGISTER PAGE -->
   <div id="registerPage" class="hidden max-w-md mx-auto my-16 feast-card-blue p-8 space-y-6">
     <div class="text-center space-y-2">
       <h1 class="text-3xl font-black uppercase">JOIN THE CREW</h1>
@@ -131,7 +136,6 @@
     </form>
   </div>
 
-  <!-- FORGOT PASSWORD PAGE -->
   <div id="forgotPasswordPage" class="hidden max-w-md mx-auto my-16 feast-card-pink p-8 space-y-6">
     <div class="text-center space-y-2">
       <h1 class="text-2xl font-black uppercase">RESET PASSWORD</h1>
@@ -143,10 +147,8 @@
     </form>
   </div>
 
-  <!-- MAIN DASHBOARD -->
   <div id="mainDashboard" class="hidden max-w-7xl mx-auto space-y-6">
     
-    <!-- HEADER NAVBAR -->
     <header class="feast-card-yellow p-4 md:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
       <div class="flex items-center gap-3">
         <div class="p-3 bg-black text-yellow-400 rounded-2xl border-2 border-black text-2xl font-black">🍫</div>
@@ -157,7 +159,6 @@
       </div>
       
       <div class="flex flex-wrap items-center gap-2">
-        <!-- 3 PAGE TABS -->
         <button onclick="switchTab('createTask')" id="tabBtnCreateTask" class="bg-black text-white feast-btn text-xs px-4 py-2.5 rounded-xl">
           ➕ NEW TASK
         </button>
@@ -178,7 +179,6 @@
       </div>
     </header>
 
-    <!-- PAGE 1: CREATE TASK PAGE -->
     <div id="viewCreateTask" class="hidden max-w-2xl mx-auto space-y-6">
       <div class="feast-card-blue p-6 md:p-8 space-y-4">
         <h2 class="text-2xl font-black text-black uppercase flex items-center gap-2 border-b-4 border-black pb-3">
@@ -273,10 +273,8 @@
       </div>
     </div>
 
-    <!-- PAGE 2: TASKS LIST VIEW -->
     <div id="viewTasks" class="space-y-6">
       
-      <!-- TODAY SHIFT SUMMARY CARD -->
       <div class="feast-card-pink p-5 text-white">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
@@ -301,7 +299,6 @@
         </div>
       </div>
 
-      <!-- STATS COUNTER -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div class="feast-card-yellow p-4 flex items-center justify-between">
           <div><p class="text-xs font-black uppercase">TOTAL TASKS</p><p id="statTotal" class="text-3xl font-black text-black mt-0.5">0</p></div>
@@ -321,16 +318,15 @@
         </div>
       </div>
 
-      <!-- FILTER & TASK TABLE -->
       <div class="space-y-4">
         <div class="feast-card p-4 flex flex-wrap items-end gap-3 text-xs">
           <div class="w-[150px]">
             <label class="block text-xs font-black text-black uppercase mb-1">📅 FILTER VIEW</label>
             <select id="dateRangeMode" onchange="toggleDateInputs(); applyFilters();" class="w-full feast-input rounded-xl p-2 text-xs">
-              <option value="today" selected>THIS TODAY</option>
+              <option value="today">THIS TODAY</option>
               <option value="month">THIS MONTH</option>
               <option value="selectMonth">SELECT MONTH...</option>
-              <option value="all">ALL TIME</option>
+              <option value="all" selected>ALL TIME</option>
               <option value="custom">CUSTOM RANGE</option>
             </select>
           </div>
@@ -377,11 +373,18 @@
               <tbody id="taskTableBody" class="divide-y-2 divide-black"></tbody>
             </table>
           </div>
+
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t-2 border-black">
+            <div id="pageInfo" class="text-xs font-black text-black uppercase">
+              SHOWING 0-0 OF 0 TASKS
+            </div>
+            <div class="flex items-center gap-1.5" id="paginationButtons">
+              </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- PAGE 3: SHIFTS MANAGEMENT VIEW -->
     <div id="viewShifts" class="hidden space-y-6">
       <div class="feast-card-yellow p-6 md:p-8 space-y-6 text-black">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b-4 border-black pb-4">
@@ -441,6 +444,10 @@
     let rawTasks = [];
     let currentTasks = [];
     let todayShiftCache = { morning: '-', evening: '-', onCall: '-', leave: 'ไม่มี' };
+
+    // 🌟 PAGINATION VARIABLES
+    let currentPage = 1;
+    const itemsPerPage = 15;
 
     function switchTab(tabName) {
       const btnCreateTask = document.getElementById('tabBtnCreateTask');
@@ -749,11 +756,30 @@
       document.getElementById('statInProgress').innerText = currentTasks.filter(t => t.status === 'In Progress').length;
       document.getElementById('statPending').innerText = currentTasks.filter(t => t.status === 'Pending').length;
 
-      const tbody = document.getElementById('taskTableBody');
-      tbody.innerHTML = '';
       document.getElementById('taskCount').innerText = `${currentTasks.length} ITEMS`;
 
-      currentTasks.forEach(t => {
+      // Reset to page 1 whenever filters change
+      currentPage = 1;
+      renderTablePage();
+    }
+
+    // 🌟 ฟังก์ชัน Render ตารางตามหน้า (15 เคส/หน้า)
+    function renderTablePage() {
+      const tbody = document.getElementById('taskTableBody');
+      tbody.innerHTML = '';
+
+      const totalItems = currentTasks.length;
+      const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+
+      const pageTasks = currentTasks.slice(startIndex, endIndex);
+
+      pageTasks.forEach(t => {
         const tr = document.createElement('tr');
         tr.className = "hover:bg-yellow-100 transition-colors";
         const caseIdStr = t.case_id || `#2026-${String(t.id).padStart(5, '0')}`;
@@ -795,6 +821,67 @@
         `;
         tbody.appendChild(tr);
       });
+
+      // Update Page Info
+      const startDisplay = totalItems === 0 ? 0 : startIndex + 1;
+      document.getElementById('pageInfo').innerText = `SHOWING ${startDisplay}-${endIndex} OF ${totalItems} TASKS (PAGE ${currentPage}/${totalPages})`;
+
+      // Render Pagination Buttons
+      renderPaginationControls(totalPages);
+    }
+
+    function renderPaginationControls(totalPages) {
+      const container = document.getElementById('paginationButtons');
+      container.innerHTML = '';
+
+      // Previous Button
+      const prevBtn = document.createElement('button');
+      prevBtn.className = 'feast-btn px-3 py-1.5 text-xs rounded-lg bg-black text-white';
+      prevBtn.innerText = '← PREV';
+      prevBtn.disabled = (currentPage === 1);
+      prevBtn.onclick = () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderTablePage();
+        }
+      };
+      container.appendChild(prevBtn);
+
+      // Page Number Buttons
+      for (let i = 1; i <= totalPages; i++) {
+        // Show max 5 buttons around current page if many pages
+        if (totalPages > 7 && Math.abs(i - currentPage) > 2 && i !== 1 && i !== totalPages) {
+          if (i === 2 && currentPage > 4) {
+            const dots = document.createElement('span');
+            dots.className = 'px-1 font-black text-black';
+            dots.innerText = '...';
+            container.appendChild(dots);
+          }
+          continue;
+        }
+
+        const numBtn = document.createElement('button');
+        numBtn.className = `feast-btn px-3 py-1.5 text-xs rounded-lg ${i === currentPage ? 'bg-yellow-400 text-black font-black' : 'bg-white text-black'}`;
+        numBtn.innerText = i;
+        numBtn.onclick = () => {
+          currentPage = i;
+          renderTablePage();
+        };
+        container.appendChild(numBtn);
+      }
+
+      // Next Button
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'feast-btn px-3 py-1.5 text-xs rounded-lg bg-black text-white';
+      nextBtn.innerText = 'NEXT →';
+      nextBtn.disabled = (currentPage === totalPages || totalPages === 0);
+      nextBtn.onclick = () => {
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderTablePage();
+        }
+      };
+      container.appendChild(nextBtn);
     }
 
     document.getElementById('taskForm').addEventListener('submit', async (e) => {
@@ -841,7 +928,7 @@
     }
 
     function resetFilter() {
-      document.getElementById('dateRangeMode').value = 'today';
+      document.getElementById('dateRangeMode').value = 'all';
       document.getElementById('searchInput').value = '';
       toggleDateInputs();
       fetchTasks();
