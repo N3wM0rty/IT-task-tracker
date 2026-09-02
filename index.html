@@ -11,13 +11,14 @@
   <style>
     body { 
       font-family: 'Kanit', sans-serif; 
-      background-color: #0070f3; /* Vibrant Blue Background */
-      color: #ffffff;
+      background-color: #0070f3; /* Bright Vibrant Blue */
+      color: #000000;
     }
     
-    /* Neubrutalism Feastables Box Style */
+    /* Neubrutalism Box Style (Light & Punchy) */
     .feast-card {
-      background-color: #000000;
+      background-color: #ffffff;
+      color: #000000;
       border: 4px solid #000000;
       box-shadow: 6px 6px 0px #000000;
       border-radius: 20px;
@@ -104,7 +105,7 @@
         </div>
         <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full feast-input rounded-xl p-3 text-sm">
       </div>
-      <button type="submit" class="w-full bg-black text-cyan-300 feast-btn py-3.5 rounded-xl text-base tracking-wider">
+      <button type="submit" class="w-full bg-black text-yellow-400 feast-btn py-3.5 rounded-xl text-base tracking-wider">
         LET'S GO! (SIGN IN) 🚀
       </button>
     </form>
@@ -148,10 +149,10 @@
     <!-- HEADER NAVBAR -->
     <header class="feast-card-yellow p-4 md:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
       <div class="flex items-center gap-3">
-        <div class="p-3 bg-black text-cyan-300 rounded-2xl border-2 border-black text-2xl font-black">🍫</div>
+        <div class="p-3 bg-black text-yellow-400 rounded-2xl border-2 border-black text-2xl font-black">🍫</div>
         <div>
           <h1 class="text-2xl md:text-3xl font-black tracking-wider uppercase text-black leading-none">IT TASK TRACKER</h1>
-          <p class="text-black font-bold text-xs mt-1 uppercase">FEASTABLES BLUE EDITION • TASK & SHIFT MANAGEMENT</p>
+          <p class="text-black font-bold text-xs mt-1 uppercase">FEASTABLES LIGHT & BLUE • TASK & SHIFT MANAGEMENT</p>
         </div>
       </div>
       
@@ -314,7 +315,7 @@
           <div><p class="text-xs font-black uppercase">IN PROGRESS</p><p id="statInProgress" class="text-3xl font-black text-white mt-0.5">0</p></div>
           <div class="w-12 h-12 bg-black text-pink-400 rounded-2xl flex items-center justify-center text-2xl font-black border-2 border-black">⏳</div>
         </div>
-        <div class="bg-white text-black border-4 border-black p-4 rounded-2xl flex items-center justify-between shadow-[6px_6px_0px_#000]">
+        <div class="feast-card p-4 flex items-center justify-between">
           <div><p class="text-xs font-black uppercase">PENDING</p><p id="statPending" class="text-3xl font-black text-rose-600 mt-0.5">0</p></div>
           <div class="w-12 h-12 bg-black text-rose-400 rounded-2xl flex items-center justify-center text-2xl font-black border-2 border-black">📌</div>
         </div>
@@ -324,7 +325,7 @@
       <div class="space-y-4">
         <div class="feast-card p-4 flex flex-wrap items-end gap-3 text-xs">
           <div class="w-[150px]">
-            <label class="block text-xs font-black text-yellow-400 uppercase mb-1">📅 FILTER VIEW</label>
+            <label class="block text-xs font-black text-black uppercase mb-1">📅 FILTER VIEW</label>
             <select id="dateRangeMode" onchange="toggleDateInputs(); applyFilters();" class="w-full feast-input rounded-xl p-2 text-xs">
               <option value="today" selected>THIS TODAY</option>
               <option value="month">THIS MONTH</option>
@@ -335,25 +336,25 @@
           </div>
 
           <div id="selectMonthGroup" class="hidden">
-            <label class="block text-xs font-black text-yellow-400 uppercase mb-1">📆 SELECT MONTH</label>
+            <label class="block text-xs font-black text-black uppercase mb-1">📆 SELECT MONTH</label>
             <input type="month" id="monthPicker" onchange="applyFilters()" class="feast-input rounded-xl p-2 text-xs">
           </div>
 
           <div class="flex-1 min-w-[140px]">
-            <label class="block text-xs font-black text-white uppercase mb-1">🔍 SEARCH CASE / TITLE</label>
+            <label class="block text-xs font-black text-black uppercase mb-1">🔍 SEARCH CASE / TITLE</label>
             <input type="text" id="searchInput" oninput="applyFilters()" placeholder="Type Case ID (#2026-00001)..." class="w-full feast-input rounded-xl p-2 text-xs">
           </div>
           <div id="customDateGroup" class="hidden flex gap-2">
             <input type="date" id="startDate" onchange="applyFilters()" class="feast-input rounded-xl p-2 text-xs">
             <input type="date" id="endDate" onchange="applyFilters()" class="feast-input rounded-xl p-2 text-xs">
           </div>
-          <div><button onclick="resetFilter()" class="bg-white text-black feast-btn px-4 py-2 rounded-xl text-xs">RESET</button></div>
+          <div><button onclick="resetFilter()" class="bg-black text-yellow-400 feast-btn px-4 py-2 rounded-xl text-xs">RESET</button></div>
         </div>
 
         <div class="feast-card p-5 space-y-4">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
-              <h2 class="text-xl font-black text-white uppercase">📊 ALL SYSTEM TASKS</h2>
+              <h2 class="text-xl font-black text-black uppercase">📊 ALL SYSTEM TASKS</h2>
               <span id="taskCount" class="bg-yellow-400 text-black text-xs font-black px-3 py-1 rounded-full border-2 border-black">0 ITEMS</span>
             </div>
             <button onclick="exportToExcel()" class="bg-emerald-400 text-black feast-btn px-4 py-2 rounded-xl text-xs flex items-center gap-1.5">
@@ -363,7 +364,7 @@
           
           <div class="overflow-x-auto rounded-xl border-4 border-black">
             <table class="w-full text-left text-xs bg-white text-black font-semibold">
-              <thead class="bg-black text-yellow-400 font-black text-xs uppercase border-b-4 border-black">
+              <thead class="bg-yellow-400 text-black font-black text-xs uppercase border-b-4 border-black">
                 <tr>
                   <th class="p-3.5">CASE ID</th>
                   <th class="p-3.5">TASK / LOCATION</th>
@@ -771,7 +772,7 @@
             <span class="text-xs font-black uppercase block text-black">${taskTitle}</span>
             <div class="flex items-center gap-1.5 mt-1">
               <span class="bg-black text-white text-[9px] px-2 py-0.5 rounded-full font-black">📍 ${locationStr}</span>
-              <span class="text-[11px] text-gray-600 truncate max-w-[180px]">${t.description || ''}</span>
+              <span class="text-[11px] text-gray-700 truncate max-w-[180px]">${t.description || ''}</span>
             </div>
           </td>
           <td class="p-3.5 text-[11px] font-bold">
