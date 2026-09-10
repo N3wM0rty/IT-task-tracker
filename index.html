@@ -443,6 +443,75 @@
       </div>
     </div>
 
+    <!-- EDIT TASK MODAL -->
+    <div id="editTaskModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+      <div class="feast-card-yellow p-6 w-full max-w-xl max-h-[90vh] overflow-y-auto relative">
+        <button onclick="closeEditModal()" type="button" class="absolute top-4 right-4 bg-white text-black border-2 border-black font-black px-3 py-1 rounded-lg feast-btn">X</button>
+        <h3 class="text-xl font-black uppercase mb-4">EDIT TASK</h3>
+        
+        <form id="editTaskForm" class="space-y-3">
+          <input type="hidden" id="editTaskId">
+          <div>
+            <label class="block text-xs font-black uppercase mb-1">TASK TITLE</label>
+            <input type="text" id="editTitle" required class="w-full feast-input rounded-xl p-2.5 text-xs">
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-black uppercase mb-1">LOCATION</label>
+              <select id="editLocation" class="w-full feast-input rounded-xl p-2.5 text-xs">
+                <option value="Radisson">Radisson</option>
+                <option value="Laya Suites">Laya Suites</option>
+                <option value="BB Horizon">BB Horizon</option>
+                <option value="Other Location">Other Location</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-black uppercase mb-1">CATEGORY</label>
+              <select id="editCategory" class="w-full feast-input rounded-xl p-2.5 text-xs">
+                <option value="POS">POS</option>
+                <option value="PC/ Laptop">PC/ Laptop</option>
+                <option value="Opera Cloud">Opera Cloud</option>
+                <option value="MC">MC</option>
+                <option value="Door">Door</option>
+                <option value="SUN">SUN</option>
+                <option value="Wi-Fi">Wi-Fi</option>
+                <option value="Passport">Passport</option>
+                <option value="CCTV">CCTV</option>
+                <option value="TV">TV</option>
+                <option value="Phone">Phone</option>
+                <option value="Silverman">Silverman</option>
+                <option value="Interface">Interface</option>
+                <option value="Print">Print</option>
+                <option value="other">other</option>
+                <option value="General work">General work</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-black uppercase mb-1">REPORTER</label>
+              <input type="text" id="editReporter" class="w-full feast-input rounded-xl p-2.5 text-xs">
+            </div>
+            <div>
+              <label class="block text-xs font-black uppercase mb-1">DEPT</label>
+              <input type="text" id="editDept" class="w-full feast-input rounded-xl p-2.5 text-xs">
+            </div>
+            <div>
+              <label class="block text-xs font-black uppercase mb-1">ASSIGNEE</label>
+              <input type="text" id="editAssignee" class="w-full feast-input rounded-xl p-2.5 text-xs">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-black uppercase mb-1">DESCRIPTION</label>
+            <textarea id="editDescription" rows="2" class="w-full feast-input rounded-xl p-2.5 text-xs"></textarea>
+          </div>
+          <button type="submit" class="w-full bg-black text-yellow-400 feast-btn py-3 rounded-xl mt-4 text-sm tracking-widest">
+            SAVE CHANGES
+          </button>
+        </form>
+      </div>
+    </div>
+
   </div>
 
   <script>
@@ -790,8 +859,9 @@
               <option value="Completed" ${t.status === 'Completed' ? 'selected' : ''}>Completed</option>
             </select>
           </td>
-          <td class="p-3.5 text-center">
-            <button onclick="deleteTask(${t.id})" class="bg-rose-500 text-white text-[11px] feast-btn px-3 py-1 rounded-lg">DELETE</button>
+          <td class="p-3.5 text-center space-y-1.5 min-w-[90px]">
+            <button onclick="openEditModal(${t.id})" class="bg-black text-white text-[11px] feast-btn px-3 py-1 rounded-lg w-full mb-1">EDIT</button>
+            <button onclick="deleteTask(${t.id})" class="bg-rose-500 text-white text-[11px] feast-btn px-3 py-1 rounded-lg w-full">DELETE</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -950,6 +1020,51 @@
 
       showToast('EXPORT COMPLETE!', 'Excel file downloaded', 'success');
     }
+
+    // --- EDIT TASK FUNCTIONS ---
+    function openEditModal(taskId) {
+      const t = rawTasks.find(x => x.id === taskId);
+      if (!t) return;
+      
+      document.getElementById('editTaskId').value = t.id;
+      document.getElementById('editTitle').value = t.title || t.task_name || '';
+      document.getElementById('editLocation').value = t.location || 'Radisson';
+      document.getElementById('editCategory').value = t.category || 'General work';
+      document.getElementById('editReporter').value = t.reporter || '';
+      document.getElementById('editDept').value = t.department || '';
+      document.getElementById('editAssignee').value = t.assignee || '';
+      document.getElementById('editDescription').value = t.description || '';
+      
+      document.getElementById('editTaskModal').classList.remove('hidden');
+    }
+
+    function closeEditModal() {
+      document.getElementById('editTaskModal').classList.add('hidden');
+    }
+
+    document.getElementById('editTaskForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('editTaskId').value;
+      const updates = {
+        title: document.getElementById('editTitle').value,
+        location: document.getElementById('editLocation').value,
+        category: document.getElementById('editCategory').value,
+        reporter: document.getElementById('editReporter').value,
+        department: document.getElementById('editDept').value,
+        assignee: document.getElementById('editAssignee').value,
+        description: document.getElementById('editDescription').value
+      };
+
+      const { error } = await supabaseClient.from('tasks').update(updates).eq('id', id);
+      
+      if (error) {
+        showToast('UPDATE FAILED', error.message, 'error');
+      } else {
+        showToast('UPDATED!', 'Task updated successfully', 'success');
+        closeEditModal();
+        fetchTasks();
+      }
+    });
 
     checkAuth();
   </script>
