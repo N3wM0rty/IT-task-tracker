@@ -95,7 +95,7 @@
   <!-- LOGIN PAGE -->
   <div id="loginPage" class="max-w-md mx-auto my-16 feast-card-yellow p-8 space-y-6">
     <div class="text-center space-y-2">
-      <div class="w-20 h-20 bg-black text-yellow-400 rounded-2xl border-4 border-black flex items-center justify-center text-4xl mx-auto shadow-[4px_4px_0px_#000]">⚡</div>
+      <div class="w-20 h-20 bg-black text-yellow-400 rounded-2xl border-4 border-black flex items-center justify-center text-2xl font-black mx-auto shadow-[4px_4px_0px_#000]">IT</div>
       <h1 class="text-3xl font-black tracking-wider uppercase">IT TRACKER</h1>
       <p class="font-bold text-xs uppercase tracking-wider">LOGIN TO CONTROL THE SYSTEM!</p>
     </div>
@@ -113,7 +113,7 @@
         <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full feast-input rounded-xl p-3 text-sm">
       </div>
       <button type="submit" class="w-full bg-black text-yellow-400 feast-btn py-3.5 rounded-xl text-base tracking-wider">
-        LET'S GO! (SIGN IN) 🚀
+        LET'S GO! (SIGN IN)
       </button>
     </form>
     <div id="loginError" class="hidden bg-rose-500 text-white border-2 border-black p-3 rounded-xl text-xs font-bold text-center"></div>
@@ -133,8 +133,8 @@
         <label class="block text-xs font-black uppercase mb-1">PASSWORD</label>
         <input type="password" id="regPassword" required minlength="6" class="w-full feast-input rounded-xl p-3 text-sm">
       </div>
-      <button type="submit" class="w-full bg-black text-cyan-300 feast-btn py-3.5 rounded-xl text-sm">CREATE ACCOUNT ⚡</button>
-      <button type="button" onclick="showLoginPage()" class="w-full bg-white text-black feast-btn py-2.5 rounded-xl text-xs">← BACK</button>
+      <button type="submit" class="w-full bg-black text-cyan-300 feast-btn py-3.5 rounded-xl text-sm">CREATE ACCOUNT</button>
+      <button type="button" onclick="showLoginPage()" class="w-full bg-white text-black feast-btn py-2.5 rounded-xl text-xs">&lt; BACK</button>
     </form>
   </div>
 
@@ -145,8 +145,8 @@
     </div>
     <form id="forgotPasswordForm" class="space-y-4">
       <input type="email" id="forgotEmail" required placeholder="user@resort.com" class="w-full feast-input rounded-xl p-3 text-sm">
-      <button type="submit" class="w-full bg-black text-pink-400 feast-btn py-3 rounded-xl text-sm">SEND RESET LINK 📩</button>
-      <button type="button" onclick="showLoginPage()" class="w-full bg-white text-black feast-btn py-2.5 rounded-xl text-xs">← BACK</button>
+      <button type="submit" class="w-full bg-black text-pink-400 feast-btn py-3 rounded-xl text-sm">SEND RESET LINK</button>
+      <button type="button" onclick="showLoginPage()" class="w-full bg-white text-black feast-btn py-2.5 rounded-xl text-xs">&lt; BACK</button>
     </form>
   </div>
 
@@ -156,7 +156,7 @@
     <!-- HEADER NAVBAR -->
     <header class="feast-card-yellow p-4 md:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
       <div class="flex items-center gap-3">
-        <div class="p-3 bg-black text-yellow-400 rounded-2xl border-2 border-black text-2xl font-black">🍫</div>
+        <div class="p-3 bg-black text-yellow-400 rounded-2xl border-2 border-black text-2xl font-black">IT</div>
         <div>
           <h1 class="text-2xl md:text-3xl font-black tracking-wider uppercase text-black leading-none">IT TASK TRACKER</h1>
           <p class="text-black font-bold text-xs mt-1 uppercase">FEASTABLES LIGHT & BLUE • TASK & SHIFT MANAGEMENT</p>
@@ -165,13 +165,13 @@
       
       <div class="flex flex-wrap items-center gap-2">
         <button onclick="switchTab('createTask')" id="tabBtnCreateTask" class="bg-black text-white feast-btn text-xs px-4 py-2.5 rounded-xl">
-          ➕ NEW TASK
+          + NEW TASK
         </button>
         <button onclick="switchTab('tasks')" id="tabBtnTasks" class="bg-white text-black feast-btn text-xs px-4 py-2.5 rounded-xl">
-          📋 TASK LIST
+          TASK LIST
         </button>
         <button onclick="switchTab('shifts')" id="tabBtnShifts" class="bg-white text-black feast-btn text-xs px-4 py-2.5 rounded-xl">
-          📅 SHIFTS
+          SHIFTS
         </button>
 
         <div class="bg-black text-white p-2 px-3 rounded-xl border-2 border-black flex items-center gap-3 shadow-[3px_3px_0px_#000]">
@@ -188,7 +188,7 @@
     <div id="viewCreateTask" class="hidden max-w-2xl mx-auto space-y-6">
       <div class="feast-card-blue p-6 md:p-8 space-y-4">
         <h2 class="text-2xl font-black text-black uppercase flex items-center gap-2 border-b-4 border-black pb-3">
-          <span>📝</span> RECORD NEW TASK
+          RECORD NEW TASK
         </h2>
         <form id="taskForm" class="space-y-4 text-black">
           <div>
@@ -197,7 +197,7 @@
           </div>
           
           <div>
-            <label class="block text-xs font-black uppercase mb-1">📍 LOCATION</label>
+            <label class="block text-xs font-black uppercase mb-1">LOCATION</label>
             <select id="location" class="w-full feast-input rounded-xl p-3 text-xs">
               <option value="Radisson" selected>Radisson</option>
               <option value="Laya Suites">Laya Suites</option>
@@ -207,7 +207,7 @@
           </div>
 
           <div>
-            <label class="block text-xs font-black uppercase mb-1">📅 DATE</label>
+            <label class="block text-xs font-black uppercase mb-1">DATE</label>
             <input type="date" id="taskDate" required class="w-full feast-input rounded-xl p-3 text-xs">
           </div>
 
@@ -273,7 +273,7 @@
           </div>
 
           <button type="submit" class="w-full bg-black text-yellow-400 feast-btn py-4 rounded-xl text-base tracking-wider">
-            + SAVE TASK NOW! 💥
+            + SAVE TASK NOW!
           </button>
         </form>
       </div>
@@ -287,21 +287,21 @@
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h3 class="text-lg font-black uppercase flex items-center gap-2">
-              <span>📅</span> TODAY ON-DUTY SHIFT (<span id="todayDateStr"></span>)
+              TODAY ON-DUTY SHIFT (<span id="todayDateStr"></span>)
             </h3>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3 text-xs font-bold">
-              <div class="p-2.5 rounded-xl bg-black text-cyan-300 border-2 border-black"><span class="text-white/70 block text-[10px]">☀️ MORNING</span><span id="summaryMorning" class="text-sm font-black">-</span></div>
-              <div class="p-2.5 rounded-xl bg-black text-yellow-300 border-2 border-black"><span class="text-white/70 block text-[10px]">🌙 EVENING</span><span id="summaryEvening" class="text-sm font-black">-</span></div>
-              <div class="p-2.5 rounded-xl bg-black text-emerald-400 border-2 border-black"><span class="text-white/70 block text-[10px]">☎️ ON-CALL</span><span id="summaryOnCall" class="text-sm font-black">-</span></div>
-              <div class="p-2.5 rounded-xl bg-black text-rose-400 border-2 border-black"><span class="text-white/70 block text-[10px]">🔴 LEAVE</span><span id="summaryLeave" class="text-sm font-black">-</span></div>
+              <div class="p-2.5 rounded-xl bg-black text-cyan-300 border-2 border-black"><span class="text-white/70 block text-[10px]">MORNING</span><span id="summaryMorning" class="text-sm font-black">-</span></div>
+              <div class="p-2.5 rounded-xl bg-black text-yellow-300 border-2 border-black"><span class="text-white/70 block text-[10px]">EVENING</span><span id="summaryEvening" class="text-sm font-black">-</span></div>
+              <div class="p-2.5 rounded-xl bg-black text-emerald-400 border-2 border-black"><span class="text-white/70 block text-[10px]">ON-CALL</span><span id="summaryOnCall" class="text-sm font-black">-</span></div>
+              <div class="p-2.5 rounded-xl bg-black text-rose-400 border-2 border-black"><span class="text-white/70 block text-[10px]">LEAVE</span><span id="summaryLeave" class="text-sm font-black">-</span></div>
             </div>
           </div>
           <div class="flex sm:flex-col gap-2 justify-end">
             <button onclick="sendLineShiftAlertFromUI()" class="bg-black text-emerald-400 feast-btn text-xs px-4 py-3 rounded-xl">
-              📲 PUSH LINE SHIFT
+              PUSH LINE SHIFT
             </button>
             <button onclick="switchTab('shifts')" class="bg-white text-black feast-btn text-xs px-4 py-3 rounded-xl">
-              ✏️ EDIT SHIFT
+              EDIT SHIFT
             </button>
           </div>
         </div>
@@ -311,19 +311,19 @@
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div class="feast-card-yellow p-4 flex items-center justify-between">
           <div><p class="text-xs font-black uppercase">TOTAL TASKS</p><p id="statTotal" class="text-3xl font-black text-black mt-0.5">0</p></div>
-          <div class="w-12 h-12 bg-black text-yellow-400 rounded-2xl flex items-center justify-center text-2xl font-black border-2 border-black">📁</div>
+          <div class="w-12 h-12 bg-black text-yellow-400 rounded-2xl flex items-center justify-center text-xs font-black border-2 border-black">ALL</div>
         </div>
         <div class="feast-card-blue p-4 flex items-center justify-between">
           <div><p class="text-xs font-black uppercase">COMPLETED</p><p id="statCompleted" class="text-3xl font-black text-black mt-0.5">0</p></div>
-          <div class="w-12 h-12 bg-black text-cyan-400 rounded-2xl flex items-center justify-center text-2xl font-black border-2 border-black">✅</div>
+          <div class="w-12 h-12 bg-black text-cyan-400 rounded-2xl flex items-center justify-center text-xs font-black border-2 border-black">DONE</div>
         </div>
         <div class="feast-card-pink p-4 flex items-center justify-between">
           <div><p class="text-xs font-black uppercase">IN PROGRESS</p><p id="statInProgress" class="text-3xl font-black text-white mt-0.5">0</p></div>
-          <div class="w-12 h-12 bg-black text-pink-400 rounded-2xl flex items-center justify-center text-2xl font-black border-2 border-black">⏳</div>
+          <div class="w-12 h-12 bg-black text-pink-400 rounded-2xl flex items-center justify-center text-xs font-black border-2 border-black">WIP</div>
         </div>
         <div class="feast-card p-4 flex items-center justify-between">
           <div><p class="text-xs font-black uppercase">PENDING</p><p id="statPending" class="text-3xl font-black text-rose-600 mt-0.5">0</p></div>
-          <div class="w-12 h-12 bg-black text-rose-400 rounded-2xl flex items-center justify-center text-2xl font-black border-2 border-black">📌</div>
+          <div class="w-12 h-12 bg-black text-rose-400 rounded-2xl flex items-center justify-center text-xs font-black border-2 border-black">WAIT</div>
         </div>
       </div>
 
@@ -331,7 +331,7 @@
       <div class="space-y-4">
         <div class="feast-card p-4 flex flex-wrap items-end gap-3 text-xs">
           <div class="w-[150px]">
-            <label class="block text-xs font-black text-black uppercase mb-1">📅 FILTER VIEW</label>
+            <label class="block text-xs font-black text-black uppercase mb-1">FILTER VIEW</label>
             <select id="dateRangeMode" onchange="toggleDateInputs(); applyFilters();" class="w-full feast-input rounded-xl p-2 text-xs">
               <option value="today">THIS TODAY</option>
               <option value="month">THIS MONTH</option>
@@ -342,12 +342,12 @@
           </div>
 
           <div id="selectMonthGroup" class="hidden">
-            <label class="block text-xs font-black text-black uppercase mb-1">📆 SELECT MONTH</label>
+            <label class="block text-xs font-black text-black uppercase mb-1">SELECT MONTH</label>
             <input type="month" id="monthPicker" onchange="applyFilters()" class="feast-input rounded-xl p-2 text-xs">
           </div>
 
           <div class="flex-1 min-w-[140px]">
-            <label class="block text-xs font-black text-black uppercase mb-1">🔍 SEARCH CASE / TITLE</label>
+            <label class="block text-xs font-black text-black uppercase mb-1">SEARCH CASE / TITLE</label>
             <input type="text" id="searchInput" oninput="applyFilters()" placeholder="Type Case ID (#2026-00001)..." class="w-full feast-input rounded-xl p-2 text-xs">
           </div>
           <div id="customDateGroup" class="hidden flex gap-2">
@@ -360,11 +360,11 @@
         <div class="feast-card p-5 space-y-4">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
-              <h2 class="text-xl font-black text-black uppercase">📊 ALL SYSTEM TASKS</h2>
+              <h2 class="text-xl font-black text-black uppercase">ALL SYSTEM TASKS</h2>
               <span id="taskCount" class="bg-yellow-400 text-black text-xs font-black px-3 py-1 rounded-full border-2 border-black">0 ITEMS</span>
             </div>
             <button onclick="exportToExcel()" class="bg-emerald-400 text-black feast-btn px-4 py-2 rounded-xl text-xs flex items-center gap-1.5">
-              <span>📥</span> EXPORT EXCEL
+              EXPORT EXCEL
             </button>
           </div>
           
@@ -384,7 +384,7 @@
             </table>
           </div>
 
-          <!-- PAGINATION CONTROLS (แสดงทีละ 15 รายการ) -->
+          <!-- PAGINATION CONTROLS -->
           <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t-2 border-black">
             <div id="pageInfo" class="text-xs font-black text-black uppercase">
               SHOWING 0-0 OF 0 TASKS
@@ -403,7 +403,7 @@
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b-4 border-black pb-4">
           <div>
             <h2 class="text-2xl font-black uppercase flex items-center gap-2">
-              <span>📅</span> SHIFT MANAGEMENT SYSTEM
+              SHIFT MANAGEMENT SYSTEM
             </h2>
             <p class="font-bold text-xs mt-1">SELECT DATE TO UPDATE ON-DUTY SCHEDULE</p>
           </div>
@@ -415,28 +415,28 @@
 
         <form id="shiftManageForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="bg-white border-4 border-black p-4 rounded-2xl space-y-2 shadow-[4px_4px_0px_#000]">
-            <h4 class="text-xs font-black text-black uppercase">☀️ MORNING SHIFT (08:00 - 17:00)</h4>
+            <h4 class="text-xs font-black text-black uppercase">MORNING SHIFT (08:00 - 17:00)</h4>
             <input type="text" id="mMorning" required placeholder="e.g. New" class="w-full feast-input rounded-xl p-2.5 text-xs">
           </div>
 
           <div class="bg-white border-4 border-black p-4 rounded-2xl space-y-2 shadow-[4px_4px_0px_#000]">
-            <h4 class="text-xs font-black text-black uppercase">🌙 EVENING SHIFT (13:00 - 22:00)</h4>
+            <h4 class="text-xs font-black text-black uppercase">EVENING SHIFT (13:00 - 22:00)</h4>
             <input type="text" id="mEvening" placeholder="e.g. P'Puen ITM" class="w-full feast-input rounded-xl p-2.5 text-xs">
           </div>
 
           <div class="bg-white border-4 border-black p-4 rounded-2xl space-y-2 shadow-[4px_4px_0px_#000]">
-            <h4 class="text-xs font-black text-black uppercase">☎️ STANDBY ON-CALL</h4>
+            <h4 class="text-xs font-black text-black uppercase">STANDBY ON-CALL</h4>
             <input type="text" id="mOnCall" required placeholder="e.g. New / P'Puen" class="w-full feast-input rounded-xl p-2.5 text-xs">
           </div>
 
           <div class="bg-white border-4 border-black p-4 rounded-2xl space-y-2 shadow-[4px_4px_0px_#000]">
-            <h4 class="text-xs font-black text-black uppercase">🔴 LEAVE & DAY OFF</h4>
+            <h4 class="text-xs font-black text-black uppercase">LEAVE & DAY OFF</h4>
             <input type="text" id="mLeave" placeholder="e.g. None" class="w-full feast-input rounded-xl p-2.5 text-xs">
           </div>
 
           <div class="md:col-span-2 flex items-center justify-end gap-3 pt-2">
             <button type="submit" class="bg-black text-yellow-400 feast-btn px-8 py-3.5 rounded-xl text-sm">
-              💾 SAVE SHIFT SCHEDULE!
+              SAVE SHIFT SCHEDULE!
             </button>
           </div>
         </form>
@@ -584,7 +584,7 @@
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
       toast.className = `pointer-events-auto p-4 rounded-2xl border-4 border-black shadow-[5px_5px_0px_#000] font-black flex items-start gap-3 toast-slide-in ${type === 'error' ? 'bg-rose-500 text-white' : 'bg-yellow-400 text-black'}`;
-      toast.innerHTML = `<span class="text-xl">⚡</span><div class="flex-1"><h4 class="text-xs uppercase">${title}</h4><p class="text-xs font-bold opacity-90">${message}</p></div>`;
+      toast.innerHTML = `<div class="flex-1"><h4 class="text-xs uppercase">${title}</h4><p class="text-xs font-bold opacity-90">${message}</p></div>`;
       container.appendChild(toast);
       setTimeout(() => toast.remove(), 3500);
     }
@@ -661,7 +661,6 @@
       applyFilters();
     }
 
-    // 🔒 ปลอดภัย: เรียกส่ง LINE ผ่าน Supabase Edge Function หลังบ้าน
     async function sendLineTaskCompletedAlert(task) {
       try {
         const { data, error } = await supabaseClient.functions.invoke('send-line-alert', {
@@ -740,7 +739,6 @@
       renderTablePage();
     }
 
-    // ฟังก์ชัน Render ตารางตามหน้า (15 เคส/หน้า)
     function renderTablePage() {
       const tbody = document.getElementById('taskTableBody');
       tbody.innerHTML = '';
@@ -774,7 +772,7 @@
           <td class="p-3.5 font-bold">
             <span class="text-xs font-black uppercase block text-black">${taskTitle}</span>
             <div class="flex items-center gap-1.5 mt-1">
-              <span class="bg-black text-white text-[9px] px-2 py-0.5 rounded-full font-black">📍 ${locationStr}</span>
+              <span class="bg-black text-white text-[9px] px-2 py-0.5 rounded-full font-black">LOC: ${locationStr}</span>
               <span class="text-[11px] text-gray-700 truncate max-w-[180px]">${t.description || ''}</span>
             </div>
           </td>
@@ -811,7 +809,7 @@
 
       const prevBtn = document.createElement('button');
       prevBtn.className = 'feast-btn px-3 py-1.5 text-xs rounded-lg bg-black text-white';
-      prevBtn.innerText = '← PREV';
+      prevBtn.innerText = '< PREV';
       prevBtn.disabled = (currentPage === 1);
       prevBtn.onclick = () => {
         if (currentPage > 1) {
@@ -844,7 +842,7 @@
 
       const nextBtn = document.createElement('button');
       nextBtn.className = 'feast-btn px-3 py-1.5 text-xs rounded-lg bg-black text-white';
-      nextBtn.innerText = 'NEXT →';
+      nextBtn.innerText = 'NEXT >';
       nextBtn.disabled = (currentPage === totalPages || totalPages === 0);
       nextBtn.onclick = () => {
         if (currentPage < totalPages) {
